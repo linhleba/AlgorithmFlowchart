@@ -11,7 +11,7 @@ Members included:
 2. Nguyen Anh Hao - 18520716
 3. Le Thi Hong Dieu - 18520265
 
-## Acknowledgements
+## Acknowledgments
 Thank you Mr. Nguyen Tan Toan for accompanying and guiding the group to implement the project.
 
 ## Feedbacks
