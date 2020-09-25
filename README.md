@@ -11,6 +11,21 @@ Members included:
 2. Nguyen Anh Hao - 18520716
 3. Le Thi Hong Dieu - 18520265
 
+## Features
+Features are expected to develop such as:
+Menu 
++ File: New,Open, Save, Save as, Export
++ Edit: Undo, Redo, Cut, Copy, Paste, Delete, Clear
++ View: Zoom in, Zoom out, Full Screen
++ Insert: Shape, Arrows, Text, Pencil 
++ Tools: Style, Color Fill,...
++ Help: Tutorials, Feedback, About us...
+
+This is the temporary UI, maybe it will be slightly different than the official UI
+- [ ] [
+![image](https://user-images.githubusercontent.com/59057692/94286396-254db300-ff7f-11ea-9233-be11706d45fb.png)
+](url)
+
 ## Acknowledgments
 Thank Mr. Nguyen Tan Toan for accompanying and guiding the group to implement the project.
 
