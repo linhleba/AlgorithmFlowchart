@@ -1,5 +1,8 @@
 # Algorithm Flowchart Project
-
+This is the temporary UI, maybe it will be slightly different than the official UI
+- [ ] [
+![image](https://user-images.githubusercontent.com/59057692/94286396-254db300-ff7f-11ea-9233-be11706d45fb.png)
+](url)
 
 ## About project
 - The project is about algorithm flowchart to make design easily and conveniently for users. 
@@ -21,10 +24,7 @@ Menu
 + Tools: Style, Color Fill,...
 + Help: Tutorials, Feedback, About us...
 
-This is the temporary UI, maybe it will be slightly different than the official UI
-- [ ] [
-![image](https://user-images.githubusercontent.com/59057692/94286396-254db300-ff7f-11ea-9233-be11706d45fb.png)
-](url)
+
 
 ## Acknowledgments
 Thank Mr. Nguyen Tan Toan for accompanying and guiding the group to implement the project.
