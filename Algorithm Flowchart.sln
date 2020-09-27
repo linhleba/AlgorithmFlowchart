@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithm Flowchart Project", "Algorithm Flowchart Project\Algorithm Flowchart Project.csproj", "{7324C065-9B11-4415-B36E-0E05ACF56433}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithm Flowchart", "Algorithm Flowchart\Algorithm Flowchart.csproj", "{8E052E6C-F1DA-4179-82D4-D9418CA40F36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7324C065-9B11-4415-B36E-0E05ACF56433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7324C065-9B11-4415-B36E-0E05ACF56433}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7324C065-9B11-4415-B36E-0E05ACF56433}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7324C065-9B11-4415-B36E-0E05ACF56433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E052E6C-F1DA-4179-82D4-D9418CA40F36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E052E6C-F1DA-4179-82D4-D9418CA40F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E052E6C-F1DA-4179-82D4-D9418CA40F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E052E6C-F1DA-4179-82D4-D9418CA40F36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F1BBE4D8-A242-4C27-B8A6-F9D67402051F}
+		SolutionGuid = {BE72A241-D017-4B76-9F37-5B0CBE6B353E}
 	EndGlobalSection
 EndGlobal

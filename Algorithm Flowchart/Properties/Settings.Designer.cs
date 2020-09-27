@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Algorithm_Flowchart_Project.Properties
+namespace Algorithm_Flowchart.Properties
 {
 
 

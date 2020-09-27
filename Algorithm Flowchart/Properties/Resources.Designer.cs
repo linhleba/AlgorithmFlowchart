@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Algorithm_Flowchart_Project.Properties
+namespace Algorithm_Flowchart.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace Algorithm_Flowchart_Project.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Algorithm_Flowchart_Project.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Algorithm_Flowchart.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
