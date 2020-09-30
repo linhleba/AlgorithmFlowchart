@@ -66,17 +66,19 @@
         <!-- Draw rectangle-->
         <ContentControl
             Width="100" Height="60" Canvas.Top="120" Canvas.Left="0"
-            MinWidth="50" MaxWidth="150" MinHeight="30" MaxHeight="120"
+            MinWidth="50" MaxWidth="200" MinHeight="30" MaxHeight="200"
             Template="{StaticResource DesignShape}">
             <Rectangle Fill="Aqua" IsHitTestVisible="False">
             </Rectangle>
         </ContentControl>
         
-        <!-- Draw -->
-        <ContentControl Width="130"
+        <!-- Draw rhombus-->
+        <ContentControl Width="100"
                     MinWidth="50"
-                    Height="130"
+                    Height="100"
                     MinHeight="50"
+                    MaxWidth="200"
+                    MaxHeight="200"
                     Canvas.Top="200"
                     Canvas.Left="0"
                     Template="{StaticResource DesignShape}">
@@ -86,9 +88,21 @@
             IsHitTestVisible="False"/>
         </ContentControl>
         
-       
-
-
+       <!-- Draw parallelogram-->
+        <ContentControl Width="100"
+                    MinWidth="50"
+                    Height="100"
+                    MinHeight="50"
+                    MaxWidth="200"
+                    MaxHeight="200"
+                    Canvas.Top="320"
+                    Canvas.Left="0"
+                    Template="{StaticResource DesignShape}">
+            <Path Fill="Orange"
+            Data="M 0,10 2.5,0 10,0 7.5,10 Z"
+            Stretch="Fill"
+            IsHitTestVisible="False"/>
+        </ContentControl>
     </Canvas>
     
 </Window>
