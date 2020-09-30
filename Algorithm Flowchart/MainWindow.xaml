@@ -10,21 +10,46 @@
     <Window.Resources>
 
 
-
+        <!-- MoveThumb Template -->
         <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:MoveThumb}">
             <Rectangle Fill="Transparent"/>
         </ControlTemplate>
-         
-        
+
+
+
+
+        <!-- Design resize shape template-->
+        <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
+            <Grid>
+                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0"
+                       VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
+                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0"
+                       VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0"
+                       VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            </Grid>
+        </ControlTemplate>
+
         <!-- Design cursor and presenter -->
         <ControlTemplate x:Key="DesignShape" TargetType="ContentControl">
-            <Grid>
-                <local:MoveThumb DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" 
-
-                Cursor="SizeAll"/>
+            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                <local:MoveThumb Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll"/>
+                <Control Template="{StaticResource ResizeDecoratorTemplate}"/>
                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
             </Grid>
         </ControlTemplate>
+
+
 
     </Window.Resources>
     
@@ -32,6 +57,7 @@
         <!-- Draw circle-->
         <ContentControl
             Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
+            MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
                     Template="{StaticResource DesignShape}"> 
             <Ellipse Fill="Red"
                      IsHitTestVisible="False"></Ellipse>
@@ -40,6 +66,7 @@
         <!-- Draw rectangle-->
         <ContentControl
             Width="100" Height="60" Canvas.Top="120" Canvas.Left="0"
+            MinWidth="50" MaxWidth="150" MinHeight="30" MaxHeight="120"
             Template="{StaticResource DesignShape}">
             <Rectangle Fill="Aqua" IsHitTestVisible="False">
             </Rectangle>
@@ -53,13 +80,13 @@
                     Canvas.Top="200"
                     Canvas.Left="0"
                     Template="{StaticResource DesignShape}">
-
             <Path Fill="Blue"
             Data="M 0,5 5,0 10,5 5,10 Z"
             Stretch="Fill"
             IsHitTestVisible="False"/>
         </ContentControl>
-
+        
+       
 
 
     </Canvas>
