@@ -24,5 +24,29 @@ namespace Algorithm_Flowchart
         {
             InitializeComponent();
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            gridColor.Background = Brushes.Black;
+            switch (index)
+            {
+                case 1:
+                    gridColor.Background = Brushes.Black;
+                    break;
+                case 2:
+                    gridColor.Background = Brushes.CadetBlue;
+                    break;
+                case 3:
+                    gridColor.Background = Brushes.DarkBlue;
+                    break;
+                case 4:
+                    gridColor.Background = Brushes.Firebrick;
+                    break;
+                case 5:
+                    gridColor.Background = Brushes.Gainsboro;
+                    break;
+
+            }
+        }
     }
 }
