@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Flowchart" Height="450" Width="800">
 
+
+
+
     <Window.Resources>
 
 
@@ -52,26 +55,38 @@
 
 
     </Window.Resources>
-    
+
     <Canvas>
+
         <!-- Draw circle-->
         <ContentControl
+            
             Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
             MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
-                    Template="{StaticResource DesignShape}"> 
-            <Ellipse Fill="Red"
-                     IsHitTestVisible="False"></Ellipse>
+                    Template="{StaticResource DesignShape}" >
+            <Grid>
+                <Ellipse Fill="Red" IsHitTestVisible="False">
+
+                </Ellipse>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Circle"/>
+            </Grid>
         </ContentControl>
-        
+
+
+
+
         <!-- Draw rectangle-->
         <ContentControl
             Width="100" Height="60" Canvas.Top="120" Canvas.Left="0"
             MinWidth="50" MaxWidth="200" MinHeight="30" MaxHeight="200"
             Template="{StaticResource DesignShape}">
-            <Rectangle Fill="Aqua" IsHitTestVisible="False">
-            </Rectangle>
+            <Grid>
+                <Rectangle Fill="Aqua" IsHitTestVisible="False">
+                </Rectangle>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Hello"/>
+            </Grid>
         </ContentControl>
-        
+
         <!-- Draw rhombus-->
         <ContentControl Width="100"
                     MinWidth="50"
@@ -87,8 +102,8 @@
             Stretch="Fill"
             IsHitTestVisible="False"/>
         </ContentControl>
-        
-       <!-- Draw parallelogram-->
+
+        <!-- Draw parallelogram-->
         <ContentControl Width="100"
                     MinWidth="50"
                     Height="100"
@@ -104,5 +119,5 @@
             IsHitTestVisible="False"/>
         </ContentControl>
     </Canvas>
-    
+
 </Window>

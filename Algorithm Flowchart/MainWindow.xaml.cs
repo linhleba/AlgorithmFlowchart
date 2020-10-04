@@ -24,5 +24,10 @@ namespace Algorithm_Flowchart
         {
             InitializeComponent();
         }
+
+        private void ContentControl_TextInput(object sender, TextCompositionEventArgs e)
+        {
+
+        }
     }
 }
