@@ -14,19 +14,22 @@
         <Grid Height="100"  >
             <!--Split 2 column 1 for tab and 1 for image label -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" ></ColumnDefinition>
+                <ColumnDefinition Width="100"  ></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
                 <ColumnDefinition Width="200" ></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                <materialDesign:PackIcon Kind="Flowchart" Foreground="Black" Width="25" Height="25"/>
-                <TextBlock Text="Argorithm" FontFamily="Yu Gothic UI" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
+            <!-->
+            <StackPanel Orientation="Vertical" Margin="10,10,10,10">                
+                    <materialDesign:PackIcon Kind="Flowchart" Foreground="Black" Width="25" Height="25"/>
+                <TextBlock Text="Algorithm" FontFamily="Yu Gothic UI" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
                 <TextBlock Text="  FlowChart" FontFamily="Yu Gothic UI" FontSize="14" FontWeight="Bold" Margin="0,3,0,0"/>
             </StackPanel>
+            <-->
+            <Image Source="logo1.jpg" />
             <!--push tab in column 2
                 dragablz using for design tab -->
-            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" >
-                <TabItem Header="File" Background="Aqua">
+            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AddLocationHint="Prior" >
+                <TabItem Header="File" ForceCursor="True" HorizontalContentAlignment="Stretch">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="Button_Click">
@@ -62,7 +65,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Edit">
+                <TabItem Header="Edit" FontSize="15">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -111,7 +114,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="View">
+                <TabItem Header="View" FontSize="15">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -135,7 +138,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Insert">
+                <TabItem Header="Insert" FontSize="15">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -165,7 +168,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Tool">
+                <TabItem Header="Tool" FontSize="15">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -183,7 +186,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Help" >
+                <TabItem Header="Help" FontSize="15">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -210,14 +213,14 @@
             </dragablz:TabablzControl>
             <StackPanel Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                 <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
-                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF8C339C">
-                    <materialDesign:PackIcon Kind="FindReplace" Foreground="Black" Width="20" Height="20" Margin="0,10,0,0"/>
+                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF207526">
+                    <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                 </Button>
             </StackPanel>
         </Grid>
 
         <Grid Background="#FFCFF4D2" Name="gridColor" Margin="0,0,0,0" Height="700">
-            <Canvas Name="drawingCanvas">
+            <Canvas Name="drawingCanvas" Visibility="Hidden">
                 <Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
                 <Button x:Name="Red" Content="Click to choice Red" Width="172" Canvas.Left="19" Canvas.Top="88" Click="Button_Click"/>
                 <Rectangle x:Name="yellow" Fill="Yellow" Width="100" Height="50" Canvas.Left="19" Canvas.Top="132"/>
