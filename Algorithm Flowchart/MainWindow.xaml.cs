@@ -128,7 +128,7 @@ namespace CopyAndPasteInCanvas
 
                         top = 100;
 
-                        left = 300;
+                        left= left+ 100;
 
                         drawingCanvas.Children.Add(shape);
 
