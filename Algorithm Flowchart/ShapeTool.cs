@@ -48,7 +48,7 @@ namespace Algorithm_Flowchart
     {
         static ShapeTool()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ShapeTool), new FrameworkPropertyMetadata(typeof(ShapeTool)));
+            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ShapeTool), new FrameworkPropertyMetadata(typeof(ShapeTool)));
         }
     }
 }

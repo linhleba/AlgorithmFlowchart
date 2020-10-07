@@ -28,19 +28,20 @@
             <Image Source="logo1.jpg" />
             <!--push tab in column 2
                 dragablz using for design tab -->
-            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" AddLocationHint="Prior" >
-                <TabItem Header="File" ForceCursor="True" HorizontalContentAlignment="Stretch">
+            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                     FontSize="18"  >
+                <TabItem Header="File" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="EmailOpen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FolderPlus" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="New" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                             <Button Name="buttonOpen" Margin="10,0,10,0" Uid="2" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="MailboxOpenUpOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FolderOpen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Open" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
@@ -52,20 +53,20 @@
                             </Button>
                             <Button Name="buttonExport" Margin="10,0,10,0" Uid="4" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="OpenInNew" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FileExport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Export" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                             <Button Name="buttonImport" Margin="10,0,10,0" Uid="5" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="OpenInBrowser" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FileImport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Import From File" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Edit" FontSize="15">
+                <TabItem Header="Edit" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -114,7 +115,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="View" FontSize="15">
+                <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -138,7 +139,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Insert" FontSize="15">
+                <TabItem Header="Insert" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -149,7 +150,7 @@
                             </Button>
                             <Button Margin="10,0,10,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ArrowDecisionAutoOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Arrow" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
@@ -168,7 +169,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Tool" FontSize="15">
+                <TabItem Header="Tool" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -186,7 +187,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Help" FontSize="15">
+                <TabItem Header="Help" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -213,13 +214,15 @@
             </dragablz:TabablzControl>
             <StackPanel Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                 <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
-                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF207526">
+                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
                     <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                 </Button>
             </StackPanel>
         </Grid>
 
-        <Grid Background="#FFCFF4D2" Name="gridColor" Margin="0,0,0,0" Height="700">
+        <Grid Background="#FFBCE6FF" Name="gridColor" Margin="0,0,0,0" Height="700" >
+            <!-- Visibility="Visible" to see testing of 'copy' and 'paste' short cut-->
+
             <Canvas Name="drawingCanvas" Visibility="Hidden">
                 <Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
                 <Button x:Name="Red" Content="Click to choice Red" Width="172" Canvas.Left="19" Canvas.Top="88" Click="Button_Click"/>
@@ -227,9 +230,19 @@
                 <Button Content="Click to choice Yellow" Width="172" Canvas.Left="19" Canvas.Top="201" Click="Button_Click_1"/>
                 <TextBlock TextWrapping="Wrap" Text="Paste Result :" Canvas.Left="300" Canvas.Top="75" Width="131"/>
                 <TextBlock TextWrapping="Wrap" Text="Ctrl + C and then Ctrl + V to paste after u choice ur shape" Canvas.Left="19" Canvas.Top="254" Width="131"/>
+
             </Canvas>
+            <DockPanel Margin="0,0,892.6,300" Background="Green" LastChildFill="False"
+                       Width="100" HorizontalAlignment="Left">
+                <Button DockPanel.Dock="Top" Background="Yellow" Margin="0,10,0,0"/>
+                <Button Background="red" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+                <Button Background="blue" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+                <Button Background="blue" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+                <Button Background="blue" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+                <Button Background="blue" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+                <Button Background="blue" DockPanel.Dock="Top" Margin="0,10,0,0"/>
+            </DockPanel>
 
         </Grid>
-
     </StackPanel>
 </Window>
