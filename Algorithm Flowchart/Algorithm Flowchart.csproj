@@ -66,9 +66,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DesignerCanvas.cs" />
+    <Compile Include="DesignerItem.cs" />
     <Compile Include="MoveThumb.cs" />
+    <Compile Include="ResizeAdorner.cs" />
+    <Compile Include="ResizeChrome.cs" />
+    <Compile Include="ResizeDecorator.cs" />
     <Compile Include="ResizeThumb.cs" />
+    <Compile Include="RuberbandAdorner.cs" />
     <Compile Include="ShapeTool.cs" />
+    <Page Include="DesignerItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
