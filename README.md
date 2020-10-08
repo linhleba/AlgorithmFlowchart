@@ -1,12 +1,7 @@
 # Algorithm Flowchart Project
 
 After Version2 , this is our project's UI 
-![UiVer2](/demoVer2.png)
-
-This is the temporary UI, maybe it will be slightly different than the official UI
-- [ ] [
-![image](https://ibb.co/DrRsLHy)
-](url)
+![UiVer2](/demoUIVer3.jpg)
 
 ## About project
 - The project is about algorithm flowchart to make design easily and conveniently for users. 
