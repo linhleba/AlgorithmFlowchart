@@ -5,7 +5,7 @@ After Version2 , this is our project's UI
 
 This is the temporary UI, maybe it will be slightly different than the official UI
 - [ ] [
-![image](https://user-images.githubusercontent.com/59057692/94286396-254db300-ff7f-11ea-9233-be11706d45fb.png)
+![image](https://ibb.co/DrRsLHy)
 ](url)
 
 ## About project
