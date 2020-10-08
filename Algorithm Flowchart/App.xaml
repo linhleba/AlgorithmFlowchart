@@ -47,6 +47,10 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- tell Dragablz tab control to use the Material Design theme -->
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+            <Style x:Key="NormalTabItemStyle" TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
+                <Setter Property="Width" Value="200"  />
+                <Setter Property="Padding" Value="1" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
