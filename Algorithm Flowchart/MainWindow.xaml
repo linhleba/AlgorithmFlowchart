@@ -239,7 +239,19 @@
         <-->
         <Algorithm_Flowchart:ShapeToolUI  DockPanel.Dock="Left"
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
-        
-        <Grid Background="#FFBCE6FF"/>
+
+        <Grid x:Name="MainArea"  Background="#FFBCE6FF">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+              
     </DockPanel>
 </Window>
