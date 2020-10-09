@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:local="clr-namespace:Algorithm_Flowchart"
+        xmlns:diag ="http://mindfusion.eu/diagramming/wpf"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
         Icon="icon.jpg"
@@ -328,7 +329,9 @@
                 </ContentControl>
             </Canvas>
 
-
+            <Grid>
+                <diag:Diagram x:Name="Flowchart" />
+            </Grid>
 
         </Grid>
        
