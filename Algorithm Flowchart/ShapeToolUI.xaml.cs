@@ -28,58 +28,33 @@ namespace Algorithm_Flowchart
 
         private void DisplayRhombus(object sender, MouseButtonEventArgs e)
         {
-            //DataContext = new ShapeDesigner().Circle;
-            //var contentControl = new ShapeDesigner().;
-            //var textBox = new TextBox();
-            //textBox.Text = "Hehe";
-            Rectangle rectangle = new Rectangle();
-            rectangle.Width = 50;
-            rectangle.Height = 60;
-            rectangle.Fill = Brushes.Red;
-            var Ellipse = new Ellipse();
-            Ellipse.Fill = Brushes.Red;
-            Ellipse.Width = 50;
-            Ellipse.Height = 60;
-
+           
           
             var contentControl = new ContentControl();
 
+            // find MainWindow
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(Window1))
                 {
-             
-                    //(window as Window1).MainArea.Children.Add(contentControl);
-                    // BindingOperations.SetBinding((window as Window1).MainCotentControl, ContentControl.ContentProperty, new Binding());
-                    Binding binding = new Binding("DesignShape");
-                    //  binding.Source = DesignShape;
-                    //(window as Window1).MainCotentControl.SetBinding(Template.Resources("DesignShape")) = 300;
-                    // (window as Window1).MainCotentControl.Template = (window as Window1).MainCotentControl.FindResource("DesignShape") as ControlTemplate;
-                    //(window as Window1).MainCotentControl.Height = 300;
-                    // (window as Window1).MainCotentControl.Width = 300;
+                    // Set shape 
                      Ellipse ellipse = new Ellipse();
-                     ellipse.Fill = Brushes.Red;
-                    // (window as Window1).MainCotentControl.Content = ellipse;
-                    // (window as Window1).MainCotentControl.SetBinding(ContentControl.ContentProperty, new Binding());
-                    // (window as Window1).MainCotentControl.SetValue(Canvas.LeftProperty, 50);
-                    //(window as Window1).MainCotentControl.R;
-                   
+                     ellipse.Fill = Brushes.White;
+                    ellipse.Stroke = Brushes.Black;
+                     ellipse.IsHitTestVisible = false;
+                  
+                    // Set content control 
                     contentControl.Content = ellipse;
                     contentControl.Template = contentControl.FindResource("DesignShape") as ControlTemplate;
                     contentControl.Height = 300;
                     contentControl.Width = 300;
-                    Canvas.SetTop(contentControl, 60);
-                    Canvas.SetLeft(contentControl, 60);
-                    (window as Window1).Canvas.Children.Add(contentControl);
+                    Canvas.SetTop(contentControl, 150);
+                    Canvas.SetLeft(contentControl, 250);
                     
-
+                    // Add content control to canvas
+                    (window as Window1).Canvas.Children.Add(contentControl);
                 }
             }
-
-
-            //Width = "202" Height = "202" Canvas.Top = "50" Canvas.Left = "50"
-            //MinWidth = "50" MaxWidth = "200" MinHeight = "50" MaxHeight = "200"
-            //        Template = "{StaticResource DesignShape}" RenderTransformOrigin = "3.005,2.555" >
         }
 
      
