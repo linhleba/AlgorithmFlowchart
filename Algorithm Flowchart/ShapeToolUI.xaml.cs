@@ -41,27 +41,38 @@ namespace Algorithm_Flowchart
             Ellipse.Width = 50;
             Ellipse.Height = 60;
 
-            var contentControl = new ShapeDesigner().Circle;
-     
+          
+            var contentControl = new ContentControl();
+
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(Window1))
                 {
-
+             
                     //(window as Window1).MainArea.Children.Add(contentControl);
                     // BindingOperations.SetBinding((window as Window1).MainCotentControl, ContentControl.ContentProperty, new Binding());
                     Binding binding = new Binding("DesignShape");
                     //  binding.Source = DesignShape;
                     //(window as Window1).MainCotentControl.SetBinding(Template.Resources("DesignShape")) = 300;
-                    (window as Window1).MainCotentControl.Template = (window as Window1).MainCotentControl.FindResource("DesignShape") as ControlTemplate;
-                   (window as Window1).MainCotentControl.Height = 300;
-                    (window as Window1).MainCotentControl.Width = 300;
-                    Ellipse ellipse = new Ellipse();
-                    ellipse.Fill = Brushes.Red;
-                    (window as Window1).MainCotentControl.Content = ellipse;
+                    // (window as Window1).MainCotentControl.Template = (window as Window1).MainCotentControl.FindResource("DesignShape") as ControlTemplate;
+                    //(window as Window1).MainCotentControl.Height = 300;
+                    // (window as Window1).MainCotentControl.Width = 300;
+                     Ellipse ellipse = new Ellipse();
+                     ellipse.Fill = Brushes.Red;
+                    // (window as Window1).MainCotentControl.Content = ellipse;
                     // (window as Window1).MainCotentControl.SetBinding(ContentControl.ContentProperty, new Binding());
                     // (window as Window1).MainCotentControl.SetValue(Canvas.LeftProperty, 50);
                     //(window as Window1).MainCotentControl.R;
+                   
+                    contentControl.Content = ellipse;
+                    contentControl.Template = contentControl.FindResource("DesignShape") as ControlTemplate;
+                    contentControl.Height = 300;
+                    contentControl.Width = 300;
+                    Canvas.SetTop(contentControl, 60);
+                    Canvas.SetLeft(contentControl, 60);
+                    (window as Window1).Canvas.Children.Add(contentControl);
+                    
+
                 }
             }
 

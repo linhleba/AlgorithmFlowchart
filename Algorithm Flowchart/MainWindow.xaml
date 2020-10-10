@@ -244,9 +244,9 @@
         <Canvas x:Name="Canvas" Background="#FFBCE6FF">
        
        
-                <ContentControl x:Name="MainCotentControl">
+                <!--<ContentControl x:Name="MainCotentControl">
 
-                </ContentControl>
+                </ContentControl>-->
            
         </Canvas>
     </DockPanel>
