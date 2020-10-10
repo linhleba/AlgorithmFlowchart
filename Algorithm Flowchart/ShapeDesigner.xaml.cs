@@ -23,5 +23,7 @@ namespace Algorithm_Flowchart
         {
             InitializeComponent();
         }
+
+    
     }
 }

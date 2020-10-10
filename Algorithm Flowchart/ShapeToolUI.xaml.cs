@@ -37,25 +37,26 @@ namespace Algorithm_Flowchart
             var canvas = new Canvas();
             var contentControl = new ContentControl();
             var ellipse = new Ellipse();
+            contentControl.Content = ellipse;
+            //this.RemoveLogicalChild(contentControl);
+            //canvas.Children.Add(ellipse);
 
 
-            canvas.Children.Add(ellipse);
+            Binding binding = new Binding("Shape");
+            binding.Source = designerWindow.test;
 
 
-            //Binding binding = new Binding("Shape");
-            //binding.Source = designerWindow.test;
-
-            
 
             // Add shape to the main window
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(Window1))
                 {
-                    (window as Window1).MainArea.Children.Add(canvas);
-                    //(window as Window1).MainArea.SetBinding(TextBlock.TextProperty, binding);
+                    //(window as Window1).MainArea.Children.Add(contentControl);
+                    (window as Window1).MainArea.SetBinding(ContentControl.ContentProperty, binding);
                 }
             }
+
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Z.Blazor.Diagrams.1.0.4\build\Z.Blazor.Diagrams.props" Condition="Exists('..\packages\Z.Blazor.Diagrams.1.0.4\build\Z.Blazor.Diagrams.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,6 +49,72 @@
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.2.0.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.2.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Barcodes, Version=1.0.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Barcodes.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Common.Wpf, Version=1.0.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Common.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.DrawImport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.DrawImport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.DxfExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.DxfExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.ExcelExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.ExcelExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.PdfExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.PdfExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.SvgExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.SvgExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.VisioExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.VisioExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.VisioImport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.VisioImport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.WmfExport, Version=3.6.0.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Diagramming.Wpf.WmfExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Graphs, Version=2.3.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Licensing, Version=1.0.4.38034, Culture=neutral, PublicKeyToken=9d02e21d957ddaef, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Pdf, Version=1.3.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Scripting, Version=1.0.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Svg, Version=1.2.2.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Svg.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Vsx, Version=1.0.3.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Vsx.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Zip, Version=1.0.1.450, Culture=neutral, PublicKeyToken=dd7449df9ffcc455, processorArchitecture=MSIL">
+      <HintPath>..\packages\MindFusion.Diagramming.Wpf.3.6.0.4\lib\net45\MindFusion.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Northwoods.GoWPF, Version=3.0.1.47, Culture=neutral, PublicKeyToken=616e2dc80068a33d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Northwoods.GoWPF.3.0.1\lib\net47\Northwoods.GoWPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Diagram.WPF, Version=18.3460.0.38, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Diagram.WPF.18.3.0.38\lib\net46\Syncfusion.Diagram.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing, Version=18.3460.0.38, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.18.3.0.38\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.WPF, Version=18.3460.0.38, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Shared.WPF.18.3.0.38\lib\net46\Syncfusion.Shared.WPF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -176,5 +243,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets'))" />
+    <Error Condition="!Exists('..\packages\Z.Blazor.Diagrams.1.0.4\build\Z.Blazor.Diagrams.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Z.Blazor.Diagrams.1.0.4\build\Z.Blazor.Diagrams.props'))" />
   </Target>
 </Project>
