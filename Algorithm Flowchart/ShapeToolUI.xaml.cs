@@ -26,37 +26,47 @@ namespace Algorithm_Flowchart
             InitializeComponent();
         }
 
-        private void DisplayRhombus(object sender, MouseButtonEventArgs e)
+        private void DisplayShape(Shape shape)
         {
-           
-          
             var contentControl = new ContentControl();
-
-            // find MainWindow
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(Window1))
                 {
-                    // Set shape 
-                     Ellipse ellipse = new Ellipse();
-                     ellipse.Fill = Brushes.White;
-                    ellipse.Stroke = Brushes.Black;
-                     ellipse.IsHitTestVisible = false;
-                  
+
                     // Set content control 
-                    contentControl.Content = ellipse;
+                    contentControl.Content = shape;
                     contentControl.Template = contentControl.FindResource("DesignShape") as ControlTemplate;
                     contentControl.Height = 300;
                     contentControl.Width = 300;
                     Canvas.SetTop(contentControl, 150);
                     Canvas.SetLeft(contentControl, 250);
-                    
+
                     // Add content control to canvas
                     (window as Window1).Canvas.Children.Add(contentControl);
                 }
             }
         }
 
-     
+        private void DisplayRhombus(object sender, MouseButtonEventArgs e)
+        {
+
+
+            // Set shape 
+            Ellipse ellipse = new Ellipse();
+            ellipse.Fill = Brushes.White;
+            ellipse.Stroke = Brushes.Black;
+            ellipse.IsHitTestVisible = false;
+
+            // Call DisplayShape function 
+            DisplayShape(ellipse);
+
+
+        }
+
+        private void DisplayParallelogram(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

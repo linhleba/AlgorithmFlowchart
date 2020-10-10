@@ -17,7 +17,8 @@
                         <ImageBrush ImageSource="rhombus.png"/>
                     </Button.Background>
                 </Button>
-                <Button  Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
+                <Button 
+                    Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
                     <Button.Background>
                         <ImageBrush ImageSource="parallelogram1.png" Stretch="UniformToFill">
 
