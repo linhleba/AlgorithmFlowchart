@@ -1,68 +1,67 @@
-﻿<Window x:Class="Algorithm_Flowchart.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" x:Class="CopyAndPasteInCanvas.Window1"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
-        Icon="icon.jpg"
+        Icon="logo1.jpg" 
         MinWidth="600" MinHeight="600">
-    <StackPanel Background="FloralWhite" >
+    
+    <DockPanel Background="FloralWhite" >
 
-        <Grid Height="100"  >
+        <Grid Height="100" DockPanel.Dock="Top" >
             <!--Split 2 column 1 for tab and 1 for image label -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" ></ColumnDefinition>
-                <ColumnDefinition ></ColumnDefinition>
-                <ColumnDefinition Width="200" ></ColumnDefinition>
+                <ColumnDefinition Width="100"  />
+                <ColumnDefinition />
+                <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                <materialDesign:PackIcon Kind="Flowchart" Foreground="Black" Width="25" Height="25"/>
-                <TextBlock Text="Argorithm" FontFamily="Yu Gothic UI" FontSize="14" FontWeight="Bold" Margin="0,10,0,0"/>
-                <TextBlock Text="  FlowChart" FontFamily="Yu Gothic UI" FontSize="14" FontWeight="Bold" Margin="0,3,0,0"/>
-            </StackPanel>
+            <Image Source="logo1.jpg" />
             <!--push tab in column 2
                 dragablz using for design tab -->
-            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" >
-                <TabItem Header="File" Background="Aqua">
+            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                     FontSize="18"   ItemContainerStyle="{DynamicResource NormalTabItemStyle}" >
+                <TabItem Header="File" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="Button_Click">
+                            <Button x:Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="EmailOpen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FolderPlus" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="New" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Name="buttonOpen" Margin="10,0,10,0" Uid="2" Click="Button_Click">
+                            <Button x:Name="buttonOpen" Margin="10,0,10,0" Uid="2" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="MailboxOpenUpOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FolderOpen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Open" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Name="buttonSave" Margin="10,0,10,0" Uid="3" Click="Button_Click">
+                            <Button x:Name="buttonSave" Margin="10,0,10,0" Uid="3" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ContentSave" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Save" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Name="buttonExport" Margin="10,0,10,0" Uid="4" Click="Button_Click">
+                            <Button x:Name="buttonExport" Margin="10,0,10,0" Uid="4" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="OpenInNew" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FileExport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Export" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Name="buttonImport" Margin="10,0,10,0" Uid="5" Click="Button_Click">
+                            <Button x:Name="buttonImport" Margin="10,0,10,0" Uid="5" Click="Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="OpenInBrowser" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="FileImport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Import From File" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Edit">
+                <TabItem Header="Edit" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -111,7 +110,7 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="View">
+                <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -135,7 +134,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Insert">
+                <TabItem Header="Insert" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -146,7 +145,7 @@
                             </Button>
                             <Button Margin="10,0,10,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ArrowDecisionAutoOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Arrow" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
@@ -165,7 +164,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Tool">
+                <TabItem Header="Tool" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -183,7 +182,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                <TabItem Header="Help" >
+                <TabItem Header="Help" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal">
                             <Button Margin="10,0,10,0">
@@ -210,18 +209,61 @@
             </dragablz:TabablzControl>
             <StackPanel Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                 <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
-                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF8C339C">
-                    <materialDesign:PackIcon Kind="FindReplace" Foreground="Black" Width="20" Height="20" Margin="0,10,0,0"/>
+                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
+                    <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                 </Button>
             </StackPanel>
         </Grid>
+        <!-->
+        <Grid Background="#FFBCE6FF" x:Name="gridColor" Margin="0,0,0,0" Height="700" >
+            Visibility="Visible" to see testing of 'copy' and 'paste' short cut
 
-        <Grid Background="Orange" Name="gridColor" Margin="0,0,0,0" Height="700">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                
-            </ScrollViewer>
+            <Canvas x:Name="drawingCanvas" Visibility="Hidden">
+                <Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"/>
+                <Button x:Name="Red" Content="Click to choice Red" Width="172" Canvas.Left="19" Canvas.Top="88" Click="Button_Click"/>
+                <Rectangle x:Name="yellow" Fill="Yellow" Width="100" Height="50" Canvas.Left="19" Canvas.Top="132"/>
+                <Button Content="Click to choice Yellow" Width="172" Canvas.Left="19" Canvas.Top="201" Click="Button_Click_1"/>
+                <TextBlock TextWrapping="Wrap" Text="Paste Result :" Canvas.Left="300" Canvas.Top="75" Width="131"/>
+                <TextBlock TextWrapping="Wrap" Text="Ctrl + C and then Ctrl + V to paste after u choice ur shape" Canvas.Left="19" Canvas.Top="254" Width="131"/>
+
+            </Canvas>
+
+            <DockPanel Margin="0,0,0,0" Background="White" LastChildFill="False"
+                       Width="100" HorizontalAlignment="Left">
+
+                <Algorithm_Flowchart:ShapeToolUI  
+                    Margin="0,0,0,0"/>
+
+            </DockPanel>
 
         </Grid>
+        <-->
+        <Algorithm_Flowchart:ShapeToolUI  DockPanel.Dock="Left"
+                HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
 
-    </StackPanel>
+        <Canvas x:Name="Canvas" Background="#FFBCE6FF">
+       
+       
+                <!--<ContentControl x:Name="MainCotentControl">
+
+                </ContentControl>-->
+           
+        </Canvas>
+    </DockPanel>
+
+    <!--<Window.Resources>
+        <Canvas x:Key="Canvas">
+            --><!-- Draw circle--><!--
+            <ContentControl x:Name="Circle"
+            Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
+            MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
+                    Template="{StaticResource DesignShape}">
+                <Ellipse Fill="Red"
+                     IsHitTestVisible="False"></Ellipse>
+            </ContentControl>
+        </Canvas>
+    </Window.Resources>-->
+
+   
+
 </Window>

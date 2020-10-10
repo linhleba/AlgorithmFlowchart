@@ -12,7 +12,7 @@
         <Grid Height="100"  >
             <!--Split 2 column 1 for tab and 1 for image label -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" ></ColumnDefinition>
+                <ColumnDefinition Width="140" ></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
                 <ColumnDefinition Width="200" ></ColumnDefinition>
             </Grid.ColumnDefinitions>
