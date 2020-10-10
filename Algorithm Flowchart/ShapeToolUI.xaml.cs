@@ -26,7 +26,8 @@ namespace Algorithm_Flowchart
             InitializeComponent();
         }
 
-        private void DisplayShape(Shape shape)
+        // Display shape in the main area, parameters -> shape, height and width
+        private void DisplayShape(Shape shape,int height, int width)
         {
             var contentControl = new ContentControl();
             foreach (Window window in Application.Current.Windows)
@@ -37,10 +38,10 @@ namespace Algorithm_Flowchart
                     // Set content control 
                     contentControl.Content = shape;
                     contentControl.Template = contentControl.FindResource("DesignShape") as ControlTemplate;
-                    contentControl.Height = 300;
-                    contentControl.Width = 300;
+                    contentControl.Height = height;
+                    contentControl.Width = width;
                     Canvas.SetTop(contentControl, 150);
-                    Canvas.SetLeft(contentControl, 250);
+                    Canvas.SetLeft(contentControl, 350);
 
                     // Add content control to canvas
                     (window as Window1).Canvas.Children.Add(contentControl);
@@ -51,7 +52,44 @@ namespace Algorithm_Flowchart
         private void DisplayRhombus(object sender, MouseButtonEventArgs e)
         {
 
+            string pathData = "M 0,5 5,0 10,5 5,10 ZZ";
+            Path rhombus = new Path();
+            rhombus.Fill = Brushes.White;
+            rhombus.Stroke = Brushes.Black;
+            rhombus.Data = Geometry.Parse(pathData);
+            rhombus.IsHitTestVisible = false;
+            rhombus.Stretch = Stretch.Fill;
 
+            DisplayShape(rhombus, 70, 140);
+        }
+
+        private void DisplayParallelogram(object sender, MouseButtonEventArgs e)
+        {
+           
+            string pathData = "M 0,10 2.5,0 10,0 7.5,10 Z";
+            Path parallelogram = new Path();
+            parallelogram.Fill = Brushes.White;
+            parallelogram.Stroke = Brushes.Black;
+            parallelogram.Data = Geometry.Parse(pathData);
+            parallelogram.IsHitTestVisible = false;
+            parallelogram.Stretch = Stretch.Fill;
+
+            DisplayShape(parallelogram, 70, 140);
+        }
+
+        private void DisplayRectangle(object sender, MouseButtonEventArgs e)
+        {
+            // Set rectangle shape
+            Rectangle rectangle = new Rectangle();
+            rectangle.Fill = Brushes.White;
+            rectangle.Stroke = Brushes.Black;
+            rectangle.IsHitTestVisible = false;
+
+            DisplayShape(rectangle, 70, 140);
+        }
+
+        private void DisplayCircle(object sender, MouseButtonEventArgs e)
+        {
             // Set shape 
             Ellipse ellipse = new Ellipse();
             ellipse.Fill = Brushes.White;
@@ -59,14 +97,7 @@ namespace Algorithm_Flowchart
             ellipse.IsHitTestVisible = false;
 
             // Call DisplayShape function 
-            DisplayShape(ellipse);
-
-
-        }
-
-        private void DisplayParallelogram(object sender, MouseButtonEventArgs e)
-        {
-
+            DisplayShape(ellipse,100,100);
         }
     }
 }
