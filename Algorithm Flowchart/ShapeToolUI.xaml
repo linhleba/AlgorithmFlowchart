@@ -11,7 +11,8 @@
     <Grid Background="White">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
             <StackPanel Background="#FFBCE6FF">
-                <Button  Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
+                <Button  MouseDoubleClick="DisplayRhombus"
+                    Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>
                         <ImageBrush ImageSource="rhombus.png"/>
                     </Button.Background>

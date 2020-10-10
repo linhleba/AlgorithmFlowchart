@@ -10,6 +10,7 @@
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
         Icon="logo1.jpg" 
         MinWidth="600" MinHeight="600">
+    
     <DockPanel Background="FloralWhite" >
 
         <Grid Height="100" DockPanel.Dock="Top" >
@@ -239,7 +240,30 @@
         <-->
         <Algorithm_Flowchart:ShapeToolUI  DockPanel.Dock="Left"
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
-        
-        <Grid Background="#FFBCE6FF"/>
+
+        <Canvas x:Name="Canvas" Background="#FFBCE6FF">
+       
+       
+                <ContentControl x:Name="MainCotentControl">
+
+                </ContentControl>
+           
+        </Canvas>
     </DockPanel>
+
+    <!--<Window.Resources>
+        <Canvas x:Key="Canvas">
+            --><!-- Draw circle--><!--
+            <ContentControl x:Name="Circle"
+            Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
+            MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
+                    Template="{StaticResource DesignShape}">
+                <Ellipse Fill="Red"
+                     IsHitTestVisible="False"></Ellipse>
+            </ContentControl>
+        </Canvas>
+    </Window.Resources>-->
+
+   
+
 </Window>

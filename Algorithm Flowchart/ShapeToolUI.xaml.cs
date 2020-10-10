@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CopyAndPasteInCanvas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,52 @@ namespace Algorithm_Flowchart
         {
             InitializeComponent();
         }
+
+        private void DisplayRhombus(object sender, MouseButtonEventArgs e)
+        {
+            //DataContext = new ShapeDesigner().Circle;
+            //var contentControl = new ShapeDesigner().;
+            //var textBox = new TextBox();
+            //textBox.Text = "Hehe";
+            Rectangle rectangle = new Rectangle();
+            rectangle.Width = 50;
+            rectangle.Height = 60;
+            rectangle.Fill = Brushes.Red;
+            var Ellipse = new Ellipse();
+            Ellipse.Fill = Brushes.Red;
+            Ellipse.Width = 50;
+            Ellipse.Height = 60;
+
+            var contentControl = new ShapeDesigner().Circle;
+     
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(Window1))
+                {
+
+                    //(window as Window1).MainArea.Children.Add(contentControl);
+                    // BindingOperations.SetBinding((window as Window1).MainCotentControl, ContentControl.ContentProperty, new Binding());
+                    Binding binding = new Binding("DesignShape");
+                    //  binding.Source = DesignShape;
+                    //(window as Window1).MainCotentControl.SetBinding(Template.Resources("DesignShape")) = 300;
+                    (window as Window1).MainCotentControl.Template = (window as Window1).MainCotentControl.FindResource("DesignShape") as ControlTemplate;
+                   (window as Window1).MainCotentControl.Height = 300;
+                    (window as Window1).MainCotentControl.Width = 300;
+                    Ellipse ellipse = new Ellipse();
+                    ellipse.Fill = Brushes.Red;
+                    (window as Window1).MainCotentControl.Content = ellipse;
+                    // (window as Window1).MainCotentControl.SetBinding(ContentControl.ContentProperty, new Binding());
+                    // (window as Window1).MainCotentControl.SetValue(Canvas.LeftProperty, 50);
+                    //(window as Window1).MainCotentControl.R;
+                }
+            }
+
+
+            //Width = "202" Height = "202" Canvas.Top = "50" Canvas.Left = "50"
+            //MinWidth = "50" MaxWidth = "200" MinHeight = "50" MaxHeight = "200"
+            //        Template = "{StaticResource DesignShape}" RenderTransformOrigin = "3.005,2.555" >
+        }
+
+     
     }
 }
