@@ -8,9 +8,9 @@
         xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" x:Class="CopyAndPasteInCanvas.Window1"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
-        Icon="logo1.jpg" 
+        Icon="./Resources/Images/logo1.jpg" 
         MinWidth="600" MinHeight="600">
-    
+
     <DockPanel Background="FloralWhite" >
 
         <Grid Height="100" DockPanel.Dock="Top" >
@@ -20,7 +20,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <Image Source="logo1.jpg" />
+            <Image Source="./Resources/Images/logo1.jpg" />
             <!--push tab in column 2
                 dragablz using for design tab -->
             <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
@@ -143,7 +143,8 @@
                                     <TextBlock Text="Shape" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0">
+                            <Button Margin="10,0,10,0"
+                                    Click="DisPlayArrow_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Arrow" Margin="10,0,0,0"/>
@@ -155,7 +156,7 @@
                                     <TextBlock Text="Text" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0">
+                            <Button Margin="10,0,10,0" Click="DrawByPencil_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Pencil" Margin="10,0,0,0"/>
@@ -242,18 +243,25 @@
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
 
         <Canvas x:Name="Canvas" Background="#FFBCE6FF">
-       
-       
-                <!--<ContentControl x:Name="MainCotentControl">
+
+
+            <!--<ContentControl x:Name="MainCotentControl">
 
                 </ContentControl>-->
-           
+
+            <!--<InkCanvas Background="Transparent" x:Name="inkCanvas" EditingMode="Ink"
+                        Width="1500" Height="1500">
+
+            </InkCanvas>-->
+
         </Canvas>
     </DockPanel>
 
     <!--<Window.Resources>
         <Canvas x:Key="Canvas">
-            --><!-- Draw circle--><!--
+            -->
+    <!-- Draw circle-->
+    <!--
             <ContentControl x:Name="Circle"
             Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
             MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
@@ -264,6 +272,6 @@
         </Canvas>
     </Window.Resources>-->
 
-   
+
 
 </Window>

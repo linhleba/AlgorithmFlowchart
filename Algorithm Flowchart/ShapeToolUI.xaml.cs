@@ -27,7 +27,7 @@ namespace Algorithm_Flowchart
         }
 
         // Display shape in the main area, parameters -> shape, height and width
-        private void DisplayShape(Shape shape,int height, int width)
+        public void DisplayShape(Shape shape,int height, int width)
         {
             var contentControl = new ContentControl();
             foreach (Window window in Application.Current.Windows)
