@@ -69,13 +69,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-
-    <Compile Include="MenuBar.xaml.cs">
-      <DependentUpon>MenuBar.xaml</DependentUpon>
-    </Compile>
-     <Compile Include="Class\MoveThumb.cs" />
+    <Compile Include="Class\MoveThumb.cs" />
     <Compile Include="Class\ResizeThumb.cs" />
-
     <Compile Include="ShapeDesigner.xaml.cs">
       <DependentUpon>ShapeDesigner.xaml</DependentUpon>
     </Compile>
@@ -95,10 +90,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MenuBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ShapeDesigner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

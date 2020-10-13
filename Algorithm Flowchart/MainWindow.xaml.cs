@@ -45,6 +45,121 @@ namespace CopyAndPasteInCanvas
             Application.Current.Shutdown();
 
         }
+        private void File_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+                case 3:
+                    this.Canvas.Background = Brushes.Green;
+                    break;
+                case 4:
+                    this.Canvas.Background = Brushes.Gray;
+                    break;
+                case 5:
+                    this.Canvas.Background = Brushes.AliceBlue;
+                    break;
+            }
+        }
+
+        private void Edit_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+                case 3:
+                    this.Canvas.Background = Brushes.Green;
+                    break;
+                case 4:
+                    this.Canvas.Background = Brushes.Gray;
+                    break;
+                case 5:
+                    this.Canvas.Background = Brushes.AliceBlue;
+                    break;
+                case 6:
+                    this.Canvas.Background = Brushes.YellowGreen;
+                    break;
+                case 7:
+                    this.Canvas.Background = Brushes.Purple;
+                    break;
+            }
+        }
+        private void View_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+                case 3:
+                    this.Canvas.Background = Brushes.Green;
+                    break;
+            }
+        }
+        private void Insert_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+                case 3:
+                    this.Canvas.Background = Brushes.Green;
+                    break;
+                case 4:
+                    this.Canvas.Background = Brushes.Gray;
+                    break;
+            }
+        }
+        private void Tool_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+            }
+        }
+        private void Help_Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    this.Canvas.Background = Brushes.Black;
+                    break;
+                case 2:
+                    this.Canvas.Background = Brushes.Red;
+                    break;
+                case 3:
+                    this.Canvas.Background = Brushes.Green;
+                    break;
+            }
+        }
     }
 
 }
