@@ -38,6 +38,7 @@ namespace CopyAndPasteInCanvas
            
         }
 
+
         private void DisPlayArrow_Click(object sender, RoutedEventArgs e)
         {
 
@@ -62,6 +63,11 @@ namespace CopyAndPasteInCanvas
             inkCanvas.Height = 1500;
             inkCanvas.Background = Brushes.Transparent;
             Canvas.Children.Add(inkCanvas);
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+
         }
     }
 
