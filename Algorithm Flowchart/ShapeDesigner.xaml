@@ -61,15 +61,11 @@
             Width="202" Height="202" Canvas.Top="50" Canvas.Left="50"
             MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
                     Template="{StaticResource DesignShape}" RenderTransformOrigin="3.005,2.555">
+            <Ellipse Fill="Red"
+                     IsHitTestVisible="False"></Ellipse>
 
-                <Ellipse Fill="Red" x:Name="Ellipse"
-                     IsHitTestVisible="False">
-                </Ellipse>
-
-        
         </ContentControl>
 
-       
         <!-- Draw rectangle-->
         <!--
         <ContentControl

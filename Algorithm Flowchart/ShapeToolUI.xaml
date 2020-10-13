@@ -11,30 +11,30 @@
     <Grid Background="White">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
             <StackPanel Background="#FFBCE6FF">
-                <Button  Click="DisplayRhombus"
+                <Button  MouseDoubleClick="DisplayRhombus"
                     Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
+                        <ImageBrush ImageSource="rhombus.png"/>
                     </Button.Background>
                 </Button>
-                <Button Click="DisplayParallelogram"
+                <Button MouseDoubleClick="DisplayParallelogram"
                     Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
                     <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/parallelogram1.png" Stretch="UniformToFill">
+                        <ImageBrush ImageSource="parallelogram1.png" Stretch="UniformToFill">
 
                         </ImageBrush>
                     </Button.Background>
                 </Button>
-                <Button Click="DisplayRectangle"  
+                <Button MouseDoubleClick="DisplayRectangle"  
                     Margin="10,40,10,0" Height="72" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >                  
                     <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/rectangle1.png"/>
+                        <ImageBrush ImageSource="rectangle1.png"/>
                     </Button.Background>
                 </Button>
-                <Button Click="DisplayCircle"  
+                <Button MouseDoubleClick="DisplayCircle"  
                     Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
                     <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/circle.png"/>
+                        <ImageBrush ImageSource="circle.png"/>
                     </Button.Background>
                 </Button>
             </StackPanel>

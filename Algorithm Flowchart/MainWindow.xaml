@@ -8,9 +8,9 @@
         xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" x:Class="CopyAndPasteInCanvas.Window1"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
-        Icon="./Resources/Images/logo1.jpg" 
+        Icon="logo1.jpg" 
         MinWidth="600" MinHeight="600">
-
+    
     <DockPanel Background="FloralWhite" >        
         <Algorithm_Flowchart:MenuBar  DockPanel.Dock="Top"
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" />
@@ -22,18 +22,14 @@
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
         </Grid>
 
-
         <Canvas x:Name="Canvas" Background="#FFBCE6FF" DockPanel.Dock="Bottom">   
-
         </Canvas>
         
     </DockPanel>
 
     <!--<Window.Resources>
         <Canvas x:Key="Canvas">
-            -->
-    <!-- Draw circle-->
-    <!--
+            --><!-- Draw circle--><!--
             <ContentControl x:Name="Circle"
             Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
             MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
@@ -43,6 +39,6 @@
             </ContentControl>
         </Canvas>
     </Window.Resources>-->
-
+   
 
 </Window>

@@ -27,7 +27,7 @@ namespace Algorithm_Flowchart
         }
 
         // Display shape in the main area, parameters -> shape, height and width
-        public void DisplayShape(Shape shape,int height, int width)
+        private void DisplayShape(Shape shape,int height, int width)
         {
             var contentControl = new ContentControl();
             foreach (Window window in Application.Current.Windows)
@@ -49,7 +49,7 @@ namespace Algorithm_Flowchart
             }
         }
 
-        private void DisplayRhombus(object sender, RoutedEventArgs e)
+        private void DisplayRhombus(object sender, MouseButtonEventArgs e)
         {
 
             string pathData = "M 0,5 5,0 10,5 5,10 ZZ";
@@ -63,7 +63,7 @@ namespace Algorithm_Flowchart
             DisplayShape(rhombus, 70, 140);
         }
 
-        private void DisplayParallelogram(object sender, RoutedEventArgs e)
+        private void DisplayParallelogram(object sender, MouseButtonEventArgs e)
         {
            
             string pathData = "M 0,10 2.5,0 10,0 7.5,10 Z";
@@ -77,7 +77,7 @@ namespace Algorithm_Flowchart
             DisplayShape(parallelogram, 70, 140);
         }
 
-        private void DisplayRectangle(object sender, RoutedEventArgs e)
+        private void DisplayRectangle(object sender, MouseButtonEventArgs e)
         {
             // Set rectangle shape
             Rectangle rectangle = new Rectangle();
@@ -88,7 +88,7 @@ namespace Algorithm_Flowchart
             DisplayShape(rectangle, 70, 140);
         }
 
-        private void DisplayCircle(object sender, RoutedEventArgs e)
+        private void DisplayCircle(object sender, MouseButtonEventArgs e)
         {
             // Set shape 
             Ellipse ellipse = new Ellipse();
@@ -99,13 +99,5 @@ namespace Algorithm_Flowchart
             // Call DisplayShape function 
             DisplayShape(ellipse,100,100);
         }
-
-        private void SetTextBox(Shape shape)
-        {
-            TextBox textBox = new TextBox();
-            //shape.AddT
-        }
-
-        
     }
 }

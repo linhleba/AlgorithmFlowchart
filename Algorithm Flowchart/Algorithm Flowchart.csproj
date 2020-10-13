@@ -69,17 +69,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-
     <Compile Include="MenuBar.xaml.cs">
       <DependentUpon>MenuBar.xaml</DependentUpon>
     </Compile>
-     <Compile Include="Class\MoveThumb.cs" />
-    <Compile Include="Class\ResizeThumb.cs" />
-
+    <Compile Include="MoveThumb.cs" />
+    <Compile Include="ResizeThumb.cs" />
     <Compile Include="ShapeDesigner.xaml.cs">
       <DependentUpon>ShapeDesigner.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Class\ShapeTool.cs" />
+    <Compile Include="ShapeTool.cs" />
     <Compile Include="ShapeToolUI.xaml.cs">
       <DependentUpon>ShapeToolUI.xaml</DependentUpon>
     </Compile>
@@ -107,7 +105,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Themes\Generic.xaml">
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -140,47 +138,43 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\icon.jpg" />
+    <Resource Include="icon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\logo1.jpg" />
+    <Resource Include="logo1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rectangle.jpg" />
+    <Resource Include="rectangle.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rectangle.ico" />
+    <Resource Include="rectangle.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\parallelogram.png" />
+    <Resource Include="parallelogram.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\parallelogram1.png" />
+    <Resource Include="parallelogram1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rhombus.ico" />
+    <Resource Include="rhombus.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\circle.ico" />
+    <Resource Include="circle.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rhombus.png" />
+    <Resource Include="rhombus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rectangle.png" />
+    <Resource Include="rectangle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\circle.jpg" />
+    <Resource Include="circle.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\circle.png" />
+    <Resource Include="circle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\rectangle1.png" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Resource Include="Resources\Images\pencil.png" />
+    <Resource Include="rectangle1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" />
