@@ -16,7 +16,7 @@
             <ColumnDefinition />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        <Image Source="logo1.jpg" />
+        <Image Source="./Resources/Images/logo1.jpg" />
         <!--push tab in column 2
                 dragablz using for design tab -->
         <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
@@ -139,7 +139,7 @@
                                 <TextBlock Text="Shape" Margin="10,0,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Margin="10,0,10,0">
+                        <Button Click="DisPlayArrow_Click"  Margin="10,0,10,0">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                 <TextBlock Text="Arrow" Margin="10,0,0,0"/>
@@ -151,7 +151,7 @@
                                 <TextBlock Text="Text" Margin="10,0,0,0"/>
                             </StackPanel>
                         </Button>
-                        <Button Margin="10,0,10,0">
+                        <Button Click="DrawByPencil_Click" Margin="10,0,10,0">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                 <TextBlock Text="Pencil" Margin="10,0,0,0"/>
