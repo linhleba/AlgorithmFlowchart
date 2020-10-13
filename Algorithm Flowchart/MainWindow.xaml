@@ -8,252 +8,32 @@
         xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" x:Class="CopyAndPasteInCanvas.Window1"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
-        Icon="logo1.jpg" 
+        Icon="./Resources/Images/logo1.jpg" 
         MinWidth="600" MinHeight="600">
-    
-    <DockPanel Background="FloralWhite" >
 
-        <Grid Height="100" DockPanel.Dock="Top" >
-            <!--Split 2 column 1 for tab and 1 for image label -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"  />
-                <ColumnDefinition />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
-            <Image Source="logo1.jpg" />
-            <!--push tab in column 2
-                dragablz using for design tab -->
-            <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
-                                     FontSize="18"   ItemContainerStyle="{DynamicResource NormalTabItemStyle}" >
-                <TabItem Header="File" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                        <StackPanel Orientation="Horizontal">
-                            <Button x:Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="Button_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="FolderPlus" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="New" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button x:Name="buttonOpen" Margin="10,0,10,0" Uid="2" Click="Button_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="FolderOpen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Open" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button x:Name="buttonSave" Margin="10,0,10,0" Uid="3" Click="Button_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ContentSave" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Save" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button x:Name="buttonExport" Margin="10,0,10,0" Uid="4" Click="Button_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="FileExport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Export" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button x:Name="buttonImport" Margin="10,0,10,0" Uid="5" Click="Button_Click">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="FileImport" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Import From File" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Edit" FontSize="15" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ContentCut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Cut" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ContentCopy" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Copy" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ContentPaste" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Paste" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="DeleteEmpty" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Delete" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Cleaning" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Clear" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Undo" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Undo" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Redo" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Redo" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-
-                <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ZoomIn" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Zoom in" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ZoomOut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Zoom out" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Fullscreen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="FullScreen" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Insert" FontSize="15" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Shape" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Shape" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Arrow" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Text" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Text" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Pencil" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Tool" FontSize="15" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="StyleOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Style" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Color" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Color Fill" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Help" FontSize="15" Margin="10,0,0,0" Width="200">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Tux" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Tutorial" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Feedback" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Feedback" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Margin="10,0,10,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="About" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="About Us" Margin="10,0,0,0"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
-                </TabItem>
-            </dragablz:TabablzControl>
-            <StackPanel Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
-                <Button HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
-                    <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
-                </Button>
-            </StackPanel>
-        </Grid>
-        <!-->
-        <Grid Background="#FFBCE6FF" x:Name="gridColor" Margin="0,0,0,0" Height="700" >
-            Visibility="Visible" to see testing of 'copy' and 'paste' short cut
-
-            <Canvas x:Name="drawingCanvas" Visibility="Hidden">
-                <Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"/>
-                <Button x:Name="Red" Content="Click to choice Red" Width="172" Canvas.Left="19" Canvas.Top="88" Click="Button_Click"/>
-                <Rectangle x:Name="yellow" Fill="Yellow" Width="100" Height="50" Canvas.Left="19" Canvas.Top="132"/>
-                <Button Content="Click to choice Yellow" Width="172" Canvas.Left="19" Canvas.Top="201" Click="Button_Click_1"/>
-                <TextBlock TextWrapping="Wrap" Text="Paste Result :" Canvas.Left="300" Canvas.Top="75" Width="131"/>
-                <TextBlock TextWrapping="Wrap" Text="Ctrl + C and then Ctrl + V to paste after u choice ur shape" Canvas.Left="19" Canvas.Top="254" Width="131"/>
-
-            </Canvas>
-
-            <DockPanel Margin="0,0,0,0" Background="White" LastChildFill="False"
-                       Width="100" HorizontalAlignment="Left">
-
-                <Algorithm_Flowchart:ShapeToolUI  
-                    Margin="0,0,0,0"/>
-
-            </DockPanel>
-
-        </Grid>
-        <-->
-        <Algorithm_Flowchart:ShapeToolUI  DockPanel.Dock="Left"
+    <DockPanel Background="FloralWhite" >        
+        <Algorithm_Flowchart:MenuBar  DockPanel.Dock="Top"
+                HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" />
+        <Grid DockPanel.Dock="Left">
+            <Algorithm_Flowchart:ShapeToolUI  
+                HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140" Height="200"/>
+            <GridSplitter Height="5"/>
+            <Algorithm_Flowchart:ShapeToolUI  
                 HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
+        </Grid>
 
-        <Canvas x:Name="Canvas" Background="#FFBCE6FF">
-       
-       
-                <!--<ContentControl x:Name="MainCotentControl">
 
-                </ContentControl>-->
-           
+        <Canvas x:Name="Canvas" Background="#FFBCE6FF" DockPanel.Dock="Bottom">   
+
         </Canvas>
+        
     </DockPanel>
 
     <!--<Window.Resources>
         <Canvas x:Key="Canvas">
-            --><!-- Draw circle--><!--
+            -->
+    <!-- Draw circle-->
+    <!--
             <ContentControl x:Name="Circle"
             Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
             MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
@@ -264,6 +44,5 @@
         </Canvas>
     </Window.Resources>-->
 
-   
 
 </Window>

@@ -14,7 +14,9 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Resources;
 using System.Windows.Shapes;
+
 
 namespace CopyAndPasteInCanvas
 
@@ -34,6 +36,14 @@ namespace CopyAndPasteInCanvas
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            
+        }
+
+
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+
         }
     }
 

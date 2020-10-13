@@ -14,13 +14,13 @@
                 <Button  Click="DisplayRhombus"
                     Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>
-                        <ImageBrush ImageSource="rhombus.png"/>
+                        <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
                     </Button.Background>
                 </Button>
                 <Button Click="DisplayParallelogram"
                     Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
                     <Button.Background>
-                        <ImageBrush ImageSource="parallelogram1.png" Stretch="UniformToFill">
+                        <ImageBrush ImageSource="./Resources/Images/parallelogram1.png" Stretch="UniformToFill">
 
                         </ImageBrush>
                     </Button.Background>
@@ -28,13 +28,13 @@
                 <Button Click="DisplayRectangle"  
                     Margin="10,40,10,0" Height="72" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >                  
                     <Button.Background>
-                        <ImageBrush ImageSource="rectangle1.png"/>
+                        <ImageBrush ImageSource="./Resources/Images/rectangle1.png"/>
                     </Button.Background>
                 </Button>
                 <Button Click="DisplayCircle"  
                     Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
                     <Button.Background>
-                        <ImageBrush ImageSource="circle.png"/>
+                        <ImageBrush ImageSource="./Resources/Images/circle.png"/>
                     </Button.Background>
                 </Button>
             </StackPanel>
