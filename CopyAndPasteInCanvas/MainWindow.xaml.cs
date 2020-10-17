@@ -170,6 +170,7 @@ namespace CopyAndPasteInCanvas
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //write canvas to .xaml file
             FileStream fs = File.Open("fileName.xaml", FileMode.Create);
             XamlWriter.Save(drawingCanvas, fs);
             fs.Close();
@@ -177,14 +178,23 @@ namespace CopyAndPasteInCanvas
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            //load .xaml file to saved Canvas and copy savedCanvas member to drawingCanvas 
             FileStream fs = File.Open("fileName.xaml", FileMode.Open, FileAccess.Read);
             savedCanvas = XamlReader.Load(fs) as Canvas;
             fs.Close();
             while (savedCanvas.Children.Count > 0)
             {
                 UIElement uie = savedCanvas.Children[0];
+                //if (uie.Uid == "save")  ;
+                //else if (uie.Uid == "load") ;
+                //else if (uie.Uid == "red") ;
+                //else if (uie.Uid == "redE") ;
+                //else
+                //{
                 savedCanvas.Children.Remove(uie);
                 drawingCanvas.Children.Add(uie);
+                //}
+                //savedCanvas.Children.Remove(uie);
             }
         }
 
@@ -205,7 +215,7 @@ namespace CopyAndPasteInCanvas
         //    //set canvas to working-on canvas
         //    canvas = sender as Canvas;
         //    //check and set shape to our just-clicked shape
-        //    if (canvas == null)
+        //    if (canvas == null)`
         //        return;
         //    HitTestResult hitTestResult = VisualTreeHelper.HitTest(canvas, e.GetPosition(canvas));
         //    shape = hitTestResult.VisualHit as Shape;

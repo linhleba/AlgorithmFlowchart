@@ -6,20 +6,22 @@
 
     Title="Window1" Height="400" Width="600">
 
-    <Canvas Name="drawingCanvas" Mouse.MouseDown="Canvas_MouseDown" Margin="0,0,445.6,-1.6">
-        <Rectangle Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
-        <Ellipse Fill="Red" Height="100" Width="100" Canvas.Left="19" Canvas.Top="103"/>
-        <Button Content="Button" Width="75" Canvas.Left="19" Canvas.Top="224" Click="Button_Click"/>
-        <Button Content="Button" Width="75" Canvas.Left="19" Canvas.Top="281" Click="Button_Click_1"/>
+    <Canvas Name="drawingCanvas" Mouse.MouseDown="Canvas_MouseDown" Margin="0,0,3.6,-1.6">
+        <Rectangle Panel.ZIndex="100" x:Uid="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
+        <Ellipse x:Uid="redE" Fill="Red" Height="100" Width="100" Canvas.Left="19" Canvas.Top="103"/>
+        <Button Panel.ZIndex="100" x:Uid="save" Content="Save" Width="75" Canvas.Left="19" Canvas.Top="224" Click="Button_Click"/>
+        <Button Panel.ZIndex="100" x:Uid="load" Content="Load" Width="75" Canvas.Left="19" Canvas.Top="281" Click="Button_Click_1"/>
         <!--<Canvas Height="370" Width="436" Name="Canvas" Mouse.MouseDown="Canvas_MouseDown" Canvas.Left="153" Canvas.Top="-2" RenderTransformOrigin="0.5,0.5">
             <Rectangle Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
             <Ellipse Fill="Red" Height="100" Width="100" Canvas.Left="19" Canvas.Top="103"/>
             <Button Content="Button" Width="75" Canvas.Left="19" Canvas.Top="224" Click="Button_Click"/>
             <Button Content="Button" Width="75" Canvas.Left="19" Canvas.Top="281" Click="Button_Click_1"/>
-            --><!--<Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
+            -->
+        <!--<Rectangle x:Name="red" Fill="Red" Width="100" Height="50" Canvas.Left="19" Canvas.Top="21"></Rectangle>
             <Ellipse Fill="Red" Height="100" Width="100" Canvas.Left="19" Canvas.Top="103"/>
             <Button Content="Button" Width="75" Canvas.Left="233" Canvas.Top="52" Click="Button_Click"/>
-            <Button Content="Button" Width="75" Canvas.Left="343" Canvas.Top="52" Click="Button_Click_1"/>--><!--
+            <Button Content="Button" Width="75" Canvas.Left="343" Canvas.Top="52" Click="Button_Click_1"/>-->
+        <!--
         </Canvas>-->
     </Canvas>
 
