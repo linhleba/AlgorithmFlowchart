@@ -1,0 +1,14 @@
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\bin\Debug\CopyAndPasteInCanvas.exe.config
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\bin\Debug\CopyAndPasteInCanvas.exe
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\bin\Debug\CopyAndPasteInCanvas.pdb
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\MainWindow.baml
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\MainWindow.g.cs
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\App.g.cs
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas_MarkupCompile.cache
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.g.resources
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.Properties.Resources.resources
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.csproj.GenerateResource.cache
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.csproj.CoreCompileInputs.cache
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.exe
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.pdb
+C:\Users\HOME\source\repos\CopyAndPasteInCanvas\CopyAndPasteInCanvas\obj\Debug\CopyAndPasteInCanvas.csprojAssemblyReference.cache
