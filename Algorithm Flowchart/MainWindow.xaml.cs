@@ -160,6 +160,11 @@ namespace CopyAndPasteInCanvas
                     break;
             }
         }
+
+        private void DisplayCircle(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 }

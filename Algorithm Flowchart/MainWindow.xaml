@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" x:Class="CopyAndPasteInCanvas.Window1"
+        xmlns:pt="http://propertytools.org/wpf"
+        xmlns:Algorithm_Flowchart="clr-namespace:Algorithm_Flowchart" xmlns:WpfColorFontDialog="clr-namespace:WpfColorFontDialog;assembly=WpfColorFontDialog" x:Class="CopyAndPasteInCanvas.Window1"
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
         Icon="./Resources/Images/logo1.jpg" 
@@ -14,6 +15,7 @@
     <DockPanel Background="FloralWhite" >
         <Grid Height="100" DockPanel.Dock="Top" >
             <!--Split 2 column 1 for tab and 1 for image label -->
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"  />
                 <ColumnDefinition />
@@ -212,16 +214,24 @@
                     <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                 </Button>
             </StackPanel>
-        </Grid>       
+        </Grid>
         <Algorithm_Flowchart:ShapeToolUI  
             HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140"/>
-    
+        <!--> 
+            make editing tool
+        <-->
+        <ScrollViewer DockPanel.Dock="Right"
+            HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" >
+            <StackPanel Background="#FFBCE6FF" Width="180">
+                <pt:ColorPickerPanel Margin="0,10,10,0" />
+                <WpfColorFontDialog:ColorFontChooser Margin="0,15,10,30" />
 
+            </StackPanel>
+        </ScrollViewer>
 
-        <Canvas x:Name="Canvas" Background="#FFBCE6FF" DockPanel.Dock="Bottom">   
-
+        <Canvas x:Name="Canvas" Background="#FFBCE6FF" DockPanel.Dock="Bottom">
         </Canvas>
-        
+
     </DockPanel>
 
     <!--<Window.Resources>
