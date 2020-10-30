@@ -25,6 +25,7 @@ namespace CopyAndPasteInCanvas
     public partial class Window1
 
     {
+        public BackRoundPicker newPick;
         public Window1()
 
         {
@@ -44,6 +45,34 @@ namespace CopyAndPasteInCanvas
         {
             Application.Current.Shutdown();
 
+        }
+        private void FontPicker_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            switch (index)
+            {
+                case 1:
+                    newPick = new BackRoundPicker(this);
+                    newPick.ShowDialog();
+                    {
+                        try
+                        {
+                            var converter = new System.Windows.Media.BrushConverter();
+                            Canvas.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            //rightPanel.Background= (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            this.ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            panel.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            gridColumn2.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                            this.rightPanel.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
+                        }
+                        catch (Exception ea) { }
+                        
+                    }
+
+                    break;
+                
+            }
         }
         private void File_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -164,6 +193,46 @@ namespace CopyAndPasteInCanvas
         private void DisplayCircle(object sender, RoutedEventArgs e)
         {
 
+        }
+        
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            Canvas.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            
+        }
+
+        
+        private void tabCnntrol_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            //Brush1 = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            
+        }
+
+        private void ShapeTool_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+        }
+
+        private void tabCnntrol_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            tabCnntrol.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+        }
+
+        private void rightPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            rightPanel.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+        }
+
+        private void gridColumn2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            gridColumn2.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
     }
 
