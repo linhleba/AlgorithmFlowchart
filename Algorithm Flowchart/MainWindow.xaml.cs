@@ -137,7 +137,17 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Red;
                     break;
                 case 3:
-                    this.Canvas.Background = Brushes.Green;
+                    if(this.ResizeMode != System.Windows.ResizeMode.NoResize)
+                    {
+                        //this.WindowState = System.Windows.WindowState.Maximized;
+                        this.ResizeMode = System.Windows.ResizeMode.NoResize;
+                        this.WindowState = System.Windows.WindowState.Maximized;
+                    }
+                    else
+                    {
+                        this.ResizeMode = System.Windows.ResizeMode.CanResize;
+                        this.WindowState = System.Windows.WindowState.Normal;
+                    }
                     break;
             }
         }
@@ -233,6 +243,7 @@ namespace CopyAndPasteInCanvas
         {
             var converter = new System.Windows.Media.BrushConverter();
             gridColumn2.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            
         }
     }
 

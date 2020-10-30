@@ -11,7 +11,8 @@
         mc:Ignorable="d"
         Title="Argorithm FlowChart" Height="600" Width="1000" WindowStartupLocation="CenterScreen"
         Icon="./Resources/Images/logo1.jpg" 
-        MinWidth="600" MinHeight="600"   >
+        MinWidth="600" MinHeight="600"  
+         >
     <Window.Resources>
 
     </Window.Resources>
