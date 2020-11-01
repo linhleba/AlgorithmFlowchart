@@ -216,8 +216,33 @@ namespace CopyAndPasteInCanvas
         private void tabCnntrol_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-            //Brush1 = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            Brush b= (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}"); 
+            tabCnntrol.BorderBrush = b;
+            this.buttonFile.Background = b;
+            this.buttonOpen.Background = b;
+            this.buttonSave.Background = b;
+            this.buttonImport.Background = b;
+            this.buttonExport.Background = b;
+            this.buttonCut.Background = b;
+            this.buttonCopy.Background = b;
+            this.buttonPaste.Background = b;
+            this.buttonDelete.Background = b;
+            this.buttonClear.Background = b;
+            this.buttonUndo.Background = b;
+            this.buttonRedo.Background = b;
+            this.buttonZoomin.Background = b;
+            this.buttonZoomout.Background = b;
+            this.buttonFull.Background = b;
+            this.buttonColor.Background = b;
+            this.buttonShape.Background = b;
+            this.buttonPencil.Background = b;
+            this.buttonArrow.Background = b;
+            this.buttonTuto.Background = b;
+            this.buttonFeedback.Background = b;
+            this.buttonText.Background = b;
+            this.buttonStyle.Background = b;
+            this.buttonAbout.Background = b;
+            this.buttonSearch.Background = b;
             
         }
 
