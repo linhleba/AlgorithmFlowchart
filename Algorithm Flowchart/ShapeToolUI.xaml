@@ -7,10 +7,11 @@
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="200">
+             d:DesignHeight="900" d:DesignWidth="200"
+             Name="shapeTool">
     <Grid Background="White">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
-            <StackPanel Background="#FFBCE6FF">
+            <StackPanel Name="shapeToolBackround" Background="#FFBCE6FF">
                 <Button  Click="DisplayRhombus"
                     Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>
