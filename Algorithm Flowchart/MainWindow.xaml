@@ -39,7 +39,7 @@
                 <TabItem Header="File" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="File_Button_Click" BorderBrush="#FF3E9201" >
+                            <Button x:Name="buttonFile" Margin="10,0,10,0" Uid="1" Click="FontPicker_Click" BorderBrush="#FF3E9201" >
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="FolderPlus" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="New" Margin="10,0,0,0"/>
@@ -75,43 +75,43 @@
                 <TabItem Header="Edit" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal" >
-                            <Button Margin="10,0,10,0" Uid="1" Click="Edit_Button_Click">
+                            <Button x:Name="buttonCut" Margin="10,0,10,0" Uid="1" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ContentCut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Cut" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="2" Click="Edit_Button_Click">
+                            <Button x:Name="buttonCopy" Margin="10,0,10,0" Uid="2" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ContentCopy" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Copy" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="3" Click="Edit_Button_Click">
+                            <Button x:Name="buttonPaste" Margin="10,0,10,0" Uid="3" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ContentPaste" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Paste" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="4" Click="Edit_Button_Click">
+                            <Button x:Name="buttonDelete" Margin="10,0,10,0" Uid="4" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="DeleteEmpty" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Delete" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="5" Click="Edit_Button_Click">
+                            <Button x:Name="buttonClear" Margin="10,0,10,0" Uid="5" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Cleaning" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Clear" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="6" Click="Edit_Button_Click">
+                            <Button x:Name="buttonUndo" Margin="10,0,10,0" Uid="6" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Undo" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Undo" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="7" Click="Edit_Button_Click">
+                            <Button x:Name="buttonRedo" Margin="10,0,10,0" Uid="7" Click="Edit_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Redo" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Redo" Margin="10,0,0,0"/>
@@ -124,19 +124,19 @@
                 <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0" Uid="1" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomin" Margin="10,0,10,0" Uid="1" Click="View_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomIn" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom in" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="2" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomout" Margin="10,0,10,0" Uid="2" Click="View_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomOut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom out" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="3" Click="View_Button_Click">
+                            <Button x:Name="buttonFull" Margin="10,0,10,0" Uid="3" Click="View_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Fullscreen" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="FullScreen" Margin="10,0,0,0"/>
@@ -148,25 +148,25 @@
                 <TabItem Header="Insert" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal" >
-                            <Button Margin="10,0,10,0" Uid="1" Click="Insert_Button_Click">
+                            <Button x:Name="buttonShape" Margin="10,0,10,0" Uid="1" Click="Insert_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Shape" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Shape" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="2" Click="Insert_Button_Click">
+                            <Button x:Name="buttonArrow" Margin="10,0,10,0" Uid="2" Click="Insert_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ArrowTopLeft" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Arrow" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="3" Click="Insert_Button_Click">
+                            <Button x:Name="buttonText" Margin="10,0,10,0" Uid="3" Click="Insert_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Text" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Text" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="4" Click="Insert_Button_Click">
+                            <Button x:Name="buttonPencil" Margin="10,0,10,0" Uid="4" Click="Insert_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Pencil" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Pencil" Margin="10,0,0,0"/>
@@ -178,38 +178,37 @@
                 <TabItem Header="Tool" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,0,10,0" Uid="1" Click="Tool_Button_Click">
+                            <Button x:Name="buttonStyle" Margin="10,0,10,0" Uid="1" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="StyleOutline" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Style" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="2" Click="Tool_Button_Click">
+                            <Button x:Name="buttonColor" Margin="10,0,10,0" Uid="2" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Color" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Color Fill" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-                        
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Help" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal" >
-                            <Button Margin="10,0,10,0" Uid="1" Click="Tool_Button_Click">
+                            <Button x:Name="buttonTuto" Margin="10,0,10,0" Uid="1" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Tux" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Tutorial" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="2" Click="Tool_Button_Click">
+                            <Button x:Name="buttonFeedback" Margin="10,0,10,0" Uid="2" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Feedback" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Feedback" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button Margin="10,0,10,0" Uid="3" Click="Tool_Button_Click">
+                            <Button x:Name="buttonAbout" Margin="10,0,10,0" Uid="3" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="About" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="About Us" Margin="10,0,0,0"/>
@@ -226,7 +225,7 @@
                         <ColumnDefinition   />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1" HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
+                    <Button x:Name="buttonSearch" Grid.Column="1" HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
                         <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                     </Button>
                     <Button Visibility="Hidden" Name="buttonChooseColor" HorizontalAlignment="Right" Grid.Column="0" Margin="0,12,-40,0" >
