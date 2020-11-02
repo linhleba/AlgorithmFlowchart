@@ -236,35 +236,48 @@
                 
             </StackPanel>
         </Grid>
-        <Algorithm_Flowchart:ShapeToolUI  x:Name="ShapeTool"         
+
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"></ColumnDefinition >
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="200"></ColumnDefinition >
+            </Grid.ColumnDefinitions>
+            
+            <Algorithm_Flowchart:ShapeToolUI  x:Name="ShapeTool" Grid.Column="0"     
             HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140" AutomationProperties.IsRowHeader="True" MouseDoubleClick="ShapeTool_MouseDoubleClick"/>
-        <ScrollViewer DockPanel.Dock="Right"
+            
+            
+            <ScrollViewer Grid.Column="2"  
             HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
-            <StackPanel x:Name="rightPanel" Background="#FFFFFFFF" Width="180" MouseLeftButtonDown="rightPanel_MouseLeftButtonDown">
-                <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
-                <WpfColorFontDialog:ColorFontChooser Margin="0,15,10,30" />
+                <StackPanel x:Name="rightPanel" Background="#FFFFFFFF" Width="180" MouseLeftButtonDown="rightPanel_MouseLeftButtonDown">
+                    <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
+                    <WpfColorFontDialog:ColorFontChooser Margin="0,0,10,30" />
+                </StackPanel>
+            </ScrollViewer>
 
-            </StackPanel>
-        </ScrollViewer>
-
-        <Canvas x:Name="Canvas" DockPanel.Dock="Bottom" 
+            <Canvas x:Name="Canvas"  Grid.Column="1"
                 Margin="0,0,0,0">
-            <Canvas.Background>
-                <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
+                <Canvas.Background>
+                    <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
                                      ViewportUnits="Absolute">
-                    <DrawingBrush.Drawing>
-                        <GeometryDrawing>
-                            <GeometryDrawing.Geometry>
-                                <RectangleGeometry Rect="0,0,50,50"/>
-                            </GeometryDrawing.Geometry>
-                            <GeometryDrawing.Pen>
-                                <Pen Brush="Gray" Thickness="1"/>
-                            </GeometryDrawing.Pen>
-                        </GeometryDrawing>
-                    </DrawingBrush.Drawing>
-                </DrawingBrush>
-            </Canvas.Background>
-        </Canvas>
+                        <DrawingBrush.Drawing>
+                            <GeometryDrawing>
+                                <GeometryDrawing.Geometry>
+                                    <RectangleGeometry Rect="0,0,50,50"/>
+                                </GeometryDrawing.Geometry>
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="Gray" Thickness="0.2"/>
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Canvas.Background>
+            </Canvas>
+        </Grid>
+        
+
+        
 
     </DockPanel>
 
