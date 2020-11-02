@@ -9,9 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="200"
              Name="shapeTool">
-    <Grid Background="White">
+    <Grid Background="LightGray">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
-            <StackPanel Name="shapeToolBackround" Background="#FFBCE6FF">
+            <StackPanel Name="shapeToolBackround" Background="GhostWhite">
                 <Button  Click="DisplayRhombus"
                     Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>

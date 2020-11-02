@@ -1,8 +1,9 @@
 ﻿<Application x:Class="Algorithm_Flowchart.App"
-              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Algorithm_Flowchart"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+             xmlns:pt="http://propertytools.org/wpf"
              StartupUri="MainWindow.xaml">
     
     <Application.Resources>
@@ -58,6 +59,7 @@
                 <Setter Property="Padding" Value="1" />
             </Style>
 
+            
 
             <!-- MoveThumb Template -->
             <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:MoveThumb}">

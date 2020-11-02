@@ -25,12 +25,15 @@ namespace CopyAndPasteInCanvas
     public partial class Window1
 
     {
+        InkCanvas inkCanvas;
         public BackRoundPicker newPick;
+        public bool isColorPicker;
         public Window1()
 
         {
             InitializeComponent();
             DataContext = new ShapeDesigner().Canvas;
+            isColorPicker = false;
         }
            
 
@@ -52,7 +55,7 @@ namespace CopyAndPasteInCanvas
             switch (index)
             {
                 case 1:
-                    newPick = new BackRoundPicker(this);
+                    /*newPick = new BackRoundPicker(this);
                     newPick.ShowDialog();
                     {
                         try
@@ -68,7 +71,7 @@ namespace CopyAndPasteInCanvas
                         }
                         catch (Exception ea) { }
                         
-                    }
+                    }*/
 
                     break;
                 
@@ -80,7 +83,8 @@ namespace CopyAndPasteInCanvas
             switch (index)
             {
                 case 1:
-                    this.Canvas.Background = Brushes.Black;
+                    filePicker file = new filePicker();
+                    file.ShowDialog();
                     break;
                 case 2:
                     this.Canvas.Background = Brushes.Red;
@@ -163,11 +167,27 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Red;
                     break;
                 case 3:
-                    this.Canvas.Background = Brushes.Green;
+                    //this.Canvas.Background = Brushes.Green;
+                    Canvas.Children.Remove(inkCanvas);
+
                     break;
                 case 4:
-                    this.Canvas.Background = Brushes.Gray;
-                    break;
+                    {
+                        inkCanvas = new InkCanvas();
+                        inkCanvas.Width = 1500;
+                        inkCanvas.Height = 1500;
+                        inkCanvas.Background = Brushes.Transparent;
+                        /*foreach (Window window in Application.Current.Windows)
+                        {
+                            if (window.GetType() == typeof(Window1))
+                            {
+                                // Add content control to canvas
+                                (window as Window1).
+                            }
+                        }*/
+                        Canvas.Children.Add(inkCanvas);
+                        break;
+                    }                    
             }
         }
         private void Tool_Button_Click(object sender, RoutedEventArgs e)
@@ -179,7 +199,18 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Black;
                     break;
                 case 2:
-                    this.Canvas.Background = Brushes.Red;
+                    var converter = new System.Windows.Media.BrushConverter();
+                    if (!isColorPicker)
+                    {
+                        buttonChooseColor.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+                        buttonChooseColor.Visibility = Visibility.Visible;
+                    }
+                    else
+                        buttonChooseColor.Visibility = Visibility.Hidden;
+                    if (isColorPicker)
+                        isColorPicker = false;
+                    else
+                        isColorPicker = true;
                     break;
             }
         }
@@ -216,7 +247,9 @@ namespace CopyAndPasteInCanvas
         private void tabCnntrol_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if(isColorPicker)
+                tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            
             //Brush1 = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
             
         }
@@ -224,26 +257,36 @@ namespace CopyAndPasteInCanvas
         private void ShapeTool_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (isColorPicker)
+                ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
 
         private void tabCnntrol_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            tabCnntrol.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (isColorPicker)
+                tabCnntrol.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
 
         private void rightPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            rightPanel.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (isColorPicker)
+                rightPanel.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
 
         private void gridColumn2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            gridColumn2.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (isColorPicker)
+                gridColumn2.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
             
+        }
+
+        private void colorPicker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var converter = new System.Windows.Media.BrushConverter();
+            buttonChooseColor.Background= (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
     }
 
