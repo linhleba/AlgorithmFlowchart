@@ -58,7 +58,7 @@
                 <Setter Property="Width" Value="200"  />
                 <Setter Property="Padding" Value="1" />
             </Style>
-
+            
             
 
             <!-- MoveThumb Template -->
@@ -95,16 +95,13 @@
             <ControlTemplate x:Key="DesignShape" TargetType="ContentControl">
                 <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                     <local:MoveThumb Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll"/>
-                    <Control Template="{StaticResource ResizeDecoratorTemplate}"/>
+                    <!--<Control Template="{StaticResource ResizeDecoratorTemplate}"/>-->
                     <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
                 </Grid>
-            </ControlTemplate>
-            
-            <!-- Design shape with textbox -->
-          
-          
+            </ControlTemplate>          
+
         </ResourceDictionary>
-    
-    
+        
+
     </Application.Resources>
 </Application>

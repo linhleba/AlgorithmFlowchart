@@ -49,9 +49,9 @@ namespace Algorithm_Flowchart
             }
         }
 
+
         private void DisplayRhombus(object sender, RoutedEventArgs e)
         {
-
             string pathData = "M 0,5 5,0 10,5 5,10 ZZ";
             Path rhombus = new Path();
             rhombus.Fill = Brushes.White;
@@ -59,7 +59,6 @@ namespace Algorithm_Flowchart
             rhombus.Data = Geometry.Parse(pathData);
             rhombus.IsHitTestVisible = false;
             rhombus.Stretch = Stretch.Fill;
-
             DisplayShape(rhombus, 70, 140);
         }
 

@@ -12,7 +12,7 @@
     <Grid Background="LightGray">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
             <StackPanel Name="shapeToolBackround" Background="GhostWhite">
-                <Button  Click="DisplayRhombus"
+                <Button  Click="DisplayRhombus" 
                     Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
                     <Button.Background>
                         <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
@@ -27,16 +27,50 @@
                     </Button.Background>
                 </Button>
                 <Button Click="DisplayRectangle"  
-                    Margin="10,40,10,0" Height="72" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >                  
-                    <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/rectangle1.png"/>
-                    </Button.Background>
+                    Margin="10,40,10,0" Height="72" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Rectangle Stroke="Black"
+                         StrokeThickness="2">
+                                    <Rectangle.Fill>
+                                        <RadialGradientBrush>
+                                            <RadialGradientBrush.Transform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleY="0.65" />
+                                                </TransformGroup>
+                                            </RadialGradientBrush.Transform>
+                                        </RadialGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
                 <Button Click="DisplayCircle"  
                     Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
-                    <Button.Background>
-                        <ImageBrush ImageSource="./Resources/Images/circle.png"/>
-                    </Button.Background>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse Stroke="Black"
+                         StrokeThickness="2">
+                                    <Ellipse.Fill>
+                                        <RadialGradientBrush>
+                                            <RadialGradientBrush.Transform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleY="0.65" />
+                                                </TransformGroup>
+                                            </RadialGradientBrush.Transform>
+                                        </RadialGradientBrush>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
             </StackPanel>
         </ScrollViewer>

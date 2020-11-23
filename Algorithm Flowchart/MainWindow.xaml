@@ -15,14 +15,15 @@
         MinWidth="600" MinHeight="600"  
          >
     <Window.Resources>
-
+        
     </Window.Resources>
 
-    <DockPanel Background="GhostWhite" Name="panel">
+    
+        <DockPanel Background="GhostWhite" Name="panel">
         <Grid Height="100" DockPanel.Dock="Top" >
             <!--Split 2 column 1 for tab and 1 for image label -->
-
-            <Grid.ColumnDefinitions>
+            
+                <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="140"  />
                 <ColumnDefinition />
                 <ColumnDefinition Width="196" />
@@ -243,11 +244,74 @@
                 <ColumnDefinition Width="200"></ColumnDefinition >
             </Grid.ColumnDefinitions>
             
-            <Algorithm_Flowchart:ShapeToolUI  x:Name="ShapeTool" Grid.Column="0"     
-            HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0,0,0.4" Width="140" AutomationProperties.IsRowHeader="True" MouseDoubleClick="ShapeTool_MouseDoubleClick"/>
-            
-            
-            <ScrollViewer Grid.Column="2"  
+            <Grid Background="LightGray" x:Name="ShapeTool" Grid.Column="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
+                <StackPanel Name="shapeToolBackround" Background="GhostWhite">
+                    <Button  
+                        Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button 
+                    Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Resources/Images/parallelogram1.png" Stretch="UniformToFill">
+
+                            </ImageBrush>
+                        </Button.Background>
+                    </Button>
+                    <Button   
+                    Margin="10,40,10,0" Height="72" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Rectangle Stroke="Black"
+                         StrokeThickness="2">
+                                        <Rectangle.Fill>
+                                            <RadialGradientBrush>
+                                                <RadialGradientBrush.Transform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform ScaleY="0.65" />
+                                                    </TransformGroup>
+                                                </RadialGradientBrush.Transform>
+                                            </RadialGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button   
+                    Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Ellipse Stroke="Black"
+                         StrokeThickness="2">
+                                        <Ellipse.Fill>
+                                            <RadialGradientBrush>
+                                                <RadialGradientBrush.Transform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform ScaleY="0.65" />
+                                                    </TransformGroup>
+                                                </RadialGradientBrush.Transform>
+                                            </RadialGradientBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <ScrollViewer Grid.Column="2"  
             HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
                 <StackPanel x:Name="rightPanel" Background="#FFFFFFFF" Width="180" MouseLeftButtonDown="rightPanel_MouseLeftButtonDown">
                     <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
@@ -266,7 +330,7 @@
                                     <RectangleGeometry Rect="0,0,50,50"/>
                                 </GeometryDrawing.Geometry>
                                 <GeometryDrawing.Pen>
-                                    <Pen Brush="Gray" Thickness="0.2"/>
+                                    <Pen Brush="Black" Thickness="0.05"/>
                                 </GeometryDrawing.Pen>
                             </GeometryDrawing>
                         </DrawingBrush.Drawing>

@@ -86,7 +86,7 @@ namespace CopyAndPasteInCanvas
                     filePicker file = new filePicker();
                     file.ShowDialog();
                     break;
-                case 2:
+                /*case 2:
                     this.Canvas.Background = Brushes.Red;
                     break;
                 case 3:
@@ -97,7 +97,7 @@ namespace CopyAndPasteInCanvas
                     break;
                 case 5:
                     this.Canvas.Background = Brushes.AliceBlue;
-                    break;
+                    break;*/
             }
         }
 
@@ -106,7 +106,7 @@ namespace CopyAndPasteInCanvas
             int index = int.Parse(((Button)e.Source).Uid);
             switch (index)
             {
-                case 1:
+               /* case 1:
                     this.Canvas.Background = Brushes.Black;
                     break;
                 case 2:
@@ -126,7 +126,7 @@ namespace CopyAndPasteInCanvas
                     break;
                 case 7:
                     this.Canvas.Background = Brushes.Purple;
-                    break;
+                    break;*/
             }
         }
         private void View_Button_Click(object sender, RoutedEventArgs e)
@@ -134,12 +134,12 @@ namespace CopyAndPasteInCanvas
             int index = int.Parse(((Button)e.Source).Uid);
             switch (index)
             {
-                case 1:
+                /*case 1:
                     this.Canvas.Background = Brushes.Black;
                     break;
                 case 2:
                     this.Canvas.Background = Brushes.Red;
-                    break;
+                    break;*/
                 case 3:
                     if(this.ResizeMode != System.Windows.ResizeMode.NoResize)
                     {
@@ -160,12 +160,12 @@ namespace CopyAndPasteInCanvas
             int index = int.Parse(((Button)e.Source).Uid);
             switch (index)
             {
-                case 1:
+                /*case 1:
                     this.Canvas.Background = Brushes.Black;
                     break;
                 case 2:
                     this.Canvas.Background = Brushes.Red;
-                    break;
+                    break;*/
                 case 3:
                     //this.Canvas.Background = Brushes.Green;
                     Canvas.Children.Remove(inkCanvas);
@@ -195,9 +195,9 @@ namespace CopyAndPasteInCanvas
             int index = int.Parse(((Button)e.Source).Uid);
             switch (index)
             {
-                case 1:
+                /*case 1:
                     this.Canvas.Background = Brushes.Black;
-                    break;
+                    break;*/
                 case 2:
                     var converter = new System.Windows.Media.BrushConverter();
                     if (!isColorPicker)
@@ -249,32 +249,34 @@ namespace CopyAndPasteInCanvas
             var converter = new System.Windows.Media.BrushConverter();
             Brush b= (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
             if (isColorPicker)
+            {
                 tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-            this.buttonFile.Background = b;
-            this.buttonOpen.Background = b;
-            this.buttonSave.Background = b;
-            this.buttonImport.Background = b;
-            this.buttonExport.Background = b;
-            this.buttonCut.Background = b;
-            this.buttonCopy.Background = b;
-            this.buttonPaste.Background = b;
-            this.buttonDelete.Background = b;
-            this.buttonClear.Background = b;
-            this.buttonUndo.Background = b;
-            this.buttonRedo.Background = b;
-            this.buttonZoomin.Background = b;
-            this.buttonZoomout.Background = b;
-            this.buttonFull.Background = b;
-            this.buttonColor.Background = b;
-            this.buttonShape.Background = b;
-            this.buttonPencil.Background = b;
-            this.buttonArrow.Background = b;
-            this.buttonTuto.Background = b;
-            this.buttonFeedback.Background = b;
-            this.buttonText.Background = b;
-            this.buttonStyle.Background = b;
-            this.buttonAbout.Background = b;
-            this.buttonSearch.Background = b;
+                this.buttonFile.Background = b;
+                this.buttonOpen.Background = b;
+                this.buttonSave.Background = b;
+                this.buttonImport.Background = b;
+                this.buttonExport.Background = b;
+                this.buttonCut.Background = b;
+                this.buttonCopy.Background = b;
+                this.buttonPaste.Background = b;
+                this.buttonDelete.Background = b;
+                this.buttonClear.Background = b;
+                this.buttonUndo.Background = b;
+                this.buttonRedo.Background = b;
+                this.buttonZoomin.Background = b;
+                this.buttonZoomout.Background = b;
+                this.buttonFull.Background = b;
+                this.buttonColor.Background = b;
+                this.buttonShape.Background = b;
+                this.buttonPencil.Background = b;
+                this.buttonArrow.Background = b;
+                this.buttonTuto.Background = b;
+                this.buttonFeedback.Background = b;
+                this.buttonText.Background = b;
+                this.buttonStyle.Background = b;
+                this.buttonAbout.Background = b;
+                this.buttonSearch.Background = b;
+            }
             //Brush1 = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
 
         }
@@ -282,8 +284,8 @@ namespace CopyAndPasteInCanvas
         private void ShapeTool_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            if (isColorPicker)
-                ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (isColorPicker) ;
+                //ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
 
         private void tabCnntrol_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
