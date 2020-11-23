@@ -319,7 +319,7 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <Canvas x:Name="Canvas"  Grid.Column="1"
+            <Canvas x:Name="Canvas"  Grid.Column="1" MouseDown="Form1_MouseClick" MouseMove="Form1_Move" KeyDown="Form1_KeyPress"
                 Margin="0,0,0,0">
                 <Canvas.Background>
                     <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 

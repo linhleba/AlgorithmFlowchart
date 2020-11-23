@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Data;
+
 
 
 namespace CopyAndPasteInCanvas
@@ -25,6 +28,14 @@ namespace CopyAndPasteInCanvas
     public partial class Window1
 
     {
+        int num = -1;
+        int size = 0;
+        bool clicked = false;
+        double [,]whxy = new double[100, 4];
+        Rectangle []rectA = new Rectangle[100];
+        Rect[] rect = new Rect[100];
+        SolidColorBrush redBrush = new SolidColorBrush(Colors.White);
+        Pen pen = new Pen(Brushes.Black, 0.1);
         InkCanvas inkCanvas;
         public BackRoundPicker newPick;
         public bool isColorPicker;
@@ -41,8 +52,146 @@ namespace CopyAndPasteInCanvas
         {
            
         }
+        protected override void OnRender(System.Windows.Media.DrawingContext e)
+        {
+            base.OnRender(e);
+            this.Canvas.Children.Clear();
+            if (size == 0) ;
+            else
+                for (int i = 0; i < size; i++)
+                {
+                    rectA[i] = new Rectangle();
+                    rect[i] = new Rect(whxy[i, 2], whxy[i, 3], whxy[i, 0], whxy[i, 1]);
+                    //if(num == 0)
+                    //rectA[i].MouseDown += Form1_shape_MouseClick;
+                    //whxy[i, 1, 0], whxy[i, 1, 1], whxy[i, 0, 0], whxy[i, 0, 1]
+                    //e.DrawRectangle(redBrush, pen, rectA[i]);
+                    rectA[i].Width = whxy[i, 0];
+                    rectA[i].Height = whxy[i, 1];
 
+                    // Set up the Background color
+                    rectA[i].Fill = Brushes.Black;
 
+                    // Set up the position in the window, at mouse coordonate
+                    Canvas.SetTop(rectA[i], whxy[i, 3] - 100);
+                    Canvas.SetLeft(rectA[i], whxy[i, 2] - 140);
+
+                    this.Canvas.Children.Add(rectA[i]);
+                }
+        }
+
+        private void Form1_KeyPress(object sender, KeyEventArgs e)
+        {
+            // for(int i= 0;, i < sizeof.rect)
+            //if(num != -1)
+            if (num > -1)
+            {
+                if (e.Key == Key.OemPlus)
+                {
+                    whxy[num, 0] += 10;
+                    whxy[num, 1] += 10;
+                }
+                //if (e.KeyChar == '-')
+                //{
+                //    whxy[num, 0, 0] -= 10;
+                //    whxy[num, 0, 1] -= 10;
+                //}
+            }
+            this.InvalidateVisual();
+        }
+        private bool Check(double Mx, double My)
+        {
+            //MessageBox.Show(Convert.ToString(num));
+            for (int i = 0; i < size; i++)
+            {
+                // if(i != num)
+                Console.WriteLine("Rect" + i+ "  " + rect[i].X);
+                Console.WriteLine(Mx);
+                if (rect[i].Contains(Mx, My))
+                {
+                    if (i == num)
+                    {
+                        num = -1;
+                    }
+                    else
+                        num = i;
+                    //MessageBox.Show(Convert.ToString(num));
+                    Console.WriteLine(1);
+                    return true;
+                }
+            }
+            Console.WriteLine(-1);
+            if (num > -1)
+            {
+                num = -2;
+                return true;
+            }
+            //MessageBox.Show(Convert.ToString(num));
+            return false;
+        }
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!Check(e.GetPosition(this).X, e.GetPosition(this).Y))//&& num == -1)
+            {
+                whxy[size, 0] = 35;
+                whxy[size, 1] = 35;
+                whxy[size, 2] = e.GetPosition(this).X;
+                whxy[size, 3] = e.GetPosition(this).Y;
+
+                rectA[size] = new Rectangle();
+
+                rect[size] = new Rect(whxy[size, 2], whxy[size, 3], whxy[size, 0], whxy[size, 1]);
+
+                this.InvalidateVisual();
+                size++;
+            }
+            if (num == -2)
+                num = -1;
+            //clicked = true;
+        }
+        private void Form1_shape_MouseClick(object sender, MouseEventArgs e)
+        {
+            //if (!clicked)
+            {
+                if (!Check(e.GetPosition(this).X, e.GetPosition(this).Y))//&& num == -1)
+                {
+                    whxy[size, 0] = 35;
+                    whxy[size, 1] = 35;
+                    whxy[size, 2] = e.GetPosition(this).X;
+                    whxy[size, 3] = e.GetPosition(this).Y;
+
+                    rectA[size] = new Rectangle();
+
+                    rect[size] = new Rect(whxy[size, 2], whxy[size, 3], whxy[size, 0], whxy[size, 1]);
+
+                    this.InvalidateVisual();
+                    size++;
+                }
+                if (num == -2)
+                    num = -1;
+            }
+        }
+        private void button1_Click(object sender, System.Windows.Media.DrawingContext e)
+        {
+            Pen pen = new Pen(Brushes.Red, 15);
+            //g.DrawLine(pen, 0, 0, 200, 200);
+            //g.Dispose();
+            Rect rect = new Rect((this.Width / 2 - 50), (this.Height / 2 - 50), 100, 50);
+            //int x = (this.Width / 2 - 50 ), y = (this.Height / 2 - 50), width = 100, height = 50;
+            e.DrawRectangle(redBrush, pen, rect);
+            //g.FillRectangle(redBrush, x, y, width, height);
+        }
+        private void Form1_Move(object sender, MouseEventArgs e)
+        {
+            if (num > -1)
+            {
+                whxy[num, 2] = e.GetPosition(this).X + 1;
+                whxy[num, 3] = e.GetPosition(this).Y + 1;// - 15;
+                this.InvalidateVisual();
+            }
+        }
+
+    
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
