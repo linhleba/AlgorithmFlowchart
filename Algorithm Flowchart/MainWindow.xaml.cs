@@ -28,6 +28,8 @@ namespace CopyAndPasteInCanvas
         public List<Rectangle> rectList;
         public Point startPoint;
         public int shapeId ;
+        public bool move = false; 
+        public bool resize = false;
         public Window1()
         {
             InitializeComponent();
@@ -317,33 +319,9 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
-            this.Canvas.Children.Clear();
+            //this.Canvas.Children.Clear();
             //Console.WriteLine("aaaa\n");
-        }
-
-        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
-            int i = -1;
-            bool success = Int32.TryParse(s, out i);
-            if (i > 0) return;
-            startPoint = e.GetPosition(Canvas);
-            Rectangle rect = new Rectangle
-            {
-                Width = 50,
-                Height = 50,
-                Fill= Brushes.Black,
-                Stroke = Brushes.Red,
-                StrokeThickness = 2,
-                Uid = rectList.Count.ToString()
-            };
-            rectList.Add(rect);
-            Canvas.SetLeft(rect, startPoint.X);
-            Canvas.SetTop(rect, startPoint.Y);
-            Canvas.Children.Add(rectList[rectList.Count-1]);
-            Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
-            //Console.WriteLine(rectList.Count);
-        }
+        }        
         public String IsContain(double x, double y)
         {
             x -= 140;
@@ -356,52 +334,87 @@ namespace CopyAndPasteInCanvas
                 double y1 = y0 + rectList[i].Height;
                 Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
                 if ((x0 <= x && x <= x1) && (y0 <= y && y <= y1))
-                {                    
+                {  
+                    this.move = true;
+                    this.Cursor = Cursors.SizeAll;
                     return rectList[i].Uid;
-                }
-                    
+                }                    
             }
+            this.Cursor = null;
             return "-1";
 
         }
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             //Console.WriteLine(rectList.Count);
-            
             if(shapeId==-1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 bool success;
                 success = Int32.TryParse(s, out shapeId);
                 Console.WriteLine($" id {s}  {shapeId}");
-            }          
-            
+                
+            }
+            /*if(move)
+            {
+                Cursor myCursor = new Cursor($"{System.AppDomain.CurrentDomain.BaseDirectory}myCursor.cur");
+                this.Cursor = myCursor;
+            }*/
             if (e.LeftButton == MouseButtonState.Released || shapeId <0)
             {
                 shapeId = -1;
+                if (move) move = !move;
+                if (resize) resize = !resize;
                 return;
 
             }
+            if(move)
+            {
+                double x = (e.GetPosition(this).X - 140 - 25);
+                double y = (e.GetPosition(this).Y - 100 - 25);
+                Canvas.SetLeft(rectList[shapeId], x);
+                Canvas.SetTop(rectList[shapeId], y);
+            }
+            else if(resize)
+            {
 
-            // if i >=0 then              
-            double x = (e.GetPosition(this).X - 140 - 25);
-            double y = (e.GetPosition(this).Y - 100 - 25);
-            Canvas.SetLeft(rectList[shapeId], x);
-            Canvas.SetTop(rectList[shapeId], y);
+            }
+
+            
 
 
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            
+        {            
             if (shapeId>=0)
-            {
-                
+            {                
                 shapeId = -1;
             }
-                
+            if (move) move = !move;
+            if (resize) resize = !resize;
+            this.Cursor = null;
         }
+
+        private void Button_Rectangle_Click_1(object sender, RoutedEventArgs e)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = 50,
+                Height = 50,
+                Fill = Brushes.Black,
+                Stroke = Brushes.Red,
+                StrokeThickness = 2,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(rect);
+            Canvas.SetLeft(rect, 100);
+            Canvas.SetTop(rect, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
+        }
+
+       
     }
 
 }
