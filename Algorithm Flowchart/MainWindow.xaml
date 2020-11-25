@@ -248,13 +248,13 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
                 <StackPanel Name="shapeToolBackround" Background="GhostWhite">
                     <Button  
-                        Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF">
+                        Margin="10,40,10,0" Height="91" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" Click="Button_Click_3">
                         <Button.Background>
                             <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
                         </Button.Background>
                     </Button>
                     <Button 
-                    Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF">
+                    Margin="10,40,10,0" Height="86" Width="100" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF" Click="Button_Click_2">
                         <Button.Background>
                             <ImageBrush ImageSource="./Resources/Images/parallelogram1.png" Stretch="UniformToFill">
 
@@ -287,7 +287,7 @@
                         </Button.Template>
                     </Button>
                     <Button   
-                    Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" >
+                    Margin="10,40,10,0" Height="95" Width="100" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" Click="Button_Click_1" >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
@@ -322,7 +322,7 @@
             </ScrollViewer>
 
             <Canvas x:Name="Canvas"  Grid.Column="1"
-                Margin="0,0,0,0" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp">
+                Margin="0,0,0,0" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1" >
                 <Canvas.Background>
                     <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
                                      ViewportUnits="Absolute">

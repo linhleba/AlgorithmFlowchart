@@ -25,7 +25,7 @@ namespace CopyAndPasteInCanvas
         InkCanvas inkCanvas;
         public BackRoundPicker newPick;
         public bool isColorPicker;
-        public List<Rectangle> rectList;
+        public List<Shape> rectList;
         public Point startPoint;
         public int shapeId ;
         public bool move = false; 
@@ -41,7 +41,7 @@ namespace CopyAndPasteInCanvas
             InitializeComponent();
             DataContext = new ShapeDesigner().Canvas;
             isColorPicker = false;
-            rectList = new List<Rectangle>();
+            rectList = new List<Shape>();
             shapeId = -1;
         }          
 
@@ -339,11 +339,15 @@ namespace CopyAndPasteInCanvas
                 double x1 = x0 + rectList[i].Width;
                 double y1 = y0 + rectList[i].Height;
                 //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
+
+                //making appear arrow to resize of paint shape
                 if ((x0 + 10 <= x && x <= x1 - 10) && (y0 + 10 <= y && y <= y1 - 10))
                 {
                     this.move = true;
-                    this.Cursor = Cursors.SizeAll;
-                    //this.Cursor = Cursors.SizeNS;
+                    if (!isColorPicker)
+                        this.Cursor = Cursors.SizeAll;
+                    else
+                        this.Cursor = Cursors.Pen;
                     return rectList[i].Uid;
                 }
                 else if ((x0 - 10 <= x && x <= x0 + 10) && (y0 - 10 <= y && y <= y0 + 10))
@@ -404,13 +408,14 @@ namespace CopyAndPasteInCanvas
                 }
                 else if (x1 - 10 <= x && x <= x1 + 10)
                 {
-                    this.resize = true;
+                    this.resize = true;                    
                     this.Cursor = Cursors.SizeWE;
                     direction = 1;
                     dragHandle = 2;
                     return rectList[i].Uid;
                 }
             }
+            //if no tin shape cursor is normal and return -1(it mean not shape is catch)
             this.Cursor = null;
             return "-1";
 
@@ -421,12 +426,10 @@ namespace CopyAndPasteInCanvas
             if(shapeId==-1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
-                bool success;
-                success = Int32.TryParse(s, out shapeId);
-                //Console.WriteLine($" id {s}  {shapeId}");
-                
+                //cause IsContain return shapeID - which is String so we have to try to parse it into int
+                bool success = Int32.TryParse(s, out shapeId);
             }    
-            //ưhen 
+            //when mouse button is release , stop this function
             if (e.LeftButton == MouseButtonState.Released || shapeId <0)
             {
                 shapeId = -1;
@@ -434,15 +437,17 @@ namespace CopyAndPasteInCanvas
                 if (resize) resize = !resize;
                 delta = direction = 0;
                 return;
-            }
-            if(move)
+            }   
+            //action when moving shape
+            if (move)
             {
                 double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width/2);
                 double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
                 Canvas.SetLeft(rectList[shapeId], x);
                 Canvas.SetTop(rectList[shapeId], y);
             }
-            else if(resize)
+            //action when resize shape
+            else if (resize)
             {
                 double x = (e.GetPosition(this).X - 140);
                 double y = (e.GetPosition(this).Y - 100);
@@ -454,8 +459,7 @@ namespace CopyAndPasteInCanvas
                     else
                     {                        
                         rectList[shapeId].Height -= 2;
-                    }
-                        
+                    }                     
                     
                 }
                 else if (dragHandle == 2|| dragHandle == 4)
@@ -486,12 +490,11 @@ namespace CopyAndPasteInCanvas
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
-        {            
-            
+        {  
+            //reset every flag (such as move , resize flag) when mouse up
             if (move) move = !move;
             if (resize)
-            {
-                
+            {                
                 direction = 0;
                 resize = !resize;
                 delta = 0;
@@ -505,13 +508,14 @@ namespace CopyAndPasteInCanvas
 
         private void Button_Rectangle_Click_1(object sender, RoutedEventArgs e)
         {
+            //this func make a shape when press button
             Rectangle rect = new Rectangle
             {
                 Width = 100,
                 Height = 100,
-                Fill = Brushes.Black,
-                Stroke = Brushes.Red,
-                StrokeThickness = 2,
+                Fill = Brushes.White,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1,
                 Uid = rectList.Count.ToString()
             };
             rectList.Add(rect);
@@ -519,8 +523,82 @@ namespace CopyAndPasteInCanvas
             Canvas.SetTop(rect, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
             Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
-        }      
+        }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Ellipse ellipse = new Ellipse
+            {
+                Width = 100,
+                Height = 100,
+                Fill = Brushes.White,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(ellipse);
+            Canvas.SetLeft(ellipse, 100);
+            Canvas.SetTop(ellipse, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            PointCollection myPointCollection = new PointCollection();
+            myPointCollection.Add(new Point(0, 100));
+            myPointCollection.Add(new Point(100, 100));
+            myPointCollection.Add(new Point(50, 0));
+            Polygon polygon = new Polygon
+            {
+                Width = 100,
+                Height = 100,
+                Points = myPointCollection,
+                Fill = Brushes.White,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(polygon);
+            Canvas.SetLeft(polygon, 100);
+            Canvas.SetTop(polygon, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = 100,
+                Height = 100,
+                Fill = Brushes.White,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(rect);
+            Canvas.SetLeft(rect, 100);
+            Canvas.SetTop(rect, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+        }
+
+        //paint shape when mouse change into pen
+        private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
+        {
+            if (shapeId == -1)
+            {
+                String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
+                //cause IsContain return shapeID - which is String so we have to try to parse it into int
+                bool success = Int32.TryParse(s, out shapeId);
+            }
+            if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
+            {
+                shapeId = -1;
+                return;
+            }
+            var converter = new System.Windows.Media.BrushConverter();
+            if (isColorPicker)
+                rectList[shapeId].Fill= (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+        }
     }
 
 }

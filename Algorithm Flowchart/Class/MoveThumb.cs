@@ -25,7 +25,6 @@ namespace Algorithm_Flowchart
             {
                 double left = Canvas.GetLeft(item);
                 double top = Canvas.GetTop(item);
-
                 Canvas.SetLeft(item, left + e.HorizontalChange);
                 Canvas.SetTop(item, top + e.VerticalChange);
             }
