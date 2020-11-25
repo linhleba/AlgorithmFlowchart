@@ -346,6 +346,38 @@ namespace CopyAndPasteInCanvas
                     //this.Cursor = Cursors.SizeNS;
                     return rectList[i].Uid;
                 }
+                else if ((x0 - 10 <= x && x <= x0 + 10) && (y0 - 10 <= y && y <= y0 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNWSE;
+                    direction = 1;
+                    dragHandle = 5;
+                    return rectList[i].Uid;
+                }
+                else if ((x1 - 10 <= x && x <= x1 + 10) && (y1 - 10 <= y && y <= y1 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNWSE;
+                    direction = 1;
+                    dragHandle = 5;
+                    return rectList[i].Uid;
+                }
+                else if ((y0 - 10 <= y && y <= y0 + 10) && (x1 - 10 <= x && x <= x1 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNESW;
+                    direction = 1;
+                    dragHandle = 6;
+                    return rectList[i].Uid;
+                }
+                else if ((y1 - 10 <= y && y <= y1 + 10) && (x0 - 10 <= x && x <= x0 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNESW;
+                    direction = 1;
+                    dragHandle = 6;
+                    return rectList[i].Uid;
+                }
                 else if (x0 - 10 <= x && x <= x0 + 10)
                 {
                     this.resize = true;
@@ -416,10 +448,15 @@ namespace CopyAndPasteInCanvas
                 double y = (e.GetPosition(this).Y - 100);
                 if (dragHandle == 1 || dragHandle == 3)
                 {      
+                    
                     if((y-Canvas.GetTop(rectList[shapeId])) > rectList[shapeId].Height)
                         rectList[shapeId].Height += 2;
-                    else 
+                    else
+                    {                        
                         rectList[shapeId].Height -= 2;
+                    }
+                        
+                    
                 }
                 else if (dragHandle == 2|| dragHandle == 4)
                 {
@@ -428,8 +465,21 @@ namespace CopyAndPasteInCanvas
                     else
                         rectList[shapeId].Width -= 2;
                 }
-                
-                
+                else if (dragHandle == 5 || dragHandle == 6)
+                {
+                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
+                    {
+                        rectList[shapeId].Width += 2;
+                        rectList[shapeId].Height+= 2;
+                    }                        
+                    else
+                    {
+                        rectList[shapeId].Width -= 2;
+                        rectList[shapeId].Height -= 2;
+                    }
+                }
+
+
             }        
 
 
