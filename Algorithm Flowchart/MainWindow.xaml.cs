@@ -19,30 +19,36 @@ using System.Windows.Shapes;
 
 
 namespace CopyAndPasteInCanvas
-
 {
-
     public partial class Window1
-
     {
         InkCanvas inkCanvas;
         public BackRoundPicker newPick;
         public bool isColorPicker;
-        public Window1()
+        public List<Rectangle> rectList;
+        public Point startPoint;
+        public int shapeId ;
+        public bool move = false; 
+        public bool resize = false;
+        //variable to test code in stackoverflow 
+        public int dragHandle = 0;
 
+        //use in resize
+        public double delta = 0;
+        public int direction = 0;
+        public Window1()
         {
             InitializeComponent();
             DataContext = new ShapeDesigner().Canvas;
             isColorPicker = false;
-        }
-           
+            rectList = new List<Rectangle>();
+            shapeId = -1;
+        }          
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            
         }
-
-
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
@@ -284,7 +290,7 @@ namespace CopyAndPasteInCanvas
         private void ShapeTool_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var converter = new System.Windows.Media.BrushConverter();
-            if (isColorPicker) ;
+            //if (isColorPicker) ;
                 //ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
 
@@ -315,6 +321,206 @@ namespace CopyAndPasteInCanvas
             var converter = new System.Windows.Media.BrushConverter();
             buttonChooseColor.Background= (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }
+
+        protected override void OnRender(System.Windows.Media.DrawingContext e)
+        {
+            base.OnRender(e);
+            //this.Canvas.Children.Clear();
+            //Console.WriteLine("aaaa\n");
+        }        
+        public String IsContain(double x, double y)
+        {
+            x -= 140;
+            y -= 100;
+            for (int i=0; i < this.rectList.Count; i++)
+            {
+                double x0 = Canvas.GetLeft(rectList[i]);
+                double y0 = Canvas.GetTop(rectList[i]);
+                double x1 = x0 + rectList[i].Width;
+                double y1 = y0 + rectList[i].Height;
+                //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
+                if ((x0 + 10 <= x && x <= x1 - 10) && (y0 + 10 <= y && y <= y1 - 10))
+                {
+                    this.move = true;
+                    this.Cursor = Cursors.SizeAll;
+                    //this.Cursor = Cursors.SizeNS;
+                    return rectList[i].Uid;
+                }
+                else if ((x0 - 10 <= x && x <= x0 + 10) && (y0 - 10 <= y && y <= y0 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNWSE;
+                    direction = 1;
+                    dragHandle = 5;
+                    return rectList[i].Uid;
+                }
+                else if ((x1 - 10 <= x && x <= x1 + 10) && (y1 - 10 <= y && y <= y1 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNWSE;
+                    direction = 1;
+                    dragHandle = 5;
+                    return rectList[i].Uid;
+                }
+                else if ((y0 - 10 <= y && y <= y0 + 10) && (x1 - 10 <= x && x <= x1 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNESW;
+                    direction = 1;
+                    dragHandle = 6;
+                    return rectList[i].Uid;
+                }
+                else if ((y1 - 10 <= y && y <= y1 + 10) && (x0 - 10 <= x && x <= x0 + 10))
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNESW;
+                    direction = 1;
+                    dragHandle = 6;
+                    return rectList[i].Uid;
+                }
+                else if (x0 - 10 <= x && x <= x0 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeWE;
+                    direction = 1;
+                    dragHandle = 4;
+                    return rectList[i].Uid;
+                }
+                else if (y0 - 10 <= y && y <= y0 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNS;
+                    direction = -1;
+                    dragHandle = 1;
+                    return rectList[i].Uid;
+                }
+                else if (y1 - 10 <= y && y <= y1 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNS;
+                    direction = -1;
+                    dragHandle = 3;
+                    return rectList[i].Uid;
+                }
+                else if (x1 - 10 <= x && x <= x1 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeWE;
+                    direction = 1;
+                    dragHandle = 2;
+                    return rectList[i].Uid;
+                }
+            }
+            this.Cursor = null;
+            return "-1";
+
+        }
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            //Console.WriteLine(rectList.Count);
+            if(shapeId==-1)
+            {
+                String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
+                bool success;
+                success = Int32.TryParse(s, out shapeId);
+                //Console.WriteLine($" id {s}  {shapeId}");
+                
+            }    
+            //ưhen 
+            if (e.LeftButton == MouseButtonState.Released || shapeId <0)
+            {
+                shapeId = -1;
+                if (move) move = !move;
+                if (resize) resize = !resize;
+                delta = direction = 0;
+                return;
+            }
+            if(move)
+            {
+                double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width/2);
+                double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
+                Canvas.SetLeft(rectList[shapeId], x);
+                Canvas.SetTop(rectList[shapeId], y);
+            }
+            else if(resize)
+            {
+                double x = (e.GetPosition(this).X - 140);
+                double y = (e.GetPosition(this).Y - 100);
+                if (dragHandle == 1 || dragHandle == 3)
+                {      
+                    
+                    if((y-Canvas.GetTop(rectList[shapeId])) > rectList[shapeId].Height)
+                        rectList[shapeId].Height += 2;
+                    else
+                    {                        
+                        rectList[shapeId].Height -= 2;
+                    }
+                        
+                    
+                }
+                else if (dragHandle == 2|| dragHandle == 4)
+                {
+                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
+                        rectList[shapeId].Width += 2;
+                    else
+                        rectList[shapeId].Width -= 2;
+                }
+                else if (dragHandle == 5 || dragHandle == 6)
+                {
+                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
+                    {
+                        rectList[shapeId].Width += 2;
+                        rectList[shapeId].Height+= 2;
+                    }                        
+                    else
+                    {
+                        rectList[shapeId].Width -= 2;
+                        rectList[shapeId].Height -= 2;
+                    }
+                }
+
+
+            }        
+
+
+        }
+
+        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {            
+            
+            if (move) move = !move;
+            if (resize)
+            {
+                
+                direction = 0;
+                resize = !resize;
+                delta = 0;
+            }
+            this.Cursor = null;
+            if (shapeId >= 0)
+            {
+                shapeId = -1;
+            }
+        }
+
+        private void Button_Rectangle_Click_1(object sender, RoutedEventArgs e)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = 100,
+                Height = 100,
+                Fill = Brushes.Black,
+                Stroke = Brushes.Red,
+                StrokeThickness = 2,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(rect);
+            Canvas.SetLeft(rect, 100);
+            Canvas.SetTop(rect, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
+        }      
+
     }
 
 }

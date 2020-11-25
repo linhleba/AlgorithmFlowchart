@@ -109,9 +109,6 @@
     </Compile>
     <Compile Include="Class\MoveThumb.cs" />
     <Compile Include="Class\ResizeThumb.cs" />
-    <Compile Include="customButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="filePicker.xaml.cs">
       <DependentUpon>filePicker.xaml</DependentUpon>
     </Compile>
