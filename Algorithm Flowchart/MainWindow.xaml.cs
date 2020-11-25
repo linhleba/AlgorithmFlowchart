@@ -30,6 +30,9 @@ namespace CopyAndPasteInCanvas
         public int shapeId ;
         public bool move = false; 
         public bool resize = false;
+        //use in resize
+        public double delta = 0;
+        public int direction = 0;
         public Window1()
         {
             InitializeComponent();
@@ -332,13 +335,42 @@ namespace CopyAndPasteInCanvas
                 double y0 = Canvas.GetTop(rectList[i]);
                 double x1 = x0 + rectList[i].Width;
                 double y1 = y0 + rectList[i].Height;
-                Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
-                if ((x0 <= x && x <= x1) && (y0 <= y && y <= y1))
-                {  
+                //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
+                if ((x0 + 10 <= x && x <= x1 - 10) && (y0 + 10 <= y && y <= y1 - 10))
+                {
                     this.move = true;
                     this.Cursor = Cursors.SizeAll;
+                    //this.Cursor = Cursors.SizeNS;
                     return rectList[i].Uid;
-                }                    
+                }
+                else if (x0 - 10 <= x && x <= x0 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeWE;
+                    direction = 1;
+                    return rectList[i].Uid;
+                }
+                else if (y0 - 10 <= y && y <= y0 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNS;
+                    direction = -1;
+                    return rectList[i].Uid;
+                }
+                else if (y1 - 10 <= y && y <= y1 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeNS;
+                    direction = -1;
+                    return rectList[i].Uid;
+                }
+                else if (x1 - 10 <= x && x <= x1 + 10)
+                {
+                    this.resize = true;
+                    this.Cursor = Cursors.SizeWE;
+                    direction = 1;
+                    return rectList[i].Uid;
+                }
             }
             this.Cursor = null;
             return "-1";
@@ -352,21 +384,17 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 bool success;
                 success = Int32.TryParse(s, out shapeId);
-                Console.WriteLine($" id {s}  {shapeId}");
+                //Console.WriteLine($" id {s}  {shapeId}");
                 
-            }
-            /*if(move)
-            {
-                Cursor myCursor = new Cursor($"{System.AppDomain.CurrentDomain.BaseDirectory}myCursor.cur");
-                this.Cursor = myCursor;
-            }*/
+            }    
+            //ưhen 
             if (e.LeftButton == MouseButtonState.Released || shapeId <0)
             {
                 shapeId = -1;
                 if (move) move = !move;
                 if (resize) resize = !resize;
+                delta = direction = 0;
                 return;
-
             }
             if(move)
             {
@@ -377,31 +405,38 @@ namespace CopyAndPasteInCanvas
             }
             else if(resize)
             {
-
-            }
-
-            
+                double x = (e.GetPosition(this).X - 140);
+                double y = (e.GetPosition(this).Y - 100);
+                
+            }        
 
 
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {            
-            if (shapeId>=0)
-            {                
+            
+            if (move) move = !move;
+            if (resize)
+            {
+                
+                direction = 0;
+                resize = !resize;
+                delta = 0;
+            }
+            this.Cursor = null;
+            if (shapeId >= 0)
+            {
                 shapeId = -1;
             }
-            if (move) move = !move;
-            if (resize) resize = !resize;
-            this.Cursor = null;
         }
 
         private void Button_Rectangle_Click_1(object sender, RoutedEventArgs e)
         {
             Rectangle rect = new Rectangle
             {
-                Width = 50,
-                Height = 50,
+                Width = 100,
+                Height = 100,
                 Fill = Brushes.Black,
                 Stroke = Brushes.Red,
                 StrokeThickness = 2,
