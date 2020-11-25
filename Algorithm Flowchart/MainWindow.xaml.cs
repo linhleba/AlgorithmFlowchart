@@ -30,6 +30,9 @@ namespace CopyAndPasteInCanvas
         public int shapeId ;
         public bool move = false; 
         public bool resize = false;
+        //variable to test code in stackoverflow 
+        public int dragHandle = 0;
+
         //use in resize
         public double delta = 0;
         public int direction = 0;
@@ -348,6 +351,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
                     direction = 1;
+                    dragHandle = 4;
                     return rectList[i].Uid;
                 }
                 else if (y0 - 10 <= y && y <= y0 + 10)
@@ -355,6 +359,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
                     direction = -1;
+                    dragHandle = 1;
                     return rectList[i].Uid;
                 }
                 else if (y1 - 10 <= y && y <= y1 + 10)
@@ -362,6 +367,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
                     direction = -1;
+                    dragHandle = 3;
                     return rectList[i].Uid;
                 }
                 else if (x1 - 10 <= x && x <= x1 + 10)
@@ -369,6 +375,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
                     direction = 1;
+                    dragHandle = 2;
                     return rectList[i].Uid;
                 }
             }
@@ -398,8 +405,8 @@ namespace CopyAndPasteInCanvas
             }
             if(move)
             {
-                double x = (e.GetPosition(this).X - 140 - 25);
-                double y = (e.GetPosition(this).Y - 100 - 25);
+                double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width/2);
+                double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
                 Canvas.SetLeft(rectList[shapeId], x);
                 Canvas.SetTop(rectList[shapeId], y);
             }
@@ -407,6 +414,21 @@ namespace CopyAndPasteInCanvas
             {
                 double x = (e.GetPosition(this).X - 140);
                 double y = (e.GetPosition(this).Y - 100);
+                if (dragHandle == 1 || dragHandle == 3)
+                {      
+                    if((y-Canvas.GetTop(rectList[shapeId])) > rectList[shapeId].Height)
+                        rectList[shapeId].Height += 2;
+                    else 
+                        rectList[shapeId].Height -= 2;
+                }
+                else if (dragHandle == 2|| dragHandle == 4)
+                {
+                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
+                        rectList[shapeId].Width += 2;
+                    else
+                        rectList[shapeId].Width -= 2;
+                }
+                
                 
             }        
 
@@ -447,9 +469,8 @@ namespace CopyAndPasteInCanvas
             Canvas.SetTop(rect, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
             Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
-        }
+        }      
 
-       
     }
 
 }
