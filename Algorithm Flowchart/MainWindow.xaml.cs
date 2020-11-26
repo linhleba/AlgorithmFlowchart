@@ -38,6 +38,10 @@ namespace CopyAndPasteInCanvas
         //use in resize
         public double delta = 0;
         public int direction = 0;
+        //add adorner
+        System.Windows.Documents.AdornerLayer myAdornerLayer;
+        public List<SimpleCircleAdorner> adornerList;
+        public bool showAdorner = false;
         public Window1()
         {
             InitializeComponent();
@@ -45,14 +49,9 @@ namespace CopyAndPasteInCanvas
             isColorPicker = false;
             rectList = new List<Shape>();
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
+            adornerList = new List<SimpleCircleAdorner>();
             shapeId = -1;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
@@ -232,11 +231,6 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Green;
                     break;
             }
-        }
-
-        private void DisplayCircle(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -447,6 +441,7 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
+                
             }
             //when mouse button is release , stop this function
             if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
@@ -454,12 +449,13 @@ namespace CopyAndPasteInCanvas
                 shapeId = -1;
                 if (move) move = !move;
                 if (resize) resize = !resize;
-                delta = direction = 0;
+                delta = direction = 0;                
                 return;
             }
-            //action when moving shape
+            
+            //action when moving shape   
             if (move)
-            {
+            {                                 
                 double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
                 double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
                 Canvas.SetLeft(rectList[shapeId], x);
@@ -468,9 +464,7 @@ namespace CopyAndPasteInCanvas
             //action when resize shape
             else if (resize)
             {
-                // If shape is rectangle or circle
                 
-                    
                 double x = (e.GetPosition(this).X - 140);
                 double y = (e.GetPosition(this).Y - 100);
 
@@ -524,7 +518,7 @@ namespace CopyAndPasteInCanvas
                 }
 
             }
-
+            //else myAdornerLayer.Remove(adornerList[shapeId]);
 
         }
 
@@ -543,9 +537,10 @@ namespace CopyAndPasteInCanvas
             {
                 shapeId = -1;
             }
+            
         }
 
-        private void Button_Rectangle_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Rectangle_Click(object sender, RoutedEventArgs e)
         {
             //this func make a shape when press button
             Rectangle rect = new Rectangle
@@ -565,9 +560,12 @@ namespace CopyAndPasteInCanvas
             Canvas.SetTop(rect, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
             Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
+            //add adorner for shape     
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(rect);
+            adornerList.Add(new SimpleCircleAdorner(rect));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Circle_Click(object sender, RoutedEventArgs e)
         {
             Ellipse ellipse = new Ellipse
             {
@@ -578,14 +576,18 @@ namespace CopyAndPasteInCanvas
                 StrokeThickness = 1,
                 Uid = rectList.Count.ToString()
             };
-            rectList.Add(ellipse);
+            rectList.Add(ellipse);            
             typeOfShape.Add(2);
             Canvas.SetLeft(ellipse, 100);
             Canvas.SetTop(ellipse, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape            
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(ellipse);
+            adornerList.Add(new SimpleCircleAdorner(ellipse));
+
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void Button_Parallelogram_Click(object sender, RoutedEventArgs e)
         {
             PointCollection myPointCollection = new PointCollection();
             myPointCollection.Add(new Point(0, 100));
@@ -611,9 +613,12 @@ namespace CopyAndPasteInCanvas
             Canvas.SetLeft(polygon, 100);
             Canvas.SetTop(polygon, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape            
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(polygon);
+            adornerList.Add(new SimpleCircleAdorner(polygon));
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void Button_Rhombus_Click(object sender, RoutedEventArgs e)
         {
             PointCollection myPointCollection = new PointCollection();
             myPointCollection.Add(new Point(0, 50));
@@ -638,55 +643,57 @@ namespace CopyAndPasteInCanvas
             Canvas.SetLeft(polygon, 100);
             Canvas.SetTop(polygon, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape            
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(polygon);
+            adornerList.Add(new SimpleCircleAdorner(polygon));
         }
 
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine($" showadorner {showAdorner.ToString()}");
             if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
+                if ((shapeId > -1 ) && !showAdorner)
+                    myAdornerLayer.Remove(adornerList[shapeId]);
             }
             if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
             {
+                if (showAdorner)
+                    showAdorner = false;
+                clearAllAdorner();
                 shapeId = -1;
                 return;
             }
+
             var converter = new System.Windows.Media.BrushConverter();
             if (isColorPicker)
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            if (!showAdorner)
+            {
+                showAdorner = true;
+                myAdornerLayer.Add(adornerList[shapeId]);
+            }
         }
 
-        private void Canvas_MouseEnter(object sender, MouseEventArgs e)
-        {
-            //Console.WriteLine(rectList.Count);
-            /*if (shapeId == -1)
-            {
-                String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
-                //cause IsContain return shapeID - which is String so we have to try to parse it into int
-                bool success = Int32.TryParse(s, out shapeId);
-            }
-            //when mouse button is release , stop this function
-            if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
-            {
-                shapeId = -1;
-                if (move) move = !move;
-                if (resize) resize = !resize;
-                delta = direction = 0;
-                return;
-            }
-            SimpleCircleAdorner ad = new SimpleCircleAdorner((UIElement)sender, this.Canvas);
-            AdornerLayer adLayer = AdornerLayer.GetAdornerLayer((UIElement)sender);
-            adLayer.Add(ad);*/
-        }
+        
 
         private void buttonClear1_Click(object sender, RoutedEventArgs e)
         {
             rectList.Clear();
+            adornerList.Clear();
             this.Canvas.Children.Clear();
         }
+        public void clearAllAdorner()
+        {
+            for(int i=0; i <adornerList.Count; i++)
+                this.myAdornerLayer.Remove(adornerList[i]);
+        }
+
+        
     }
 
 }
