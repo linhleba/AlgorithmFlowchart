@@ -662,7 +662,7 @@ namespace CopyAndPasteInCanvas
         private void Canvas_MouseEnter(object sender, MouseEventArgs e)
         {
             //Console.WriteLine(rectList.Count);
-            if (shapeId == -1)
+            /*if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
@@ -679,7 +679,7 @@ namespace CopyAndPasteInCanvas
             }
             SimpleCircleAdorner ad = new SimpleCircleAdorner((UIElement)sender, this.Canvas);
             AdornerLayer adLayer = AdornerLayer.GetAdornerLayer((UIElement)sender);
-            adLayer.Add(ad);
+            adLayer.Add(ad);*/
         }
 
         private void buttonClear1_Click(object sender, RoutedEventArgs e)
