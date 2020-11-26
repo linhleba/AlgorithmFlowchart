@@ -224,12 +224,19 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition   />
+                        <ColumnDefinition   />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="buttonSearch" Grid.Column="1" HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
+                    <Button x:Name="buttonSearch" Grid.Column="2" HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
                         <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
                     </Button>
-                    <Button Visibility="Hidden" Name="buttonChooseColor" HorizontalAlignment="Right" Grid.Column="0" Margin="0,12,-40,0" >
+                    <Button Name="buttonChooseColor" Click="Tool_Button_Click"
+                            Uid="3"
+                            HorizontalAlignment="Right" Grid.Column="1" Margin="10,12,0,0" >
+
+                    </Button>
+                    <Button Name="buttonClear1" Content="clear" 
+                            HorizontalAlignment="Right" Grid.Column="0" Margin="0,12,-10,0" Click="buttonClear1_Click" >
 
                     </Button>
                 </Grid>
@@ -320,26 +327,29 @@
                     <WpfColorFontDialog:ColorFontChooser Margin="0,0,10,30" />
                 </StackPanel>
             </ScrollViewer>
-
-            <Canvas x:Name="Canvas"  Grid.Column="1"
-                Margin="0,0,0,0" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1" >
-                <Canvas.Background>
-                    <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
+            <ScrollViewer Grid.Column="1"
+                HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
+                <Canvas x:Name="Canvas"  
+                        Height="1000"
+                        Width="3000"
+                Margin="0,0,0,0" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1" MouseEnter="Canvas_MouseEnter" >
+                    <Canvas.Background>
+                        <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
                                      ViewportUnits="Absolute">
-                        <DrawingBrush.Drawing>
-                            <GeometryDrawing>
-                                <GeometryDrawing.Geometry>
-                                    <RectangleGeometry Rect="0,0,50,50"/>
-                                </GeometryDrawing.Geometry>
-                                <GeometryDrawing.Pen>
-                                    <Pen Brush="Black" Thickness="0.05"/>
-                                </GeometryDrawing.Pen>
-                            </GeometryDrawing>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Canvas.Background>
-
-            </Canvas>
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,50,50"/>
+                                    </GeometryDrawing.Geometry>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="Black" Thickness="0.05"/>
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Canvas.Background>
+                </Canvas>
+            </ScrollViewer>
         </Grid>
 
 

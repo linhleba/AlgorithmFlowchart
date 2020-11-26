@@ -185,15 +185,7 @@ namespace CopyAndPasteInCanvas
                         inkCanvas = new InkCanvas();
                         inkCanvas.Width = 1500;
                         inkCanvas.Height = 1500;
-                        inkCanvas.Background = Brushes.Transparent;
-                        /*foreach (Window window in Application.Current.Windows)
-                        {
-                            if (window.GetType() == typeof(Window1))
-                            {
-                                // Add content control to canvas
-                                (window as Window1).
-                            }
-                        }*/
+                        inkCanvas.Background = Brushes.Transparent;                        
                         Canvas.Children.Add(inkCanvas);
                         break;
                     }
@@ -208,19 +200,21 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Black;
                     break;*/
                 case 2:
+                case 3:
                     var converter = new System.Windows.Media.BrushConverter();
                     if (!isColorPicker)
                     {
                         buttonChooseColor.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-                        buttonChooseColor.Visibility = Visibility.Visible;
+                        buttonChooseColor.Content = "P";
                     }
                     else
-                        buttonChooseColor.Visibility = Visibility.Hidden;
+                        buttonChooseColor.Content = "NP";
                     if (isColorPicker)
                         isColorPicker = false;
                     else
                         isColorPicker = true;
                     break;
+
             }
         }
         private void Help_Button_Click(object sender, RoutedEventArgs e)
@@ -269,7 +263,7 @@ namespace CopyAndPasteInCanvas
                 this.buttonCopy.Background = b;
                 this.buttonPaste.Background = b;
                 this.buttonDelete.Background = b;
-                this.buttonClear.Background = b;
+                //this.buttonClear.Background = b;
                 this.buttonUndo.Background = b;
                 this.buttonRedo.Background = b;
                 this.buttonZoomin.Background = b;
@@ -335,7 +329,6 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-
             for (int i = 0; i < this.rectList.Count; i++)
             {
                 double x0 = Canvas.GetLeft(rectList[i]);
@@ -368,6 +361,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNWSE;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 5;
                     return rectList[i].Uid;
@@ -376,6 +370,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNWSE;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 5;
                     return rectList[i].Uid;
@@ -384,6 +379,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNESW;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 6;
                     return rectList[i].Uid;
@@ -392,6 +388,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNESW;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 6;
                     return rectList[i].Uid;
@@ -400,6 +397,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 4;
                     return rectList[i].Uid;
@@ -408,6 +406,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = -1;
                     dragHandle = 1;
                     return rectList[i].Uid;
@@ -416,6 +415,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = -1;
                     dragHandle = 3;
                     return rectList[i].Uid;
@@ -424,6 +424,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
+                    rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 2;
                     return rectList[i].Uid;
@@ -431,7 +432,11 @@ namespace CopyAndPasteInCanvas
             }
             //if no tin shape cursor is normal and return -1(it mean not shape is catch)
             this.Cursor = null;
-            return "-1";
+            for (int i = 0; i < this.rectList.Count; i++)
+            {
+                rectList[i].Stroke = Brushes.Black;
+            }
+                return "-1";
 
         }
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -464,9 +469,11 @@ namespace CopyAndPasteInCanvas
             else if (resize)
             {
                 // If shape is rectangle or circle
-
+                
+                    
                 double x = (e.GetPosition(this).X - 140);
                 double y = (e.GetPosition(this).Y - 100);
+
                 if (dragHandle == 1 || dragHandle == 3)
                 {
 
@@ -474,16 +481,28 @@ namespace CopyAndPasteInCanvas
                         rectList[shapeId].Height += 2;
                     else
                     {
+                        if (rectList[shapeId].Height < 5 )
+                        {
+                            resize = false;
+                            return;
+                        }
                         rectList[shapeId].Height -= 2;
                     }
-
                 }
                 else if (dragHandle == 2 || dragHandle == 4)
                 {
                     if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
                         rectList[shapeId].Width += 2;
                     else
+                    {
+                        if (rectList[shapeId].Width < 5)
+                        {
+                            resize = false;
+                            return;
+                        }
                         rectList[shapeId].Width -= 2;
+                    }
+                        
                 }
                 else if (dragHandle == 5 || dragHandle == 6)
                 {
@@ -494,6 +513,11 @@ namespace CopyAndPasteInCanvas
                     }
                     else
                     {
+                        if (rectList[shapeId].Height < 5 || rectList[shapeId].Width < 5)
+                        {
+                            resize = false;
+                            return;
+                        }
                         rectList[shapeId].Width -= 2;
                         rectList[shapeId].Height -= 2;
                     }
@@ -633,6 +657,35 @@ namespace CopyAndPasteInCanvas
             var converter = new System.Windows.Media.BrushConverter();
             if (isColorPicker)
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+        }
+
+        private void Canvas_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //Console.WriteLine(rectList.Count);
+            if (shapeId == -1)
+            {
+                String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
+                //cause IsContain return shapeID - which is String so we have to try to parse it into int
+                bool success = Int32.TryParse(s, out shapeId);
+            }
+            //when mouse button is release , stop this function
+            if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
+            {
+                shapeId = -1;
+                if (move) move = !move;
+                if (resize) resize = !resize;
+                delta = direction = 0;
+                return;
+            }
+            SimpleCircleAdorner ad = new SimpleCircleAdorner((UIElement)sender, this.Canvas);
+            AdornerLayer adLayer = AdornerLayer.GetAdornerLayer((UIElement)sender);
+            adLayer.Add(ad);
+        }
+
+        private void buttonClear1_Click(object sender, RoutedEventArgs e)
+        {
+            rectList.Clear();
+            this.Canvas.Children.Clear();
         }
     }
 
