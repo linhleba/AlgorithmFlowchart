@@ -30,8 +30,8 @@ namespace Algorithm_Flowchart
         public PointCollection Points;
         public int Width;
         public int Height;
-        public SolidColorBrush Fill;
-        public SolidColorBrush Stroke;
+        public Brush Fill;
+        public Brush Stroke;
         public int StrokeThickness;
         public string Uid;
     }

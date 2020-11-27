@@ -158,11 +158,21 @@ namespace CopyAndPasteInCanvas
                     this.Open(sender, e);
                     break;
                 case 3:
+                    for (int i = 0; i < rectList.Count; i++)
+                    {
+                        InfoList[i].X = Canvas.GetTop(rectList[i]);
+                        InfoList[i].Y = Canvas.GetLeft(rectList[i]);
+                        InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
+                        InfoList[i].Height = Convert.ToInt32(rectList[i].Height);
+                        InfoList[i].StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness);
+                        InfoList[i].Stretch = rectList[i].Stretch;
+                        InfoList[i].Uid = rectList[i].Uid;
+                        InfoList[i].Fill = rectList[i].Fill;
+                    }
                     FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Create);
                     XamlWriter.Save(Canvas, fs);
                     fs.Close();
                     string jsonStateOfShape = JsonConvert.SerializeObject(InfoList);
-                    JsonConvert.SerializeObject(InfoList);
                     using (FileStream stream = new FileStream("Info.json", FileMode.Create))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
@@ -393,20 +403,6 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
-            for (int i = 0; i < rectList.Count; i++)
-            {
-                ShapeInfo info = new ShapeInfo
-                {
-                    X = Canvas.GetTop(rectList[i]),
-                    Y = Canvas.GetLeft(rectList[i]),
-                    Width = Convert.ToInt32(rectList[i].Width),
-                    Height = Convert.ToInt32(rectList[i].Height),
-                    StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness),
-                    Stretch = rectList[i].Stretch,
-                    Uid = rectList.Count.ToString()
-                };
-                InfoList[i] = info;
-            }
             //this.Canvas.Children.Clear();
             //Console.WriteLine("aaaa\n");
         }
@@ -631,7 +627,6 @@ namespace CopyAndPasteInCanvas
 
         }
 
-
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             //reset every flag (such as move , resize flag) when mouse up
@@ -662,11 +657,7 @@ namespace CopyAndPasteInCanvas
                 StrokeThickness = 1,
                 Uid = rectList.Count.ToString()
             };
-            ShapeInfo info = new ShapeInfo
-            {
-                Fill = Brushes.White,
-                Stroke = Brushes.Black,
-            };
+            ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
             rectList.Add(rect);
             // Add type of shape of the rectangle
@@ -692,11 +683,7 @@ namespace CopyAndPasteInCanvas
                 StrokeThickness = 1,
                 Uid = rectList.Count.ToString()
             };
-            ShapeInfo info = new ShapeInfo
-            {
-                Fill = Brushes.White,
-                Stroke = Brushes.Black,
-            };
+            ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
             rectList.Add(ellipse);
             typeOfShape.Add(2);
@@ -730,13 +717,9 @@ namespace CopyAndPasteInCanvas
                 Stretch = Stretch.Fill,
                 Uid = rectList.Count.ToString()
             };
-            ShapeInfo info = new ShapeInfo
-            {
-                Points = polygon.Points,
-                Fill = Brushes.White,
-                Stroke = Brushes.Black,
-                havePoints = true,
-            };
+            ShapeInfo info = new ShapeInfo();
+            info.Points = myPointCollection;
+            info.havePoints = true;
             InfoList.Add(info);
             rectList.Add(polygon);
             typeOfShape.Add(3);
@@ -768,13 +751,9 @@ namespace CopyAndPasteInCanvas
                 Stretch = Stretch.Fill,
                 Uid = rectList.Count.ToString()
             };
-            ShapeInfo info = new ShapeInfo
-            {
-                Points = polygon.Points,
-                Fill = Brushes.White,
-                Stroke = Brushes.Black,
-                havePoints = true,
-            };
+            ShapeInfo info = new ShapeInfo();
+            info.Points = myPointCollection;
+            info.havePoints = true;
             InfoList.Add(info);
             rectList.Add(polygon);
             typeOfShape.Add(4);
@@ -870,6 +849,7 @@ namespace CopyAndPasteInCanvas
         {
             //remove shape from canvas
             canvas.Children.Remove(shape);
+         
         }
         private void SaveCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -955,23 +935,23 @@ namespace CopyAndPasteInCanvas
         private void Open(object sender, RoutedEventArgs e)
         {
             //load .xaml file to saved Canvas and copy savedCanvas member to drawingCanvas 
-            FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Open, FileAccess.Read);
-            savedCanvas = XamlReader.Load(fs) as Canvas;
-            fs.Close();
-            while (savedCanvas.Children.Count > 0)
-            {
-                UIElement uie = savedCanvas.Children[0];
-                //if (uie.Uid == "save")  ;
-                //else if (uie.Uid == "load") ;
-                //else if (uie.Uid == "red") ;
-                //else if (uie.Uid == "redE") ;
-                //else
-                //{
-                savedCanvas.Children.Remove(uie);
-                Canvas.Children.Add(uie);
-                //}
-                //savedCanvas.Children.Remove(uie);
-            }
+            //FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Open, FileAccess.Read);
+            //savedCanvas = XamlReader.Load(fs) as Canvas;
+            //fs.Close();
+            //while (savedCanvas.Children.Count > 0)
+            //{
+            //    UIElement uie = savedCanvas.Children[0];
+            //    //if (uie.Uid == "save")  ;
+            //    //else if (uie.Uid == "load") ;
+            //    //else if (uie.Uid == "red") ;
+            //    //else if (uie.Uid == "redE") ;
+            //    //else
+            //    //{
+            //    savedCanvas.Children.Remove(uie);
+            //    Canvas.Children.Add(uie);
+            //    //}
+            //    //savedCanvas.Children.Remove(uie);
+            //}
             string reopenedState = string.Empty;
             using (FileStream stream = new FileStream("Info.json", FileMode.Open))
             using (StreamReader reader = new StreamReader(stream))
@@ -979,6 +959,7 @@ namespace CopyAndPasteInCanvas
                 reopenedState = reader.ReadToEnd();
             }
             var info = JsonConvert.DeserializeObject<List<ShapeInfo>>(reopenedState);
+            InfoList = new List<ShapeInfo>();
             info.ForEach(InfoList.Add);
 
             AddShape(InfoList, rectList);
@@ -1002,16 +983,23 @@ namespace CopyAndPasteInCanvas
             rectList = new List<Shape>();
             for (int i = 0; i < infoList.Count; i++)
             {
-                MessageBox.Show(Convert.ToString(i));
-                MessageBox.Show(Convert.ToString(infoList.Count));
-                rectList[i].Width = infoList[i].Width;
-                rectList[i].Height = infoList[i].Height;
-                rectList[i].Fill = infoList[i].Fill;
-                rectList[i].Stroke = infoList[i].Stroke;
-                rectList[i].StrokeThickness = infoList[i].StrokeThickness;
-                rectList[i].Stretch = infoList[i].Stretch;
-                rectList[i].Uid = infoList[i].Uid;
-                canvas.Children.Add(rectList[i]);
+                Shape shape = new Rectangle();
+                //MessageBox.Show(Convert.ToString(infoList.Count));
+                shape.Width =  infoList[i].Width;
+                shape.Height =  infoList[i].Height;
+                shape.Fill = infoList[i].Fill;
+                shape.Stroke = infoList[i].Stroke;
+                shape.StrokeThickness = infoList[i].StrokeThickness;
+                shape.Stretch = infoList[i].Stretch;
+                shape.Uid = infoList[i].Uid;
+                rectList.Add(shape);
+                Canvas.SetLeft(rectList[i], infoList[i].Y );
+                Canvas.SetTop(rectList[i], infoList[i].X);
+                Canvas.Children.Add(shape);
+                myAdornerLayer = AdornerLayer.GetAdornerLayer(rectList[i]);
+                adornerList.Add(new SimpleCircleAdorner(rectList[i]));
+                //MessageBox.Show(Convert.ToString(infoList[i].Y));
+                //MessageBox.Show(Convert.ToString(infoList[i].X));
             }
         }
     }
