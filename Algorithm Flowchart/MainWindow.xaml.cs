@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,11 @@ namespace CopyAndPasteInCanvas
 {
     public partial class Window1
     {
+        int top = 100, left = 200;
+        string xaml = "";
+        Shape shape;
+        Canvas savedCanvas = new Canvas();
+        Canvas canvas = new Canvas();
         InkCanvas inkCanvas;
         public BackRoundPicker newPick;
         public bool isColorPicker;
@@ -51,6 +57,56 @@ namespace CopyAndPasteInCanvas
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
             adornerList = new List<SimpleCircleAdorner>();
             shapeId = -1;
+            CommandBinding SaveCmdBinding = new CommandBinding();
+
+            SaveCmdBinding.Command = ApplicationCommands.Save;
+
+            SaveCmdBinding.Executed += SaveCmdBinding_Executed;
+
+            SaveCmdBinding.CanExecute += SaveCmdBinding_CanExecute;
+
+            CommandBinding DelCmdBinding = new CommandBinding();
+
+            DelCmdBinding.Command = ApplicationCommands.Delete;
+
+            DelCmdBinding.Executed += DelCmdBinding_Executed;
+
+            DelCmdBinding.CanExecute += DelCmdBinding_CanExecute;
+
+            this.CommandBindings.Add(DelCmdBinding);
+
+            CommandBinding CutCmdBinding = new CommandBinding();
+
+            CutCmdBinding.Command = ApplicationCommands.Cut;
+
+            CutCmdBinding.Executed += CutCmdBinding_Executed;
+
+            CutCmdBinding.CanExecute += CutCmdBinding_CanExecute;
+
+            this.CommandBindings.Add(CutCmdBinding);
+
+            //Same as CutCmd
+            CommandBinding pasteCmdBinding = new CommandBinding();
+
+            pasteCmdBinding.Command = ApplicationCommands.Paste;
+
+            pasteCmdBinding.Executed += pasteCmdBinding_Executed;
+
+            pasteCmdBinding.CanExecute += pasteCmdBinding_CanExecute;
+
+            this.CommandBindings.Add(pasteCmdBinding);
+
+
+            //Same as CutCmd
+            CommandBinding copyCmdBinding = new CommandBinding();
+
+            copyCmdBinding.Command = ApplicationCommands.Copy;
+
+            copyCmdBinding.Executed += copyCmdBinding_Executed;
+
+            copyCmdBinding.CanExecute += copyCmdBinding_CanExecute;
+
+            this.CommandBindings.Add(copyCmdBinding);
         }
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
@@ -94,12 +150,16 @@ namespace CopyAndPasteInCanvas
                     filePicker file = new filePicker();
                     file.ShowDialog();
                     break;
-                    /*case 2:
-                        this.Canvas.Background = Brushes.Red;
-                        break;
-                    case 3:
-                        this.Canvas.Background = Brushes.Green;
-                        break;
+                case 2:
+                    canvas.Children.Clear();
+                    this.Open(sender, e);
+                    break;
+                case 3:
+                    FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Create);
+                    XamlWriter.Save(Canvas, fs);
+                    fs.Close();
+                    break;
+                    /*
                     case 4:
                         this.Canvas.Background = Brushes.Gray;
                         break;
@@ -710,8 +770,154 @@ namespace CopyAndPasteInCanvas
             for(int i=0; i <adornerList.Count; i++)
                 this.myAdornerLayer.Remove(adornerList[i]);
         }
+        private void pasteCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Clipboard.ContainsText(TextDataFormat.Xaml);
+        }
 
-        
+        private void DelCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        {
+            e.CanExecute = true;
+        }
+        private void SaveCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        {
+            e.CanExecute = true;
+        }
+
+        private void CutCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        {
+            e.CanExecute = true;
+        }
+
+        private void copyCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+
+        {
+            e.CanExecute = true;
+        }
+
+        private void copyCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            //this code allow us to save shape info to Clipboard by turn shape info to string and the save it
+            xaml = XamlWriter.Save(shape);
+            Clipboard.SetText(xaml, TextDataFormat.Xaml);
+        }
+
+        private void DelCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            //remove shape from canvas
+            canvas.Children.Remove(shape);
+        }
+        private void SaveCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Create);
+            XamlWriter.Save(Canvas, fs);
+            fs.Close();
+        }
+        private void CutCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            //canvas.Children.Remove allow to remove a canvas children member as shape in this canvas
+            canvas.Children.Remove(shape);
+            string xaml = XamlWriter.Save(shape);
+            Clipboard.SetText(xaml, TextDataFormat.Xaml);
+        }
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //set canvas to working-on canvas
+            canvas = sender as Canvas;
+            //check and set shape to our just-clicked shape
+            if (canvas == null)
+                return;
+            if (rectList.Count.ToString() != "0")
+            {
+                HitTestResult hitTestResult = VisualTreeHelper.HitTest(canvas, e.GetPosition(canvas));
+                shape = hitTestResult.VisualHit as Shape;
+            }
+            if (shape == null)
+                return;
+        }   
+        private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+
+        {
+            //this extract what we just save to Clipboard as CopyCmd or CutCmd
+
+            xaml = Clipboard.GetText(TextDataFormat.Xaml);
+
+            //Check and then load it as shape type to canvas
+
+            if (xaml != null)
+
+            {
+
+                using (MemoryStream stream = new MemoryStream(xaml.Length))
+
+                {
+
+                    using (StreamWriter sw = new StreamWriter(stream))
+
+                    {
+
+                        sw.Write(xaml);
+
+                        sw.Flush();
+
+                        stream.Seek(0, SeekOrigin.Begin);
+
+                        Shape shape = XamlReader.Load(stream) as Shape;
+
+                        shape.Uid = rectList.Count.ToString();
+
+                        rectList.Add(shape);
+
+                        typeOfShape.Add(typeOfShape[Int32.Parse(shape.Uid) - 1]);
+
+                        Canvas.SetLeft(shape, left);
+
+                        Canvas.SetTop(shape, top);
+
+                        top = 100;
+
+                        left = 200;
+
+                        Canvas.Children.Add(shape);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        private void Open(object sender, RoutedEventArgs e)
+        {
+            //load .xaml file to saved Canvas and copy savedCanvas member to drawingCanvas 
+            FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Open, FileAccess.Read);
+            savedCanvas = XamlReader.Load(fs) as Canvas;
+            fs.Close();
+            while (savedCanvas.Children.Count > 0)
+            {
+                UIElement uie = savedCanvas.Children[0];
+                //if (uie.Uid == "save")  ;
+                //else if (uie.Uid == "load") ;
+                //else if (uie.Uid == "red") ;
+                //else if (uie.Uid == "redE") ;
+                //else
+                //{
+                savedCanvas.Children.Remove(uie);
+                Canvas.Children.Add(uie);
+                //}
+                //savedCanvas.Children.Remove(uie);
+            }
+            
+            //fs = File.Open("SaveType.xaml", FileMode.Open, FileAccess.Read);
+            //typeOfShape = XamlReader.Load(fs) as List<int>;
+            //fs.Close();
+        }
+
+
     }
 
 }
