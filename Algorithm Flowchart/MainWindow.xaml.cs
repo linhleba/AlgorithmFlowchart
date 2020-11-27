@@ -545,55 +545,103 @@ namespace CopyAndPasteInCanvas
 
                 double deltaDistanceY = y - y1;
                 double deltaDistanceX = x - x1;
-                switch (dragHandle)
+                try
                 {
+                    switch (dragHandle)
+                    {
+                        // Case handle vertical alignment for shapes
+                        case 1:
+                            Canvas.SetTop(rectList[shapeId], y);
+                            if ((rectList[shapeId].Height < 5) && deltaDistanceY < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
 
-                    // Case handle vertical alignment for shapes
-                    case 1:
-                        Canvas.SetTop(rectList[shapeId], y);
-                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
-                        break;
-                    case 3:
-                        rectList[shapeId].Height += deltaDistanceY;
-                        break;
+                            rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                            break;
+                        case 3:
+                            if ((rectList[shapeId].Height < 5) && deltaDistanceY < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            rectList[shapeId].Height += deltaDistanceY;
+                            break;
 
-                    // Case handle horizontal alignment for shapes
-                    case 2:
-                        rectList[shapeId].Width += deltaDistanceX;
-                        break;
-                    case 4:
-                        Canvas.SetLeft(rectList[shapeId], x);
-                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
-                        break;
-                    // Case handle diagonal alignment right-bottom for shapes
-                    case 5:
-                        double deltaX = x - x1;
-                        rectList[shapeId].Width += deltaX;
-                        double deltaY = y - y1;
-                        rectList[shapeId].Height += deltaY;
-                        break;
-                    // Case handle diagonal alignment left-bottom for shapes
-                    case 6:
-                        rectList[shapeId].Height += deltaDistanceY;
-                        Canvas.SetLeft(rectList[shapeId], x);
-                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
-                        break;
+                        // Case handle horizontal alignment for shapes
+                        case 2:
+                            if ((rectList[shapeId].Width < 5) && deltaDistanceX < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            rectList[shapeId].Width += deltaDistanceX;
+                            break;
+                        case 4:
+                            if ((rectList[shapeId].Width < 5) && deltaDistanceX < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            Canvas.SetLeft(rectList[shapeId], x);
+                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                            break;
+                        // Case handle diagonal alignment right-bottom for shapes
+                        case 5:
+                            double deltaX = x - x1;
+                            double deltaY = y - y1;
+                            if ((rectList[shapeId].Height < 5) && deltaY < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            if ((rectList[shapeId].Width < 5) && deltaX < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            rectList[shapeId].Width += deltaX;
+                            rectList[shapeId].Height += deltaY;
+                            break;
+                        // Case handle diagonal alignment left-bottom for shapes
+                        case 6:
+                            if ((rectList[shapeId].Height < 5) && deltaDistanceY < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
 
-                    // Case handle diagonal alignment left-top for shapes
-                    case 7:
-                        Canvas.SetTop(rectList[shapeId], y);
-                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
-                        Canvas.SetLeft(rectList[shapeId], x);
-                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
-                        break;
+                            rectList[shapeId].Height += deltaDistanceY;
+                            Canvas.SetLeft(rectList[shapeId], x);
+                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                            break;
 
-                    // Case handle diagonal alignment right-top for shapes
-                    case 8:
-                        Canvas.SetTop(rectList[shapeId], y);
-                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
-                        rectList[shapeId].Width += deltaDistanceX;
-                        break;
+                        // Case handle diagonal alignment left-top for shapes
+                        case 7:
+                            Canvas.SetTop(rectList[shapeId], y);
+                            rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                            Canvas.SetLeft(rectList[shapeId], x);
+                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                            break;
+
+                        // Case handle diagonal alignment right-top for shapes
+                        case 8:
+                            if ((rectList[shapeId].Width < 5) && deltaDistanceX < 0)
+                            {
+                                resize = false;
+                                return;
+                            }
+                            Canvas.SetTop(rectList[shapeId], y);
+                            rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                            rectList[shapeId].Width += deltaDistanceX;
+                            break;
+                    }
                 }
+                catch(Exception exception)
+                {
+                }
+                
             }
             //else myAdornerLayer.Remove(adornerList[shapeId]);
 
@@ -882,7 +930,9 @@ namespace CopyAndPasteInCanvas
                         left = 200;
 
                         Canvas.Children.Add(shape);
-
+                        //add adorner for shape            
+                        myAdornerLayer = AdornerLayer.GetAdornerLayer(shape);
+                        adornerList.Add(new SimpleCircleAdorner(shape));
                     }
 
                 }
