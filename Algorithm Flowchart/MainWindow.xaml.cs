@@ -369,7 +369,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeNWSE;
                     direction = 1;
-                    dragHandle = 5;
+                    dragHandle = 7;
                     return rectList[i].Uid;
                 }
                 else if ((x1 - valueOfDistance <= x && x <= x1 + valueOfDistance) && (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance))
@@ -385,7 +385,7 @@ namespace CopyAndPasteInCanvas
                     this.resize = true;
                     this.Cursor = Cursors.SizeNESW;
                     direction = 1;
-                    dragHandle = 6;
+                    dragHandle = 8;
                     return rectList[i].Uid;
                 }
                 else if ((y1 - valueOfDistance <= y && y <= y1 + valueOfDistance) && (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance))
@@ -396,7 +396,7 @@ namespace CopyAndPasteInCanvas
                     dragHandle = 6;
                     return rectList[i].Uid;
                 }
-                else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance)
+                else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance && y0 <= y && y <= y1)
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
@@ -404,7 +404,7 @@ namespace CopyAndPasteInCanvas
                     dragHandle = 4;
                     return rectList[i].Uid;
                 }
-                else if (y0 - valueOfDistance <= y && y <= y0 + valueOfDistance)
+                else if (y0 - valueOfDistance <= y && y <= y0 + valueOfDistance && x0 <= x && x <= x1)
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
@@ -412,15 +412,15 @@ namespace CopyAndPasteInCanvas
                     dragHandle = 1;
                     return rectList[i].Uid;
                 }
-                else if (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance)
+                else if (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance && x0 <= x && x <= x1)
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
-                    direction = -1;
+                    direction = 1;
                     dragHandle = 3;
                     return rectList[i].Uid;
                 }
-                else if (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance)
+                else if (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance && y0 <= y && y <= y1)
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
@@ -465,44 +465,76 @@ namespace CopyAndPasteInCanvas
             {
                 // If shape is rectangle or circle
 
+                // Get current pos x
                 double x = (e.GetPosition(this).X - 140);
+                // Get currennt pos y
                 double y = (e.GetPosition(this).Y - 100);
-                if (dragHandle == 1 || dragHandle == 3)
+                double x0 = Canvas.GetLeft(rectList[shapeId]);
+                double y0 = Canvas.GetTop(rectList[shapeId]);
+
+                // Get the bottom pos x1,y1
+                double x1 = x0 + rectList[shapeId].Width;
+                double y1 = y0 + rectList[shapeId].Height;
+
+                Console.WriteLine("Drag handle is " + dragHandle);
+
+
+                double deltaDistanceY = y - y1;
+                double deltaDistanceX = x - x1;
+                switch (dragHandle)
                 {
 
-                    if ((y - Canvas.GetTop(rectList[shapeId])) > rectList[shapeId].Height)
-                        rectList[shapeId].Height += 2;
-                    else
-                    {
-                        rectList[shapeId].Height -= 2;
-                    }
+                    // Case handle vertical alignment for shapes
+                    case 1:
+                        Canvas.SetTop(rectList[shapeId], y);
+                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                        break;
+                    case 3:
+                        rectList[shapeId].Height += deltaDistanceY;
+                        break;
 
-                }
-                else if (dragHandle == 2 || dragHandle == 4)
-                {
-                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
-                        rectList[shapeId].Width += 2;
-                    else
-                        rectList[shapeId].Width -= 2;
-                }
-                else if (dragHandle == 5 || dragHandle == 6)
-                {
-                    if ((x - Canvas.GetLeft(rectList[shapeId])) > rectList[shapeId].Width)
-                    {
-                        rectList[shapeId].Width += 2;
-                        rectList[shapeId].Height += 2;
-                    }
-                    else
-                    {
-                        rectList[shapeId].Width -= 2;
-                        rectList[shapeId].Height -= 2;
-                    }
-                }
+                    // Case handle horizontal alignment for shapes
+                    case 2:
+                        rectList[shapeId].Width += deltaDistanceX;
+                        break;
+                    case 4:
+                        Canvas.SetLeft(rectList[shapeId], x);
+                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                        break;
+                    // Case handle diagonal alignment right-bottom for shapes
+                    case 5:
+                        double deltaX = x - x1;
+                        rectList[shapeId].Width += deltaX;
+                        double deltaY = y - y1;
+                        rectList[shapeId].Height += deltaY;
+                        break;
+                    // Case handle diagonal alignment left-bottom for shapes
+                    case 6:
+                        rectList[shapeId].Height += deltaDistanceY;
+                        Canvas.SetLeft(rectList[shapeId], x);
+                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                        break;
 
+                    // Case handle diagonal alignment left-top for shapes
+                    case 7:
+                        Canvas.SetTop(rectList[shapeId], y);
+                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                        Canvas.SetLeft(rectList[shapeId], x);
+                        rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]);
+                        break;
+
+                    // Case handle diagonal alignment right-top for shapes
+                    case 8:
+                        Canvas.SetTop(rectList[shapeId], y);
+                        rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
+                        rectList[shapeId].Width += deltaDistanceX;
+                        break;
+                }
             }
 
 
         }
+
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
