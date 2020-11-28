@@ -50,7 +50,7 @@ namespace CopyAndPasteInCanvas
         public int direction = 0;
         //add adorner
         System.Windows.Documents.AdornerLayer myAdornerLayer;
-        public List<SimpleCircleAdorner> adornerList;
+        public List<Adorner> adornerList;
         public bool showAdorner = false;
         public Window1()
         {
@@ -61,7 +61,7 @@ namespace CopyAndPasteInCanvas
             InfoList = new List<ShapeInfo>();
             textBoxes = new List<TextBox>();
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
-            adornerList = new List<SimpleCircleAdorner>();
+            adornerList = new List<Adorner>();
             shapeId = -1;
             CommandBinding SaveCmdBinding = new CommandBinding();
 
@@ -721,7 +721,6 @@ namespace CopyAndPasteInCanvas
             //add adorner for shape            
             myAdornerLayer = AdornerLayer.GetAdornerLayer(ellipse);
             adornerList.Add(new SimpleCircleAdorner(ellipse));
-
             CreateTextBoxForShapes(textBoxes, ellipse);
             this.InvalidateVisual();
         }
@@ -802,8 +801,8 @@ namespace CopyAndPasteInCanvas
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine($" showadorner {showAdorner.ToString()}");
-            if (shapeId == -1)
+            //Console.WriteLine($" showadorner {showAdorner.ToString()}");
+            /*if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
@@ -827,7 +826,23 @@ namespace CopyAndPasteInCanvas
             {
                 showAdorner = true;
                 myAdornerLayer.Add(adornerList[shapeId]);
-            }
+            }*/
+            Point a = new Point(e.GetPosition(this).X-240, e.GetPosition(this).Y-200);
+            Console.WriteLine($" FUNC");
+            Canvas.Children.Remove(rectList[0]);
+            Arrow arrow = new Arrow
+            {
+                StartPoint = new Point(0, 10),
+                EndPoint = a,
+                Stroke = Brushes.Black
+            };
+            rectList[0] = arrow;
+            Canvas.SetLeft(rectList[0], 100);
+            Canvas.SetTop(rectList[0], 100);
+            Canvas.Children.Add(rectList[0]);
+            if (arrow.IsMouseCaptured)
+                rectList[0].Stroke = Brushes.Red;
+            //this.InvalidateVisual();
         }
 
 
@@ -908,10 +923,9 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
-
+                if (shapeId>-1)
                 textBoxes[shapeId].IsEnabled = true;
             }
-
             if (canvas == null)
                 return;
             if (rectList.Count.ToString() != "0")
@@ -920,8 +934,8 @@ namespace CopyAndPasteInCanvas
                 shape = hitTestResult.VisualHit as Shape;
             }
             if (shape == null)
-                return;
-           
+                return;            
+            
         }
         private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 
@@ -1068,6 +1082,30 @@ namespace CopyAndPasteInCanvas
 
         }
 
+        private void Button_Arrow_Click(object sender, RoutedEventArgs e)
+        {
+            Arrow arrow = new Arrow
+            {
+                /*x0 = 0,
+                x1 = 10,
+                y0 = 50,
+                y1 = 100,*/
+                StartPoint = new Point(0, 10),
+                EndPoint= new Point(100, 10),
+                Stroke = Brushes.Black,
+                Uid = rectList.Count.ToString()
+            };            
+            
+            rectList.Add(arrow);
+            typeOfShape.Add(4);
+            Canvas.SetLeft(arrow, 100);
+            Canvas.SetTop(arrow, 10);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape           
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
+            adornerList.Add(new SimpleCircleAdorner(arrow));
+            this.InvalidateVisual();
+        }
 
         private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape)
         {
