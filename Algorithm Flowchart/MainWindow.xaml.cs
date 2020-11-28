@@ -415,6 +415,20 @@ namespace CopyAndPasteInCanvas
             y -= 100;
             for (int i = 0; i < this.rectList.Count; i++)
             {
+                if(typeOfShape[i]==5)
+                {                    
+                    dynamic a = rectList[i];
+                    Point p = new Point(x, y);
+                    Console.WriteLine($"{DistanceFromPointToLine(p, a)}");
+                    if(DistanceFromPointToLine(p, a) <108 && DistanceFromPointToLine(p, a) > 102)
+                    {
+                        move = true;
+                        rectList[i].Stroke = Brushes.Red;
+                        return rectList[i].Uid;
+                    }
+                    rectList[i].Stroke = Brushes.Black;
+                    return "-1";
+                }
                 double x0 = Canvas.GetLeft(rectList[i]);
                 double y0 = Canvas.GetTop(rectList[i]);
                 double x1 = x0 + rectList[i].Width;
@@ -552,40 +566,33 @@ namespace CopyAndPasteInCanvas
                 this.InvalidateVisual();
                 return;
             }
-
+            
             //action when moving shape  
             if (move)
             {
-                if (typeOfShape[shapeId] == 5)
+                
+                if(typeOfShape[shapeId] != 5)
                 {
-                    double x0 = 0;
-                    double y0 = 10;
-                    double x1 = e.GetPosition(this).X - 240;
-                    double y1 = e.GetPosition(this).Y - 200;
-                    double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
-                    Point a = new Point(x1, y1);
-                    Canvas.Children.Remove(rectList[shapeId]);
-                    Arrow arrow = new Arrow
-                    {
-                        StartPoint = new Point(x0, y0),
-                        EndPoint = a,
-                        Stroke = Brushes.Black,
-                        //Height=2,
-                        StrokeThickness = 2,
-                        Width=distance
-                    };
-                    rectList[shapeId] = arrow;
-                    Canvas.SetLeft(rectList[shapeId], 100);
-                    Canvas.SetTop(rectList[shapeId], 100);
-                    Canvas.Children.Add(rectList[shapeId]);
-                    return;
+                    double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
+                    double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
+                    Canvas.SetLeft(rectList[shapeId], x);
+                    Canvas.SetTop(rectList[shapeId], y);
+                    Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
+                    Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
                 }
-                double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
-                double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);                
-                Canvas.SetLeft(rectList[shapeId], x);
-                Canvas.SetTop(rectList[shapeId], y);
-                Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
-                Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+                else
+                {
+                    double x = (e.GetPosition(this).X -140);
+                    double y = (e.GetPosition(this).Y -100);
+                    Canvas.SetLeft(rectList[shapeId], x);
+                    Canvas.SetTop(rectList[shapeId], y);
+                }
+                /*double x = (e.GetPosition(this).X - 140 );
+                double y = (e.GetPosition(this).Y - 100 );
+                Canvas.SetLeft(rectList[0], x);
+                Canvas.SetTop(rectList[0], y);*/
+                //Canvas.SetLeft(textBoxes[0], x + (rectList[0].Width - textBoxes[0].Width) / 2);
+                //Canvas.SetTop(textBoxes[0], y + (rectList[0].Height - textBoxes[0].Height) / 2);
             }
             //action when resize shape
             else if (resize)
@@ -834,8 +841,7 @@ namespace CopyAndPasteInCanvas
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
-            for (int i=0; i< typeOfShape.Count; i++)
-                Console.WriteLine($" {typeOfShape[i]} ");
+            
             //Console.WriteLine($" showadorner {showAdorner.ToString()}");
             if (shapeId == -1)
             {
@@ -870,6 +876,9 @@ namespace CopyAndPasteInCanvas
         {
             rectList.Clear();
             adornerList.Clear();
+            typeOfShape.Clear();
+            InfoList.Clear();
+            textBoxes.Clear();
             this.Canvas.Children.Clear();
         }
         public void clearAllAdorner()
@@ -953,7 +962,7 @@ namespace CopyAndPasteInCanvas
                 shape = hitTestResult.VisualHit as Shape;
             }
             if (shape == null)
-                return;            
+                return; 
             
         }
         private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1115,16 +1124,20 @@ namespace CopyAndPasteInCanvas
                 Stroke = Brushes.Black,
                 //Height=2,
                 StrokeThickness = 2,
-                Width = distance
+                //Width = distance
             };
             rectList.Add(arrow);
             typeOfShape.Add(5);
-            Canvas.SetLeft(arrow, 100);
+            Canvas.SetLeft(arrow, 200);
             Canvas.SetTop(arrow, 100);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
             //add adorner for shape           
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
-            adornerList.Add(new ArrowAdorner(arrow));
+            ArrowAdorner myAdorner= new ArrowAdorner(arrow);
+            dynamic a = arrow;
+            myAdorner.From = a.StartPoint;
+            myAdorner.To = a.EndPoint;
+            adornerList.Add(myAdorner);
             this.InvalidateVisual();
         }
 
@@ -1152,6 +1165,13 @@ namespace CopyAndPasteInCanvas
             Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.Width) / 2);
             Canvas.SetTop(textBox, 10 + (shape.Height - textBox.Height) / 2);
             Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
+        }
+        public double DistanceFromPointToLine(Point point, Arrow arrow)
+        {            
+            Point l1 = arrow.StartPoint;
+            Point l2 = arrow.EndPoint;
+            return Math.Abs((l2.X - l1.X) * (l1.Y - point.Y) - (l1.X - point.X) * (l2.Y - l1.Y)) /
+                    Math.Sqrt(Math.Pow(l2.X - l1.X, 2) + Math.Pow(l2.Y - l1.Y, 2));
         }
     }
 
