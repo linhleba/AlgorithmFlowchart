@@ -55,6 +55,9 @@
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PropertyTools, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyTools.3.0.0\lib\net45\PropertyTools.dll</HintPath>
@@ -116,9 +119,11 @@
       <DependentUpon>ShapeDesigner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\ShapeTool.cs" />
+    <Compile Include="ShapeInfo.cs" />
     <Compile Include="ShapeToolUI.xaml.cs">
       <DependentUpon>ShapeToolUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SimpleCircleAdorner.cs" />
     <Page Include="BackRoundPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
