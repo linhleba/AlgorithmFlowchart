@@ -1034,7 +1034,7 @@ namespace CopyAndPasteInCanvas
             for (int i = 0; i < infoList.Count; i++)
             {
                 Shape shape;
-                switch (typeOfShape[i / 2])
+                switch (typeOfShape[i])
                 {
                     case 1:
                         shape = new Rectangle();
