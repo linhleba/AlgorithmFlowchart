@@ -934,11 +934,15 @@ namespace CopyAndPasteInCanvas
                         myAdornerLayer = AdornerLayer.GetAdornerLayer(shape);
                         adornerList.Add(new SimpleCircleAdorner(shape));
                     }
-
                 }
 
             }
 
+        }
+
+        private void Button_LINE_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void Open(object sender, RoutedEventArgs e)

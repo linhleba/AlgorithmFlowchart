@@ -329,7 +329,18 @@
                                     </Button.Template>
                                 </Button>
                             </Grid>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                </Grid.ColumnDefinitions>
+                                <Button  Grid.Column="0"
+                                    Margin="0,0,0,0" Height="60" Width="60" 
+                                         Content="LINE" Click="Button_LINE_Click"  >
 
+                                </Button>
+
+                            </Grid>
                         </StackPanel>
                     </Grid>
                 </Border>
