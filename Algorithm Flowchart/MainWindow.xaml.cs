@@ -559,6 +559,7 @@ namespace CopyAndPasteInCanvas
                 Canvas.SetTop(rectList[shapeId], y);
                 Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
                 Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+
             }
             //action when resize shape
             else if (resize)
@@ -745,6 +746,7 @@ namespace CopyAndPasteInCanvas
             {
                 Width = 150,
                 Height = 100,
+
                 Points = myPointCollection,
                 Fill = Brushes.White,
                 Stroke = Brushes.Black,
