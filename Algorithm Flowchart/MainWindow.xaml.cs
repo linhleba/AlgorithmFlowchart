@@ -161,17 +161,7 @@ namespace CopyAndPasteInCanvas
                     this.Open(sender, e);
                     break;
                 case 3:
-                    for (int i = 0; i < rectList.Count; i++)
-                    {
-                        InfoList[i].X = Canvas.GetTop(rectList[i]);
-                        InfoList[i].Y = Canvas.GetLeft(rectList[i]);
-                        InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
-                        InfoList[i].Height = Convert.ToInt32(rectList[i].Height);
-                        InfoList[i].StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness);
-                        InfoList[i].Stretch = rectList[i].Stretch;
-                        InfoList[i].Uid = rectList[i].Uid;
-                        InfoList[i].Fill = rectList[i].Fill;
-                    }
+                    UpdateInfo(InfoList, rectList);
                     FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Create);
                     XamlWriter.Save(Canvas, fs);
                     fs.Close();
@@ -196,6 +186,22 @@ namespace CopyAndPasteInCanvas
                     case 5:
                         this.Canvas.Background = Brushes.AliceBlue;
                         break;*/
+            }
+        }
+
+        private void UpdateInfo(List<ShapeInfo> infoList, List<Shape> rectList)
+        {
+            for (int i = 0; i < rectList.Count; i++)
+            {
+                MessageBox.Show(Convert.ToString(i));
+                InfoList[i].X = Canvas.GetTop(rectList[i]);
+                InfoList[i].Y = Canvas.GetLeft(rectList[i]);
+                InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
+                InfoList[i].Height = Convert.ToInt32(rectList[i].Height);
+                InfoList[i].StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness);
+                InfoList[i].Stretch = rectList[i].Stretch;
+                InfoList[i].Uid = rectList[i].Uid;
+                InfoList[i].Fill = rectList[i].Fill;
             }
         }
 
@@ -406,6 +412,7 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
+            AddShape(InfoList, rectList);
             //this.Canvas.Children.Clear();
             //Console.WriteLine("aaaa\n");
         }
@@ -546,11 +553,10 @@ namespace CopyAndPasteInCanvas
             //action when moving shape  
             if (move)
             {
-                double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
-                double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
+                double x = (e.GetPosition(this).X - 140 - rectList[0].Width / 2);
+                double y = (e.GetPosition(this).Y - 100 - rectList[0].Height / 2);
                 Canvas.SetLeft(rectList[shapeId], x);
                 Canvas.SetTop(rectList[shapeId], y);
-
                 Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
                 Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
             }
@@ -657,7 +663,7 @@ namespace CopyAndPasteInCanvas
             {
                 shapeId = -1;
             }
-            
+
 
         }
 
@@ -689,13 +695,13 @@ namespace CopyAndPasteInCanvas
             adornerList.Add(new SimpleCircleAdorner(rect));
 
 
-           
+
 
             CreateTextBoxForShapes(textBoxes, rect);
-            
+
             //Canvas.SetLeft(textBox, 110);
             //Canvas.SetTop(textBox, 35);
-            
+
             this.InvalidateVisual();
         }
 
@@ -739,7 +745,6 @@ namespace CopyAndPasteInCanvas
             {
                 Width = 150,
                 Height = 100,
-
                 Points = myPointCollection,
                 Fill = Brushes.White,
                 Stroke = Brushes.Black,
@@ -819,7 +824,6 @@ namespace CopyAndPasteInCanvas
                 shapeId = -1;
                 return;
             }
-
             var converter = new System.Windows.Media.BrushConverter();
             if (isColorPicker)
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
@@ -873,6 +877,7 @@ namespace CopyAndPasteInCanvas
 
         private void copyCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (shape == null) return;
             //this code allow us to save shape info to Clipboard by turn shape info to string and the save it
             xaml = XamlWriter.Save(shape);
             Clipboard.SetText(xaml, TextDataFormat.Xaml);
@@ -882,7 +887,7 @@ namespace CopyAndPasteInCanvas
         {
             //remove shape from canvas
             canvas.Children.Remove(shape);
-         
+
         }
         private void SaveCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -908,10 +913,8 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
-
                 textBoxes[shapeId].IsEnabled = true;
             }
-
             if (canvas == null)
                 return;
             if (rectList.Count.ToString() != "0")
@@ -921,7 +924,7 @@ namespace CopyAndPasteInCanvas
             }
             if (shape == null)
                 return;
-           
+
         }
         private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 
@@ -944,6 +947,10 @@ namespace CopyAndPasteInCanvas
 
                     {
 
+                        ShapeInfo info = new ShapeInfo();
+
+                        InfoList.Add(info);
+
                         sw.Write(xaml);
 
                         sw.Flush();
@@ -958,18 +965,29 @@ namespace CopyAndPasteInCanvas
 
                         typeOfShape.Add(typeOfShape[Int32.Parse(shape.Uid) - 1]);
 
-                        Canvas.SetLeft(shape, left);
+                        Canvas.SetLeft(rectList[rectList.Count - 1], left);
 
-                        Canvas.SetTop(shape, top);
+                        Canvas.SetTop(rectList[rectList.Count - 1], top);
 
                         top = 100;
 
                         left = 200;
 
-                        Canvas.Children.Add(shape);
+                        Canvas.Children.Add(rectList[rectList.Count - 1]);
+
+                        CreateTextBoxForShapes(textBoxes, shape);
+
                         left = 200;
+
                         myAdornerLayer = AdornerLayer.GetAdornerLayer(shape);
+
                         adornerList.Add(new SimpleCircleAdorner(shape));
+
+                        Canvas.SetLeft(textBoxes[Int32.Parse(shape.Uid)], Canvas.GetLeft(shape) + (shape.Width - textBoxes[Int32.Parse(shape.Uid)].Width) / 2);
+
+                        Canvas.SetTop(textBoxes[Int32.Parse(shape.Uid)], Canvas.GetTop(shape) + (rectList[Int32.Parse(shape.Uid)].Height - textBoxes[Int32.Parse(shape.Uid) - 1].Height) / 2);
+
+                        this.InvalidateVisual();
 
                     }
 
@@ -981,25 +999,14 @@ namespace CopyAndPasteInCanvas
 
         private void Open(object sender, RoutedEventArgs e)
         {
-            //load .xaml file to saved Canvas and copy savedCanvas member to drawingCanvas 
-            //FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Open, FileAccess.Read);
-            //savedCanvas = XamlReader.Load(fs) as Canvas;
-            //fs.Close();
-            //while (savedCanvas.Children.Count > 0)
-            //{
-            //    UIElement uie = savedCanvas.Children[0];
-            //    //if (uie.Uid == "save")  ;
-            //    //else if (uie.Uid == "load") ;
-            //    //else if (uie.Uid == "red") ;
-            //    //else if (uie.Uid == "redE") ;
-            //    //else
-            //    //{
-            //    savedCanvas.Children.Remove(uie);
-            //    Canvas.Children.Add(uie);
-            //    //}
-            //    //savedCanvas.Children.Remove(uie);
-            //}
             string reopenedState = string.Empty;
+            using (FileStream stream = new FileStream("Type.json", FileMode.Open))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                reopenedState = reader.ReadToEnd();
+            }
+            var type = JsonConvert.DeserializeObject<List<int>>(reopenedState);
+            type.ForEach(typeOfShape.Add);
             using (FileStream stream = new FileStream("Info.json", FileMode.Open))
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -1012,13 +1019,6 @@ namespace CopyAndPasteInCanvas
             AddShape(InfoList, rectList);
 
             reopenedState = string.Empty;
-            using (FileStream stream = new FileStream("Type.json", FileMode.Open))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                reopenedState = reader.ReadToEnd();
-            }
-            var type = JsonConvert.DeserializeObject<List<int>>(reopenedState);
-            type.ForEach(typeOfShape.Add);
 
             //fs = File.Open("SaveType.xaml", FileMode.Open, FileAccess.Read);
             //typeOfShape = XamlReader.Load(fs) as List<int>;
@@ -1027,20 +1027,36 @@ namespace CopyAndPasteInCanvas
 
         private void AddShape(List<ShapeInfo> infoList, List<Shape> rectList)
         {
+            adornerList = new List<SimpleCircleAdorner>();
             rectList = new List<Shape>();
             for (int i = 0; i < infoList.Count; i++)
             {
-                Shape shape = new Rectangle();
+                Shape shape;
+                switch (typeOfShape[i])
+                {
+                    case 1:
+                        shape = new Rectangle();
+                        break;
+                    case 2:
+                        shape = new Ellipse();
+                        break;
+                    default:
+                        shape = new Polygon()
+                        {
+                            Points = infoList[i].Points,
+                        };
+                        break;
+                }
                 //MessageBox.Show(Convert.ToString(infoList.Count));
-                shape.Width =  infoList[i].Width;
-                shape.Height =  infoList[i].Height;
+                shape.Width = infoList[i].Width;
+                shape.Height = infoList[i].Height;
                 shape.Fill = infoList[i].Fill;
                 shape.Stroke = infoList[i].Stroke;
                 shape.StrokeThickness = infoList[i].StrokeThickness;
                 shape.Stretch = infoList[i].Stretch;
                 shape.Uid = infoList[i].Uid;
                 rectList.Add(shape);
-                Canvas.SetLeft(rectList[i], infoList[i].Y );
+                Canvas.SetLeft(rectList[i], infoList[i].Y);
                 Canvas.SetTop(rectList[i], infoList[i].X);
                 Canvas.Children.Add(shape);
                 myAdornerLayer = AdornerLayer.GetAdornerLayer(rectList[i]);
