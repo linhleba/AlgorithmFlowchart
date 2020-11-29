@@ -1150,6 +1150,9 @@ namespace CopyAndPasteInCanvas
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
+            CreateTextBoxForShapes(textBoxes, arrow);
+            textBoxes[rectList.Count - 1].Width = 0;
+            textBoxes[rectList.Count - 1].Height = 0;
             this.InvalidateVisual();
         }
 
@@ -1190,7 +1193,6 @@ namespace CopyAndPasteInCanvas
         private void buttonZoomout_Click(object sender, RoutedEventArgs e)
         {
             zoom -= zoomDelta;
-
             Canvas.LayoutTransform = new ScaleTransform(zoom, zoom);
         }
 
