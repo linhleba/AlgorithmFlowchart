@@ -125,13 +125,13 @@
                 <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="buttonZoomin" Margin="10,0,10,0" Uid="1" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomin" Margin="10,0,10,0" Uid="1" Click="buttonZoomin_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomIn" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom in" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="buttonZoomout" Margin="10,0,10,0" Uid="2" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomout" Margin="10,0,10,0" Uid="2" Click="buttonZoomout_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomOut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom out" Margin="10,0,0,0"/>
@@ -262,28 +262,63 @@
                                 <Button  Grid.Column="0"
                                     Margin="0,0,0,0" Height="60" Width="60" BorderBrush="#FFBCE6FF"
                                     Foreground="#FFBCE6FF" Click="Button_Rhombus_Click">
-                                    <Button.Background>
-                                        <ImageBrush ImageSource="./Resources/Images/rhombus.png"/>
-                                    </Button.Background>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Polygon Points="0, 50 50,0 100,50 50,100" Stretch="Fill" Stroke="Black"                                          
+                         StrokeThickness="2"> 
+                                                    <Polygon.Fill>
+                                                        
+                                                        <RadialGradientBrush>
+                                                            <RadialGradientBrush.Transform>
+                                                                <TransformGroup>
+                                                                    <ScaleTransform ScaleY="0.65" />
+                                                                </TransformGroup>
+                                                            </RadialGradientBrush.Transform>
+                                                        </RadialGradientBrush>
+                                                    </Polygon.Fill>
+                                                </Polygon>
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
                                 </Button>
                                 <Button Grid.Column="1"
-                            Margin="0,0,0,0" Height="70" Width="70" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF" Click="Button_Parallelogram_Click">
-                                    <Button.Background>
-                                        <ImageBrush ImageSource="./Resources/Images/parallelogram1.png" Stretch="UniformToFill">
+                            Margin="0,0,0,0" Height="40" Width="60" BorderBrush="#FFBCE6FF"  Foreground="#FFBCE6FF" Click="Button_Parallelogram_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Polygon Points="0, 100 25, 0 100, 0 75, 100" Stretch="Fill" Stroke="Black"                                          
+                         StrokeThickness="2">
+                                                    <Polygon.Fill>
 
-                                        </ImageBrush>
-                                    </Button.Background>
+                                                        <RadialGradientBrush>
+                                                            <RadialGradientBrush.Transform>
+                                                                <TransformGroup>
+                                                                    <ScaleTransform ScaleY="0.65" />
+                                                                </TransformGroup>
+                                                            </RadialGradientBrush.Transform>
+                                                        </RadialGradientBrush>
+                                                    </Polygon.Fill>
+                                                </Polygon>
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
                                 </Button>
                             </Grid>
                             <Grid >
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                    <ColumnDefinition Width="21.5"></ColumnDefinition >
+                                    <ColumnDefinition Width="48.5"/>
                                     <ColumnDefinition Width="70"></ColumnDefinition >
                                 </Grid.ColumnDefinitions>
                                 <Button  Grid.Column="0" 
-                        Margin="5,0,10,5" Height="55" Width="55"
+                        Margin="5,2,10,7" Height="55" Width="55"
                         BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
-                        Click="Button_Rectangle_Click">
+                        Click="Button_Rectangle_Click" Grid.ColumnSpan="2">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Grid>
@@ -305,7 +340,7 @@
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button   Grid.Column="1"
+                                <Button   Grid.Column="2"
                         Margin="0,0,10,5" Height="60" Width="60" BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" Click="Button_Circle_Click" >
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
@@ -329,7 +364,19 @@
                                     </Button.Template>
                                 </Button>
                             </Grid>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                </Grid.ColumnDefinitions>
+                                <Button  Grid.Column="0" 
+                        Margin="5,0,10,5" Height="55" Width="55"
+                        BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
+                        Click="Button_Arrow_Click" Content="ARROW">
 
+                                </Button>
+
+                            </Grid>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -345,6 +392,7 @@
             </ScrollViewer>
             <ScrollViewer Grid.Column="1"
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
+                
                 <Canvas x:Name="Canvas"  
                         Height="1000"
                         Width="3000"
@@ -370,7 +418,7 @@
 
 
 
-        
+
     </DockPanel>
 
     <!--<Window.Resources>
@@ -388,5 +436,5 @@
         </Canvas>
     </Window.Resources>-->
 
-    
+
 </Window>
