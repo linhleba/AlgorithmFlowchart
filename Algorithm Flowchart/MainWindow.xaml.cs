@@ -462,7 +462,6 @@ namespace CopyAndPasteInCanvas
                     valueOfDistance = 20;
                 }
 
-                //making appear arrow to resize of paint shape
                 if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
                 {
                     this.move = true;
