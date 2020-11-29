@@ -427,16 +427,16 @@ namespace CopyAndPasteInCanvas
                 if (typeOfShape[i] == 5)
                 {
                     dynamic a = rectList[i];
-                    Point p = new Point(x, y);
-                    Console.WriteLine($"{DistanceFromPointToLine(p, a)}");
-                    if (DistanceFromPointToLine(p, a) < 108 && DistanceFromPointToLine(p, a) > 102)
+
+                    Point p = new Point(x, y);                    
+                    if (DistanceFromPointToLine(p,a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i])) < 5 && DistanceFromPointToLine(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i])) > 0)
+
                     {
                         move = true;
                         rectList[i].Stroke = Brushes.Red;
                         return rectList[i].Uid;
-                    }
+                    }                    
                     rectList[i].Stroke = Brushes.Black;
-                    return "-1";
                 }
                 double x0 = Canvas.GetLeft(rectList[i]);
                 double y0 = Canvas.GetTop(rectList[i]);
@@ -452,6 +452,7 @@ namespace CopyAndPasteInCanvas
                 {
                     valueOfDistance = 20;
                 }
+
                 //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
                 if (typeOfShape[i] == 5)
                 {
@@ -464,6 +465,7 @@ namespace CopyAndPasteInCanvas
                     return rectList[i].Uid;
 
                 }
+
                 //making appear arrow to resize of paint shape
                 if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
                 {
@@ -572,14 +574,16 @@ namespace CopyAndPasteInCanvas
                 if (move) move = !move;
                 if (resize) resize = !resize;
                 delta = direction = 0;
-                this.InvalidateVisual();
                 return;
             }
 
             //action when moving shape  
             if (move)
-            {
-                if (typeOfShape[shapeId] != 5)
+
+            {       
+                //type= 5 is arrow
+               if(typeOfShape[shapeId] != 5)
+
                 {
                     double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
                     double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
@@ -595,12 +599,6 @@ namespace CopyAndPasteInCanvas
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
                 }
-                /*double x = (e.GetPosition(this).X - 140 );
-                double y = (e.GetPosition(this).Y - 100 );
-                Canvas.SetLeft(rectList[0], x);
-                Canvas.SetTop(rectList[0], y);*/
-                //Canvas.SetLeft(textBoxes[0], x + (rectList[0].Width - textBoxes[0].Width) / 2);
-                //Canvas.SetTop(textBoxes[0], y + (rectList[0].Height - textBoxes[0].Height) / 2);
             }
             //action when resize shape
             else if (resize)
@@ -886,6 +884,7 @@ namespace CopyAndPasteInCanvas
             typeOfShape.Clear();
             InfoList.Clear();
             textBoxes.Clear();
+            clearAllAdorner();
             this.Canvas.Children.Clear();
         }
         public void clearAllAdorner()
@@ -1144,9 +1143,9 @@ namespace CopyAndPasteInCanvas
         private void Button_Arrow_Click(object sender, RoutedEventArgs e)
         {
             double x0 = 0;
-            double y0 = 10;
+            double y0 = 0;
             double x1 = 100;
-            double y1 = 150;
+            double y1 = 100;
             double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
             Arrow arrow = new Arrow
             {
@@ -1169,6 +1168,9 @@ namespace CopyAndPasteInCanvas
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
+            CreateTextBoxForShapes(textBoxes, arrow);
+            textBoxes[rectList.Count - 1].Width = 0;
+            textBoxes[rectList.Count - 1].Height = 0;
             this.InvalidateVisual();
         }
 
@@ -1209,16 +1211,45 @@ namespace CopyAndPasteInCanvas
         private void buttonZoomout_Click(object sender, RoutedEventArgs e)
         {
             zoom -= zoomDelta;
-
             Canvas.LayoutTransform = new ScaleTransform(zoom, zoom);
         }
 
-        public double DistanceFromPointToLine(Point point, Arrow arrow)
+
+        public double DistanceFromPointToLine(Point p, Arrow arrow,double leftCanvas, double topCanvas)
         {
-            Point l1 = arrow.StartPoint;
-            Point l2 = arrow.EndPoint;
-            return Math.Abs((l2.X - l1.X) * (l1.Y - point.Y) - (l1.X - point.X) * (l2.Y - l1.Y)) /
+            Point l1 = new Point(leftCanvas, topCanvas);
+            double dX = leftCanvas - arrow.StartPoint.X;
+            double dY = topCanvas - arrow.StartPoint.Y;
+            Point l2 = new Point(arrow.EndPoint.X + dX, arrow.EndPoint.Y + dY);
+            // border to limit coordinate of p
+            double xMax; double xMin; double yMax; double yMin;
+            if (l1.X < l2.X)
+            {
+                xMax = l2.X;
+                xMin = l1.X;
+            }
+            else
+            {
+                xMin = l2.X;
+                xMax = l1.X;
+            }
+            if (l1.Y < l2.Y)
+            {
+                yMax = l2.Y;
+                yMin = l1.Y;
+            }
+            else
+            {
+                yMin = l2.Y;
+                yMax = l1.Y;
+            }
+            if (xMin <= p.X && p.X <= xMax && yMin <= p.Y && p.Y <= yMax)
+            {
+                return Math.Abs((l2.X - l1.X) * (l1.Y - p.Y) - (l1.X - p.X) * (l2.Y - l1.Y)) /
+
                     Math.Sqrt(Math.Pow(l2.X - l1.X, 2) + Math.Pow(l2.Y - l1.Y, 2));
+            }
+            return 999;
         }
     }
 
