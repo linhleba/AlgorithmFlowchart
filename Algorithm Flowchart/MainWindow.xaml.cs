@@ -870,7 +870,11 @@ namespace CopyAndPasteInCanvas
             }
             var converter = new System.Windows.Media.BrushConverter();
             if (isColorPicker)
+            {
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+                textBoxes[shapeId].Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+            }
+                
             if (!showAdorner)
             {
                 showAdorner = true;
