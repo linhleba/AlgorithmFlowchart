@@ -1079,7 +1079,9 @@ namespace CopyAndPasteInCanvas
 
         private void AddShape(List<ShapeInfo> infoList, List<Shape> rectList)
         {
+
             //adornerList = new List<SimpleCircleAdorner>();
+
             rectList = new List<Shape>();
             for (int i = 0; i < infoList.Count; i++)
             {
