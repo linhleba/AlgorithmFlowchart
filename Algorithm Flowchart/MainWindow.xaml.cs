@@ -459,21 +459,6 @@ namespace CopyAndPasteInCanvas
                 {
                     valueOfDistance = 20;
                 }
-
-                //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
-                if (typeOfShape[i] == 5)
-                {
-                    if (rectList[i].IsMouseCaptured)
-                    {
-                        move = true;
-                        rectList[i].Stroke = Brushes.Red;
-                        return rectList[i].Uid;
-                    }
-                    return rectList[i].Uid;
-
-                }
-
-                //making appear arrow to resize of paint shape
                 if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
                 {
                     this.move = true;
