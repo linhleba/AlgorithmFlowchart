@@ -578,10 +578,8 @@ namespace CopyAndPasteInCanvas
             
             //action when moving shape  
             if (move)
-            {
-
-                
-                if(typeOfShape[shapeId] != 5)
+            {             
+               if(typeOfShape[shapeId] != 5)
                 {
                     double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
                     double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
@@ -603,7 +601,6 @@ namespace CopyAndPasteInCanvas
                 Canvas.SetTop(rectList[0], y);*/
                 //Canvas.SetLeft(textBoxes[0], x + (rectList[0].Width - textBoxes[0].Width) / 2);
                 //Canvas.SetTop(textBoxes[0], y + (rectList[0].Height - textBoxes[0].Height) / 2);
-
             }
             //action when resize shape
             else if (resize)
@@ -789,7 +786,6 @@ namespace CopyAndPasteInCanvas
             {
                 Width = 150,
                 Height = 100,
-
                 Points = myPointCollection,
                 Fill = Brushes.White,
                 Stroke = Brushes.Black,
