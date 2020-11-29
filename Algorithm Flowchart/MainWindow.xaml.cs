@@ -25,6 +25,8 @@ namespace CopyAndPasteInCanvas
 {
     public partial class Window1
     {
+        double zoom = 1;
+        double zoomDelta = 0.1;
         int top = 100, left = 200;
         string xaml = "";
         Shape shape;
@@ -1198,6 +1200,22 @@ namespace CopyAndPasteInCanvas
             Canvas.SetTop(textBox, 10 + (shape.Height - textBox.Height) / 2);
             Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
         }
+
+        private void buttonZoomin_Click(object sender, RoutedEventArgs e)
+        {
+            zoom += zoomDelta;
+
+            Canvas.LayoutTransform = new ScaleTransform(zoom, zoom);
+
+        }
+
+        private void buttonZoomout_Click(object sender, RoutedEventArgs e)
+        {
+            zoom -= zoomDelta;
+
+            Canvas.LayoutTransform = new ScaleTransform(zoom, zoom);
+        }
+
         public double DistanceFromPointToLine(Point point, Arrow arrow)
         {            
             Point l1 = arrow.StartPoint;

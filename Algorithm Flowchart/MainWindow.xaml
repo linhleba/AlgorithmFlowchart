@@ -125,13 +125,13 @@
                 <TabItem Header="View" FontSize="15" Margin="10,0,0,0" Width="200">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="buttonZoomin" Margin="10,0,10,0" Uid="1" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomin" Margin="10,0,10,0" Uid="1" Click="buttonZoomin_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomIn" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom in" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="buttonZoomout" Margin="10,0,10,0" Uid="2" Click="View_Button_Click">
+                            <Button x:Name="buttonZoomout" Margin="10,0,10,0" Uid="2" Click="buttonZoomout_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ZoomOut" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Zoom out" Margin="10,0,0,0"/>
@@ -392,6 +392,7 @@
             </ScrollViewer>
             <ScrollViewer Grid.Column="1"
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
+                
                 <Canvas x:Name="Canvas"  
                         Height="1000"
                         Width="3000"
