@@ -443,6 +443,8 @@ namespace CopyAndPasteInCanvas
                         return rectList[i].Uid;
                     }                    
                     rectList[i].Stroke = Brushes.Black;
+
+                   
                 }
                 double x0 = Canvas.GetLeft(rectList[i]) * zoom;
                 Console.WriteLine("x0 is: " +  x0);
@@ -458,19 +460,6 @@ namespace CopyAndPasteInCanvas
                 else if (typeOfShape[i] == 3 || typeOfShape[i] == 4)
                 {
                     valueOfDistance = 20;
-                }
-
-                //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
-                if (typeOfShape[i] == 5)
-                {
-                    if (rectList[i].IsMouseCaptured)
-                    {
-                        move = true;
-                        rectList[i].Stroke = Brushes.Red;
-                        return rectList[i].Uid;
-                    }
-                    return rectList[i].Uid;
-
                 }
 
                 //making appear arrow to resize of paint shape
@@ -594,8 +583,8 @@ namespace CopyAndPasteInCanvas
                if(typeOfShape[shapeId] != 5)
 
                 {
-                    double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2) * zoom;
-                    double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2) * zoom;
+                    double x = (e.GetPosition(this).X/zoom - (rectList[shapeId].Width/zoom) / 2)  - 140/zoom;
+                    double y = (e.GetPosition(this).Y/zoom - (rectList[shapeId].Height/zoom) / 2) - 100/zoom;
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
                     Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
@@ -618,17 +607,17 @@ namespace CopyAndPasteInCanvas
                 // If shape is rectangle or circle
 
                 // Get current pos x
-                double x = (e.GetPosition(this).X  - 140);
+                double x = (e.GetPosition(this).X/zoom   - 140);
                 // Get currennt pos y
-                double y = (e.GetPosition(this).Y  - 100);
+                double y = (e.GetPosition(this).Y/zoom  - 100);
 
 
                 double x0 = Canvas.GetLeft(rectList[shapeId]);
                 double y0 = Canvas.GetTop(rectList[shapeId]);
 
                 // Get the bottom pos x1,y1
-                double x1 = x0 + rectList[shapeId].Width * zoom;
-                double y1 = y0 + rectList[shapeId].Height * zoom;
+                double x1 = x0 + rectList[shapeId].Width / zoom;
+                double y1 = y0 + rectList[shapeId].Height / zoom;
 
                 Console.WriteLine("Drag handle is " + dragHandle);
 
@@ -642,48 +631,48 @@ namespace CopyAndPasteInCanvas
 
                         // Case handle vertical alignment for shapes
                         case 1:
-                            Canvas.SetTop(rectList[shapeId], y);
+                            Canvas.SetTop(rectList[shapeId], y * zoom);
                             rectList[shapeId].Height = (y1 - Canvas.GetTop(rectList[shapeId]))*zoom;
                             break;
                         case 3:
-                            rectList[shapeId].Height += deltaDistanceY;
+                            rectList[shapeId].Height += deltaDistanceY * zoom;
                             break;
 
                         // Case handle horizontal alignment for shapes
                         case 2:
-                            rectList[shapeId].Width += deltaDistanceX;
+                            rectList[shapeId].Width += deltaDistanceX * zoom;
                             break;
                         case 4:
                             Canvas.SetLeft(rectList[shapeId], x * zoom);
-                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]) * zoom;
+                            rectList[shapeId].Width = (x1 - Canvas.GetLeft(rectList[shapeId])) * zoom;
                             break;
                         // Case handle diagonal alignment right-bottom for shapes
                         case 5:
                             double deltaX = x - x1;
-                            rectList[shapeId].Width += deltaX;
+                            rectList[shapeId].Width += deltaX * zoom;
                             double deltaY = y - y1;
-                            rectList[shapeId].Height += deltaY;
+                            rectList[shapeId].Height += deltaY * zoom;
                             break;
                         // Case handle diagonal alignment left-bottom for shapes
                         case 6:
-                            rectList[shapeId].Height += deltaDistanceY;
+                            rectList[shapeId].Height += deltaDistanceY * zoom;
                             Canvas.SetLeft(rectList[shapeId], x * zoom);
-                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]) * zoom;
+                            rectList[shapeId].Width = (x1 - Canvas.GetLeft(rectList[shapeId])) * zoom;
                             break;
 
                         // Case handle diagonal alignment left-top for shapes
                         case 7:
                             Canvas.SetTop(rectList[shapeId], y * zoom);
-                            rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]) * zoom;
+                            rectList[shapeId].Height = (y1 - Canvas.GetTop(rectList[shapeId])) * zoom;
                             Canvas.SetLeft(rectList[shapeId], x * zoom);
-                            rectList[shapeId].Width = x1 - Canvas.GetLeft(rectList[shapeId]) * zoom;
+                            rectList[shapeId].Width = (x1 - Canvas.GetLeft(rectList[shapeId])) * zoom;
                             break;
 
                         // Case handle diagonal alignment right-top for shapes
                         case 8:
-                            Canvas.SetTop(rectList[shapeId], y);
-                            rectList[shapeId].Height = y1 - Canvas.GetTop(rectList[shapeId]);
-                            rectList[shapeId].Width += deltaDistanceX;
+                            Canvas.SetTop(rectList[shapeId], y * zoom);
+                            rectList[shapeId].Height = (y1 - Canvas.GetTop(rectList[shapeId])) * zoom;
+                            rectList[shapeId].Width += deltaDistanceX * zoom;
                             break;
 
                     }
@@ -1224,7 +1213,7 @@ namespace CopyAndPasteInCanvas
 
         private void buttonZoomout_Click(object sender, RoutedEventArgs e)
         {
-            zoom -= zoomDelta;
+            zoom -= zoomDelta; 
             Canvas.RenderTransform = new ScaleTransform(zoom, zoom);
 
         }
