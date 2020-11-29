@@ -50,7 +50,7 @@ namespace CopyAndPasteInCanvas
         public int direction = 0;
         //add adorner
         System.Windows.Documents.AdornerLayer myAdornerLayer;
-        public List<SimpleCircleAdorner> adornerList;
+        public List<Adorner> adornerList;
         public bool showAdorner = false;
         public Window1()
         {
@@ -61,7 +61,7 @@ namespace CopyAndPasteInCanvas
             InfoList = new List<ShapeInfo>();
             textBoxes = new List<TextBox>();
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
-            adornerList = new List<SimpleCircleAdorner>();
+            adornerList = new List<Adorner>();
             shapeId = -1;
             CommandBinding SaveCmdBinding = new CommandBinding();
 
@@ -422,6 +422,20 @@ namespace CopyAndPasteInCanvas
             y -= 100;
             for (int i = 0; i < this.rectList.Count; i++)
             {
+                if(typeOfShape[i]==5)
+                {                    
+                    dynamic a = rectList[i];
+                    Point p = new Point(x, y);
+                    Console.WriteLine($"{DistanceFromPointToLine(p, a)}");
+                    if(DistanceFromPointToLine(p, a) <108 && DistanceFromPointToLine(p, a) > 102)
+                    {
+                        move = true;
+                        rectList[i].Stroke = Brushes.Red;
+                        return rectList[i].Uid;
+                    }
+                    rectList[i].Stroke = Brushes.Black;
+                    return "-1";
+                }
                 double x0 = Canvas.GetLeft(rectList[i]);
                 double y0 = Canvas.GetTop(rectList[i]);
                 double x1 = x0 + rectList[i].Width;
@@ -437,7 +451,17 @@ namespace CopyAndPasteInCanvas
                     valueOfDistance = 20;
                 }
                 //Console.WriteLine($"coor of rect {x0} {y0} {x1} {y1}");
-
+                if(typeOfShape[i]==5)
+                {
+                    if (rectList[i].IsMouseCaptured)
+                    {
+                        move = true;
+                        rectList[i].Stroke = Brushes.Red;
+                        return rectList[i].Uid;
+                    }
+                    return rectList[i].Uid;
+                        
+                }
                 //making appear arrow to resize of paint shape
                 if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
                 {
@@ -549,16 +573,34 @@ namespace CopyAndPasteInCanvas
                 this.InvalidateVisual();
                 return;
             }
-
+            
             //action when moving shape  
             if (move)
             {
-                double x = (e.GetPosition(this).X - 140 - rectList[0].Width / 2);
-                double y = (e.GetPosition(this).Y - 100 - rectList[0].Height / 2);
-                Canvas.SetLeft(rectList[shapeId], x);
-                Canvas.SetTop(rectList[shapeId], y);
-                Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
-                Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+
+                
+                if(typeOfShape[shapeId] != 5)
+                {
+                    double x = (e.GetPosition(this).X - 140 - rectList[shapeId].Width / 2);
+                    double y = (e.GetPosition(this).Y - 100 - rectList[shapeId].Height / 2);
+                    Canvas.SetLeft(rectList[shapeId], x);
+                    Canvas.SetTop(rectList[shapeId], y);
+                    Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
+                    Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+                }
+                else
+                {
+                    double x = (e.GetPosition(this).X -140);
+                    double y = (e.GetPosition(this).Y -100);
+                    Canvas.SetLeft(rectList[shapeId], x);
+                    Canvas.SetTop(rectList[shapeId], y);
+                }
+                /*double x = (e.GetPosition(this).X - 140 );
+                double y = (e.GetPosition(this).Y - 100 );
+                Canvas.SetLeft(rectList[0], x);
+                Canvas.SetTop(rectList[0], y);*/
+                //Canvas.SetLeft(textBoxes[0], x + (rectList[0].Width - textBoxes[0].Width) / 2);
+                //Canvas.SetTop(textBoxes[0], y + (rectList[0].Height - textBoxes[0].Height) / 2);
 
             }
             //action when resize shape
@@ -728,7 +770,6 @@ namespace CopyAndPasteInCanvas
             //add adorner for shape            
             myAdornerLayer = AdornerLayer.GetAdornerLayer(ellipse);
             adornerList.Add(new SimpleCircleAdorner(ellipse));
-
             CreateTextBoxForShapes(textBoxes, ellipse);
             this.InvalidateVisual();
         }
@@ -809,7 +850,8 @@ namespace CopyAndPasteInCanvas
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine($" showadorner {showAdorner.ToString()}");
+            
+            //Console.WriteLine($" showadorner {showAdorner.ToString()}");
             if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
@@ -842,6 +884,9 @@ namespace CopyAndPasteInCanvas
         {
             rectList.Clear();
             adornerList.Clear();
+            typeOfShape.Clear();
+            InfoList.Clear();
+            textBoxes.Clear();
             this.Canvas.Children.Clear();
         }
         public void clearAllAdorner()
@@ -915,6 +960,9 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
+
+                if (shapeId>-1)
+
                 textBoxes[shapeId].IsEnabled = true;
             }
             if (canvas == null)
@@ -925,7 +973,9 @@ namespace CopyAndPasteInCanvas
                 shape = hitTestResult.VisualHit as Shape;
             }
             if (shape == null)
-                return;
+
+                return; 
+            
 
         }
         private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -1086,6 +1136,36 @@ namespace CopyAndPasteInCanvas
 
         }
 
+        private void Button_Arrow_Click(object sender, RoutedEventArgs e)
+        {
+            double x0 = 0;
+            double y0 = 10;
+            double x1 = 100;
+            double y1 = 150;
+            double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+            Arrow arrow = new Arrow
+            {
+                StartPoint = new Point(x0, y0),
+                EndPoint = new Point(x1, y1),
+                Stroke = Brushes.Black,
+                //Height=2,
+                StrokeThickness = 2,
+                //Width = distance
+            };
+            rectList.Add(arrow);
+            typeOfShape.Add(5);
+            Canvas.SetLeft(arrow, 200);
+            Canvas.SetTop(arrow, 100);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape           
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
+            ArrowAdorner myAdorner= new ArrowAdorner(arrow);
+            dynamic a = arrow;
+            myAdorner.From = a.StartPoint;
+            myAdorner.To = a.EndPoint;
+            adornerList.Add(myAdorner);
+            this.InvalidateVisual();
+        }
 
         private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape)
         {
@@ -1111,6 +1191,13 @@ namespace CopyAndPasteInCanvas
             Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.Width) / 2);
             Canvas.SetTop(textBox, 10 + (shape.Height - textBox.Height) / 2);
             Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
+        }
+        public double DistanceFromPointToLine(Point point, Arrow arrow)
+        {            
+            Point l1 = arrow.StartPoint;
+            Point l2 = arrow.EndPoint;
+            return Math.Abs((l2.X - l1.X) * (l1.Y - point.Y) - (l1.X - point.X) * (l2.Y - l1.Y)) /
+                    Math.Sqrt(Math.Pow(l2.X - l1.X, 2) + Math.Pow(l2.Y - l1.Y, 2));
         }
     }
 

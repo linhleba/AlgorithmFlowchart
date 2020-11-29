@@ -329,7 +329,19 @@
                                     </Button.Template>
                                 </Button>
                             </Grid>
-
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                    <ColumnDefinition Width="70"></ColumnDefinition >
+                                </Grid.ColumnDefinitions>
+                                <Button  Grid.Column="0" 
+                        Margin="5,0,10,5" Height="55" Width="55"
+                        BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
+                        Click="Button_Arrow_Click" Content="ARROW">
+                                   
+                                </Button>
+                               
+                            </Grid>
                         </StackPanel>
                     </Grid>
                 </Border>
