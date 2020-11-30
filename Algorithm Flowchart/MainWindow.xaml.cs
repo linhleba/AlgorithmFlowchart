@@ -1091,7 +1091,7 @@ namespace CopyAndPasteInCanvas
 
                         Canvas.Children.Add(rectList[rectList.Count - 1]);
 
-                        CreateTextBoxForShapes(textBoxes, shape);
+                        CreateTextBoxForShapes(textBoxes, shape, textBoxes[Int32.Parse(shape.Uid) - 1].Text);
 
                         left = 200;
 
@@ -1236,7 +1236,7 @@ namespace CopyAndPasteInCanvas
             this.InvalidateVisual();
         }
 
-        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape)
+        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape, string text = null)
         {
             TextBox textBox = new TextBox
             {
@@ -1253,6 +1253,10 @@ namespace CopyAndPasteInCanvas
                 IsReadOnly = true,
                 IsEnabled = false
             };
+            if (text != null)
+            {
+                textBox.Text = text;
+            }
             textBoxes.Add(textBox);
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus;
