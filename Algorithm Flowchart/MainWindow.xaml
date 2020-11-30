@@ -193,17 +193,17 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="buttonBringToBack" Margin="10,0,10,0" Uid="3" Click="Tool_Button_Click">
+                            <Button x:Name="buttonBringToForward" Margin="10,0,10,0" Uid="3" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="ArrangeBringForward" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
                                     <TextBlock Text="Bring Forward" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="buttonBringToFront" Margin="10,0,10,0" Uid="4" Click="Tool_Button_Click">
+                            <Button x:Name="buttonBringToBackWard" Margin="10,0,10,0" Uid="4" Click="Tool_Button_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ArrangeBringToFront" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
-                                    <TextBlock Text="Bring Front" Margin="10,0,0,0"/>
+                                    <materialDesign:PackIcon Kind="ArrangeSendBackward" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <TextBlock Text="Bring Backward" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
