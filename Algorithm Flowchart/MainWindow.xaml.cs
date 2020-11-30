@@ -41,6 +41,7 @@ namespace CopyAndPasteInCanvas
         public List<TextBox> textBoxes;
         public Point startPoint;
         public int shapeId;
+        public int preShapeId;
         public bool move = false;
         public bool resize = false;
         public bool isAbleMove = false;
@@ -303,7 +304,6 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Background = Brushes.Black;
                     break;*/
                 case 2:
-                case 3:
                     var converter = new System.Windows.Media.BrushConverter();
                     if (!isColorPicker)
                     {
@@ -317,6 +317,55 @@ namespace CopyAndPasteInCanvas
                     else
                         isColorPicker = true;
                     break;
+                case 3:
+                    try
+                    {
+                        int currentIndex = Canvas.GetZIndex(rectList[preShapeId]);
+                        int zIndex = 0;
+                        int maxZ = 0;
+                        for (int i = 0; i < rectList.Count; i++)
+                        {
+                            zIndex = Canvas.GetZIndex(rectList[i]);
+                            maxZ = Math.Max(maxZ, zIndex);
+                            if (zIndex >= currentIndex && i != preShapeId)
+                            {
+                                Canvas.SetZIndex(rectList[i], zIndex - 1);
+                                Canvas.SetZIndex(textBoxes[i], zIndex - 1);
+                            }
+
+                        }
+                        Canvas.SetZIndex(rectList[preShapeId], maxZ);
+                        Canvas.SetZIndex(textBoxes[preShapeId], maxZ);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    break;
+                case 4:
+                    try
+                    {
+                        int currentIndex = Canvas.GetZIndex(rectList[preShapeId]);
+                        int zIndex = 0;
+                        int minZ = 0;
+                        for (int i = 0; i < rectList.Count; i++)
+                        {
+                            zIndex = Canvas.GetZIndex(rectList[i]);
+                            minZ = Math.Min(minZ, zIndex);
+                            if (zIndex <= currentIndex && i != preShapeId)
+                            {
+                                Canvas.SetZIndex(rectList[i], zIndex + 1);
+                                Canvas.SetZIndex(textBoxes[i], zIndex + 1);
+                            }
+
+                        }
+                        Canvas.SetZIndex(rectList[preShapeId], minZ);
+                        Canvas.SetZIndex(textBoxes[preShapeId], minZ);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    break;
+
 
             }
         }
@@ -557,6 +606,10 @@ namespace CopyAndPasteInCanvas
         // Move and resize shape func
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            if (shapeId != -1)
+            {
+                preShapeId = shapeId;
+            }
             //Console.WriteLine(rectList.Count);
             if (shapeId == -1)
             {
@@ -698,6 +751,11 @@ namespace CopyAndPasteInCanvas
                 delta = 0;
             }
             this.Cursor = null;
+
+            if (shapeId != -1)
+            {
+                preShapeId = shapeId;
+            }
             if (shapeId >= 0)
             {
                 shapeId = -1;
@@ -842,6 +900,10 @@ namespace CopyAndPasteInCanvas
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
+            if (shapeId != -1)
+            {
+                preShapeId = shapeId;
+            }
 
             //Console.WriteLine($" showadorner {showAdorner.ToString()}");
             if (shapeId == -1)

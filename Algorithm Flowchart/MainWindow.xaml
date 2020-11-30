@@ -26,7 +26,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="140"  />
                 <ColumnDefinition />
-                <ColumnDefinition Width="196" />
+                <ColumnDefinition Width="23.5" />
+                <ColumnDefinition Width="172.5"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Background="WhiteSmoke">
                 <Image  Source="./Resources/Images/logo1.jpg" Margin="0,0,0,0" SnapsToDevicePixels="True"/>
@@ -191,6 +192,20 @@
                                     <TextBlock Text="Color Fill" Margin="10,0,0,0"/>
                                 </StackPanel>
                             </Button>
+
+                            <Button x:Name="buttonBringToBack" Margin="10,0,10,0" Uid="3" Click="Tool_Button_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ArrangeBringForward" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <TextBlock Text="Bring Forward" Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="buttonBringToFront" Margin="10,0,10,0" Uid="4" Click="Tool_Button_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ArrangeBringToFront" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                    <TextBlock Text="Bring Front" Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
@@ -219,7 +234,7 @@
                     </ScrollViewer>
                 </TabItem>
             </dragablz:TabablzControl>
-            <StackPanel x:Name="gridColumn2" Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" MouseLeftButtonDown="gridColumn2_MouseLeftButtonDown">
+            <StackPanel x:Name="gridColumn2" Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" MouseLeftButtonDown="gridColumn2_MouseLeftButtonDown" Grid.ColumnSpan="2">
                 <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -266,9 +281,9 @@
                                         <ControlTemplate TargetType="Button">
                                             <Grid>
                                                 <Polygon Points="0, 50 50,0 100,50 50,100" Stretch="Fill" Stroke="Black"                                          
-                         StrokeThickness="2"> 
+                         StrokeThickness="2">
                                                     <Polygon.Fill>
-                                                        
+
                                                         <RadialGradientBrush>
                                                             <RadialGradientBrush.Transform>
                                                                 <TransformGroup>
@@ -392,7 +407,7 @@
             </ScrollViewer>
             <ScrollViewer Grid.Column="1"
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
-                
+
                 <Canvas x:Name="Canvas"  
                         Height="1000"
                         Width="3000"
@@ -412,6 +427,8 @@
                             </DrawingBrush.Drawing>
                         </DrawingBrush>
                     </Canvas.Background>
+
+
                 </Canvas>
             </ScrollViewer>
         </Grid>
