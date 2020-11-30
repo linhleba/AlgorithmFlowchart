@@ -202,7 +202,7 @@ namespace CopyAndPasteInCanvas
         {
             for (int i = 0; i < rectList.Count; i++)
             {
-                MessageBox.Show(Convert.ToString(i));
+                //MessageBox.Show(Convert.ToString(i));
                 InfoList[i].X = Canvas.GetTop(rectList[i]);
                 InfoList[i].Y = Canvas.GetLeft(rectList[i]);
                 InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
