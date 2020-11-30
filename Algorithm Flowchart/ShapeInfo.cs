@@ -34,6 +34,8 @@ namespace Algorithm_Flowchart
         public Brush Stroke;
         public int StrokeThickness;
         public string Uid;
+        public string text;
+        public Brush color;
         int type;
     }
 }

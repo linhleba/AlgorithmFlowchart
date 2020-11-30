@@ -211,6 +211,8 @@ namespace CopyAndPasteInCanvas
                 InfoList[i].Stretch = rectList[i].Stretch;
                 InfoList[i].Uid = rectList[i].Uid;
                 InfoList[i].Fill = rectList[i].Fill;
+                InfoList[i].text = textBoxes[i].Text;
+                InfoList[i].color = textBoxes[i].Background;
             }
         }
 
@@ -1091,7 +1093,7 @@ namespace CopyAndPasteInCanvas
 
                         Canvas.Children.Add(rectList[rectList.Count - 1]);
 
-                        CreateTextBoxForShapes(textBoxes, shape, textBoxes[Int32.Parse(shape.Uid) - 1].Text);
+                        CreateTextBoxForShapes(textBoxes, shape, textBoxes[Int32.Parse(shape.Uid) - 1].Text, textBoxes[Int32.Parse(shape.Uid) - 1].Background);
 
                         left = 200;
 
@@ -1180,7 +1182,8 @@ namespace CopyAndPasteInCanvas
                 //add adorner for shape            
                 myAdornerLayer = AdornerLayer.GetAdornerLayer(shape);
                 adornerList.Add(new SimpleCircleAdorner(shape));
-                CreateTextBoxForShapes(textBoxes, shape);
+                CreateTextBoxForShapes(textBoxes, shape, infoList[i].text, infoList[i].color);
+
             }
         }
         private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1236,7 +1239,7 @@ namespace CopyAndPasteInCanvas
             this.InvalidateVisual();
         }
 
-        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape, string text = null)
+        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape, string text = null, Brush color = null)
         {
             TextBox textBox = new TextBox
             {
@@ -1256,6 +1259,10 @@ namespace CopyAndPasteInCanvas
             if (text != null)
             {
                 textBox.Text = text;
+            }
+            if (color != null)
+            {
+                textBox.Background = color;
             }
             textBoxes.Add(textBox);
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
