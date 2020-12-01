@@ -477,7 +477,7 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            for (int i = 0; i < this.rectList.Count; i++)
+            for (int i = this.rectList.Count-1; i >= 0; i--)
             {
                 if (typeOfShape[i] == 5)
                 {
@@ -524,7 +524,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNWSE;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 7;
                     return rectList[i].Uid;
@@ -533,7 +533,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNWSE;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 5;
                     return rectList[i].Uid;
@@ -542,7 +542,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNESW;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 8;
                     return rectList[i].Uid;
@@ -551,7 +551,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNESW;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 6;
                     return rectList[i].Uid;
@@ -560,7 +560,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 4;
                     return rectList[i].Uid;
@@ -569,7 +569,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = -1;
                     dragHandle = 1;
                     return rectList[i].Uid;
@@ -578,7 +578,6 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeNS;
-
                     direction = 1;
                     dragHandle = 3;
                     return rectList[i].Uid;
@@ -587,7 +586,7 @@ namespace CopyAndPasteInCanvas
                 {
                     this.resize = true;
                     this.Cursor = Cursors.SizeWE;
-                    rectList[i].Stroke = Brushes.Red;
+                    //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 2;
                     return rectList[i].Uid;
