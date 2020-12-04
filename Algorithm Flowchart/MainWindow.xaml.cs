@@ -484,7 +484,7 @@ namespace CopyAndPasteInCanvas
                     dynamic a = rectList[i];
                     Point p = new Point(x, y);
                     //checking mouse is over the start of arrow
-                    if (DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1) < 5 && DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1) > 0)
+                    /*if (DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1) < 5 && DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1) > 0)
                     {
                         resize = true;
                         this.Cursor = Cursors.ScrollE;
@@ -496,10 +496,11 @@ namespace CopyAndPasteInCanvas
                         this.Cursor = Cursors.ScrollE;
                         return rectList[i].Uid;
                     }
-                    else if (DistanceFromPointToLine(p,a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i])) < 5 && DistanceFromPointToLine(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i])) > 0)
+                    else*/ if (DistanceFromPointToLine(p,a) < 5 && DistanceFromPointToLine(p, a) > 0)
                     {
                         move = true;
                         rectList[i].Stroke = Brushes.Red;
+                        Console.WriteLine("return "+ rectList[i].Uid);
                         return rectList[i].Uid;
                     }
                     //Console.WriteLine($" {DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1)}");
@@ -620,7 +621,7 @@ namespace CopyAndPasteInCanvas
             {
                 preShapeId = shapeId;
             }
-            //Console.WriteLine(rectList.Count);
+            //Console.WriteLine(shapeId);
             if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
@@ -636,14 +637,12 @@ namespace CopyAndPasteInCanvas
                 delta = direction = 0;
                 return;
             }
-            Console.WriteLine($"shapeid ={shapeId}");
+            //Console.WriteLine($"shapeid ={shapeId}");
             //action when moving shape  
             if (move)
-
             {       
                 //type= 5 is arrow
                if(typeOfShape[shapeId] != 5)
-
                 {
                     double x = (e.GetPosition(this).X/zoom - (rectList[shapeId].Width/zoom) / 2)  - 140/zoom;
                     double y = (e.GetPosition(this).Y/zoom - (rectList[shapeId].Height/zoom) / 2) - 100/zoom;
@@ -654,9 +653,24 @@ namespace CopyAndPasteInCanvas
                 }
                 else
                 {
-
                     double x = (e.GetPosition(this).X  - 140);
-                    double y = (e.GetPosition(this).Y  - 100) ;
+                    double y = (e.GetPosition(this).Y  - 100) ;     
+                    dynamic a1 = rectList[shapeId];
+                    Canvas.Children.Remove(rectList[shapeId]);
+                    Point newStart = a1.StartPoint;
+                    Point newEnd = a1.EndPoint;
+                    Arrow arrow = new Arrow
+                    {
+                        StartPoint = newStart,
+                        EndPoint = newEnd,
+                        Left=x,
+                        Top=y,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 2,
+                        Uid = shapeId.ToString()
+                    };
+                    rectList[shapeId] = arrow;
+                    this.Canvas.Children.Add(rectList[shapeId]);
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
                 }
@@ -667,7 +681,7 @@ namespace CopyAndPasteInCanvas
                 if(typeOfShape[shapeId]==5)
                 {
                     dynamic a = rectList[shapeId];
-                    ResizeArrow(2, e.GetPosition(this).X, e.GetPosition(this).Y, shapeId);
+                    //ResizeArrow(1, e.GetPosition(this).X, e.GetPosition(this).Y, shapeId);
                     return;
                 }
 
@@ -1228,10 +1242,11 @@ namespace CopyAndPasteInCanvas
             {
                 StartPoint = new Point(x0, y0),
                 EndPoint = new Point(x1, y1),
+                Left= 200,
+                Top=100,
                 Stroke = Brushes.Black,
-                //Height=2,
                 StrokeThickness = 2,
-                //Width = distance
+                Uid = rectList.Count.ToString()
             };
             rectList.Add(arrow);
             typeOfShape.Add(5);
@@ -1295,12 +1310,12 @@ namespace CopyAndPasteInCanvas
         }
 
 
-        public double DistanceFromPointToLine(Point p, Arrow arrow,double leftCanvas, double topCanvas)
+        public double DistanceFromPointToLine(Point p, Arrow arrow)
         {
-            Point l1 = new Point(leftCanvas, topCanvas);
-            double dX = leftCanvas - arrow.StartPoint.X;
-            double dY = topCanvas - arrow.StartPoint.Y;
-            Point l2 = new Point(arrow.EndPoint.X + dX, arrow.EndPoint.Y + dY);
+            Point l1 = new Point(arrow.Left+ arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
+            //double dX = leftCanvas - arrow.StartPoint.X;
+            //double dY = topCanvas - arrow.StartPoint.Y;
+            Point l2 = new Point(arrow.Left + arrow.EndPoint.X, arrow.Top + arrow.EndPoint.Y);
             // border to limit coordinate of p
             double xMax; double xMin; double yMax; double yMin;
             if (l1.X < l2.X)
@@ -1335,7 +1350,7 @@ namespace CopyAndPasteInCanvas
             }
             return 999;
         }
-        public double DistanceFromPointToPoint(Point p, Arrow arrow, double leftCanvas, double topCanvas, double typeOfPoint)
+        /*public double DistanceFromPointToPoint(Point p, Arrow arrow, double leftCanvas, double topCanvas, double typeOfPoint)
         {
             Point l1 = new Point(leftCanvas, topCanvas);
             double dX = leftCanvas - arrow.StartPoint.X;
@@ -1383,15 +1398,15 @@ namespace CopyAndPasteInCanvas
             this.Canvas.Children.Add(rectList[shapeid]);
             if(typeOfPoint==1)
             {
-                Canvas.SetLeft(rectList[shapeid], left);
-                Canvas.SetTop(rectList[shapeid], right);
+                //Canvas.SetLeft(rectList[shapeid], 100);
+                //Canvas.SetTop(rectList[shapeid], 100);
             }
             else
             {
                 Canvas.SetLeft(rectList[shapeid], left );
                 Canvas.SetTop(rectList[shapeid], top);
             }
-        }
+        }*/
     }
 
 }

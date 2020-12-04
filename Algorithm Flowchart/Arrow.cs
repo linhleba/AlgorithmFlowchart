@@ -16,6 +16,8 @@ namespace Algorithm_Flowchart
 
         public static readonly DependencyProperty EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(Arrow), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Arrow), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty LeftProperty = DependencyProperty.Register("Left", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty TopProperty = DependencyProperty.Register("Top", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         private GeometryGroup linegeo;
 
@@ -46,7 +48,17 @@ namespace Algorithm_Flowchart
             get { return (Point)GetValue(StartPointProperty); }
             set { SetValue(StartPointProperty, value); }
         }
-        public PathGeometry triagle { get; set; }
+        public double Left
+        {
+            get { return (double)GetValue(LeftProperty); }
+            set { SetValue(LeftProperty, value); }
+        }
+        public double Top
+        {
+            get { return (double)GetValue(TopProperty); }
+            set { SetValue(TopProperty, value); }
+        }
+        public PathGeometry triangle { get; set; }
 
         protected override Geometry DefiningGeometry
         {
@@ -67,9 +79,9 @@ namespace Algorithm_Flowchart
                 Point pt4 = new Point(
                     X2 + (4 * cost + 4 * sint),
                     Y2 - (4 * cost - 4 * sint));
-                triagle = new PathGeometry();
-                triagle.AddGeometry(Geometry.Parse($"M {pt1.X},{pt1.Y} {pt2.X},{pt2.Y} {pt3.X },{pt3.Y} {pt4.X},{pt4.Y} {pt2.X},{pt2.Y} "));
-                linegeo.Children.Add(triagle);
+                triangle = new PathGeometry();
+                triangle.AddGeometry(Geometry.Parse($"M {pt1.X},{pt1.Y} {pt2.X},{pt2.Y} {pt3.X },{pt3.Y} {pt4.X},{pt4.Y} {pt2.X},{pt2.Y} "));
+                linegeo.Children.Add(triangle);
                 return linegeo;
             }
         }
