@@ -19,23 +19,21 @@
     </Window.Resources>
 
 
-    <DockPanel Background="GhostWhite" Name="panel">
+    <DockPanel Background="White" Name="panel">
         <Grid Height="100" DockPanel.Dock="Top" >
             <!--Split 2 column 1 for tab and 1 for image label -->
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="140"  />
                 <ColumnDefinition />
-                <ColumnDefinition Width="23.5" />
-                <ColumnDefinition Width="172.5"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="WhiteSmoke">
-                <Image  Source="./Resources/Images/logo1.jpg" Margin="0,0,0,0" SnapsToDevicePixels="True"/>
+            <Grid Grid.Column="0" Background="Black">
+                <Image  Source="./Resources/Images/logo1.jpg" Margin="0,0,0,0" SnapsToDevicePixels="True" Stretch="Fill"/>
             </Grid>
             <!--push tab in column 2
                 dragablz using for design tab -->
             <dragablz:TabablzControl Grid.Column="1" Margin="0,0,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
-                                     FontSize="18"   ItemContainerStyle="{DynamicResource NormalTabItemStyle}" BorderBrush="#FF035B90" 
+                                     FontSize="18"   ItemContainerStyle="{DynamicResource NormalTabItemStyle}" BorderBrush="#000000" 
                                      Name="tabCnntrol" MouseDoubleClick="tabCnntrol_MouseDoubleClick" MouseRightButtonDown="tabCnntrol_MouseRightButtonDown">
 
                 <TabItem Header="File" Margin="10,0,0,0" Width="200">
@@ -234,40 +232,30 @@
                     </ScrollViewer>
                 </TabItem>
             </dragablz:TabablzControl>
-            <StackPanel x:Name="gridColumn2" Grid.Column="2" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" MouseLeftButtonDown="gridColumn2_MouseLeftButtonDown" Grid.ColumnSpan="2">
-                <TextBox Margin="10,14,10,0" VerticalAlignment="Center" BorderThickness="2" Background="White" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition   />
-                        <ColumnDefinition   />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="buttonSearch" Grid.Column="2" HorizontalAlignment="Right" Margin="0,12,0,0" Background="#FF015C92">
-                        <materialDesign:PackIcon Kind="Search" Foreground="{DynamicResource PrimaryHueLightBrush}" Width="20" Height="20" Margin="0,2,0,0"/>
-                    </Button>
-                    <Button Name="buttonChooseColor" Click="Tool_Button_Click"
-                            Uid="3"
-                            HorizontalAlignment="Right" Grid.Column="1" Margin="10,12,0,0" >
-
-                    </Button>
-                    <Button Name="buttonClear1" Content="clear" 
-                            HorizontalAlignment="Right" Grid.Column="0" Margin="0,12,-10,0" Click="buttonClear1_Click" >
-
-                    </Button>
-                </Grid>
-
-            </StackPanel>
+            
         </Grid>
 
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="140"></ColumnDefinition >
                 <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="200"></ColumnDefinition >
             </Grid.ColumnDefinitions>
             <StackPanel Name="shapeToolBackround" Background="White">
-                <Border BorderBrush="Black" BorderThickness="2" Grid.Column="0">
-                    <Grid Background="White" x:Name="ShapeTool"  Grid.Column="0">
+                <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="0">
+                    <Grid Background="White" Height="70">
+                        <StackPanel >
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="buttonChooseColor" Margin="10,10,0,0" Width="50"/>
+                                <Button Name="buttonClear1" Content="clear" Width="60" Margin="10,10,0,0" Click="buttonClear1_Click" FontSize="10" />
+                            </StackPanel>
+                        </StackPanel>
+                        
+
+
+                    </Grid>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="0">
+                    <Grid Background="White" x:Name="ShapeTool" >
                         <StackPanel Background="White">
                             <Grid >
                                 <Grid.ColumnDefinitions>
@@ -387,30 +375,34 @@
                                 <Button  Grid.Column="0" 
                         Margin="5,0,10,5" Height="55" Width="55"
                         BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
-                        Click="Button_Arrow_Click" Content="ARROW">
-
+                        Click="Button_Arrow_Click" >
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>                                              
+                                                <Path Data="M 0,25 48,25 45,28 45,22 50,25" Stroke="Black" StrokeThickness="3">
+                                                    
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
                                 </Button>
 
                             </Grid>
                         </StackPanel>
                     </Grid>
                 </Border>
+                <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="0">
+                    <Grid Background="White" Grid.Column="0">
+                            <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
+                    </Grid>
+                </Border>
             </StackPanel>
-
-
-            <ScrollViewer Grid.Column="2"  
-            HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
-                <StackPanel x:Name="rightPanel" Background="#FFFFFFFF" Width="180" MouseLeftButtonDown="rightPanel_MouseLeftButtonDown">
-                    <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
-                    <WpfColorFontDialog:ColorFontChooser Margin="0,0,10,30" />
-                </StackPanel>
-            </ScrollViewer>
             <ScrollViewer Grid.Column="1"
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
 
-                <Canvas x:Name="Canvas"  
-                        Height="1000"
-                        Width="3000"
+                <Canvas x:Name="Canvas" Height="1000" Width="3000"
                 Margin="0,0,0,0" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1"  >
                     <Canvas.Background>
                         <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
@@ -434,24 +426,9 @@
         </Grid>
 
 
-
+        
 
     </DockPanel>
 
-    <!--<Window.Resources>
-        <Canvas x:Key="Canvas">
-            -->
-    <!-- Draw circle-->
-    <!--
-            <ContentControl x:Name="Circle"
-            Width="100" Height="100" Canvas.Top="0" Canvas.Left="0"
-            MinWidth="50" MaxWidth="200" MinHeight="50" MaxHeight="200"
-                    Template="{StaticResource DesignShape}">
-                <Ellipse Fill="Red"
-                     IsHitTestVisible="False"></Ellipse>
-            </ContentControl>
-        </Canvas>
-    </Window.Resources>-->
-
-
+   
 </Window>
