@@ -128,24 +128,6 @@ namespace CopyAndPasteInCanvas
             switch (index)
             {
                 case 1:
-                    /*newPick = new BackRoundPicker(this);
-                    newPick.ShowDialog();
-                    {
-                        try
-                        {
-                            var converter = new System.Windows.Media.BrushConverter();
-                            Canvas.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            tabCnntrol.BorderBrush = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            //rightPanel.Background= (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            this.ShapeTool.shapeToolBackround.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            panel.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            gridColumn2.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                            this.rightPanel.Background = (Brush)converter.ConvertFromString($"{newPick.colorCode}");
-                        }
-                        catch (Exception ea) { }
-                        
-                    }*/
-
                     break;
 
             }
@@ -188,13 +170,7 @@ namespace CopyAndPasteInCanvas
                     }
                  
                     break;
-                    /*
-                    case 4:
-                        this.Canvas.Background = Brushes.Gray;
-                        break;
-                    case 5:
-                        this.Canvas.Background = Brushes.AliceBlue;
-                        break;*/
+       
             }
         }
 
@@ -1138,10 +1114,6 @@ namespace CopyAndPasteInCanvas
 
            
             reopenedState = string.Empty;
-
-            //fs = File.Open("SaveType.xaml", FileMode.Open, FileAccess.Read);
-            //typeOfShape = XamlReader.Load(fs) as List<int>;
-            //fs.Close();
         }
 
         private void AddShape(List<ShapeInfo> infoList, List<Shape> rectList)
@@ -1217,9 +1189,7 @@ namespace CopyAndPasteInCanvas
                 StartPoint = new Point(x0, y0),
                 EndPoint = new Point(x1, y1),
                 Stroke = Brushes.Black,
-                //Height=2,
                 StrokeThickness = 2,
-                //Width = distance
             };
             rectList.Add(arrow);
             typeOfShape.Add(5);
@@ -1278,8 +1248,6 @@ namespace CopyAndPasteInCanvas
             zoom += zoomDelta;
 
             Canvas.RenderTransform = new ScaleTransform(zoom, zoom);
-
-           // Canvas.Children.R
 
         }
 
