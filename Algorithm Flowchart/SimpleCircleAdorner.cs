@@ -29,12 +29,21 @@ namespace Algorithm_Flowchart
             renderBrush.Opacity = 0.2;
             Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
             double renderRadius = 5.0;
-
+            Point top = new Point(adornedElementRect.TopLeft.X + adornedElementRect.Width / 2, adornedElementRect.TopLeft.Y);
+            Point bot = new Point(adornedElementRect.TopLeft.X + adornedElementRect.Width / 2, adornedElementRect.BottomLeft.Y);
+            Point left = new Point(adornedElementRect.TopLeft.X,adornedElementRect.TopLeft.Y + adornedElementRect.Height/ 2);
+            Point right = new Point(adornedElementRect.TopRight.X, adornedElementRect.TopLeft.Y + adornedElementRect.Height / 2);
             // Draw a circle at each corner.
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopLeft, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopRight, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomLeft, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, top, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, left, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, bot, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, right, renderRadius, renderRadius);
+
         }
     }
 }
