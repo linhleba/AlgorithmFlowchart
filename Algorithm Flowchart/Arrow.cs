@@ -18,6 +18,7 @@ namespace Algorithm_Flowchart
         public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Arrow), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty LeftProperty = DependencyProperty.Register("Left", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty TopProperty = DependencyProperty.Register("Top", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ShapeIDProperty = DependencyProperty.Register("ShapeID", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1 , FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         private GeometryGroup linegeo;
 
@@ -57,6 +58,11 @@ namespace Algorithm_Flowchart
         {
             get { return (double)GetValue(TopProperty); }
             set { SetValue(TopProperty, value); }
+        }
+        public int ShapeID
+        {
+            get { return (int)GetValue(ShapeIDProperty); }
+            set { SetValue(ShapeIDProperty, value); }
         }
         public PathGeometry triangle { get; set; }
 

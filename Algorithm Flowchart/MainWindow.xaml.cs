@@ -56,6 +56,8 @@ namespace CopyAndPasteInCanvas
         public bool showAdorner = false;
         //variable to  choose which point of arrow is chosen
         public int pointArrow = -1;
+        //vector bind arrow with shape 
+        public List<List<int>> bindingArrowShape = new List<List<int>>();
         public Window1()
         {
             InitializeComponent();
@@ -449,7 +451,7 @@ namespace CopyAndPasteInCanvas
                     {
                         move = true;
                         rectList[i].Stroke = Brushes.Red;
-                        Console.WriteLine("return "+ rectList[i].Uid);
+                        //Console.WriteLine("return "+ rectList[i].Uid);
                         return rectList[i].Uid;
                     }
                     //Console.WriteLine($" {DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1)}");
@@ -519,8 +521,14 @@ namespace CopyAndPasteInCanvas
                 }
                 else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance && y0 <= y && y <= y1)
                 {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeWE;
+                    /*if(!showAdorner)
+                        this.Cursor = Cursors.Cross;
+                    else*/
+                    {
+                        this.resize = true;
+                        this.Cursor = Cursors.SizeWE;
+                    }
+                    
                     //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 4;
@@ -586,6 +594,7 @@ namespace CopyAndPasteInCanvas
                 delta = direction = 0;
                 return;
             }
+            //Console.WriteLine($"shape id = {shapeId}");
             //Console.WriteLine($"shapeid ={shapeId}");
             //action when moving shape  
             if (move)
@@ -599,6 +608,13 @@ namespace CopyAndPasteInCanvas
                     Canvas.SetTop(rectList[shapeId], y);
                     Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
                     Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+                    Console.WriteLine($"left = {Canvas.GetLeft(rectList[shapeId])}  top = {Canvas.GetTop(rectList[shapeId])}");
+                    if (bindingArrowShape[shapeId] != null)
+                    {
+                        for(int i=1; i < bindingArrowShape[shapeId].Count; i++)
+                            ResizeArrow(2, Canvas.GetLeft(rectList[shapeId]) + 140, Canvas.GetTop(rectList[shapeId]) + 100 + rectList[shapeId].Width / 2, i);
+                    }
+                        
                 }
                 else
                 {
@@ -622,6 +638,7 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Children.Add(rectList[shapeId]);
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
+                   
                 }
             }
             //action when resize shape
@@ -629,8 +646,20 @@ namespace CopyAndPasteInCanvas
             {
                 if(typeOfShape[shapeId]==5)
                 {
-                    dynamic a = rectList[shapeId];
+                    dynamic a = rectList[shapeId];                    
                     ResizeArrow(pointArrow, e.GetPosition(this).X, e.GetPosition(this).Y, shapeId);
+                    Console.WriteLine($"x & y=  {e.GetPosition(this).X} {e.GetPosition(this).Y}");
+                    int temp = Int32.Parse(IsContain(e.GetPosition(this).X, e.GetPosition(this).Y));
+                    if (temp != -1 && typeOfShape[temp] != 5)
+                    {
+                        Console.WriteLine($"arrow AT SHAPE ID {temp}");
+                        ResizeArrow(2, Canvas.GetLeft(rectList[temp]) + 140, Canvas.GetTop(rectList[temp]) + 100 + rectList[temp].Width / 2, shapeId);
+                        bindingArrowShape[temp].Add(shapeId);
+                        resize=false;
+                        return;
+                    }
+                        
+                   //Console.WriteLine($"arrow AT SHAPE ID {temp}");
                     return;
                 }
 
@@ -759,12 +788,14 @@ namespace CopyAndPasteInCanvas
             ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
             rectList.Add(rect);
+            List<int> temp= new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
             // Add type of shape of the rectangle
             typeOfShape.Add(1);
             Canvas.SetLeft(rect, 100);
             Canvas.SetTop(rect, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
-            Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
+           // Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
             //add adorner for shape     
             myAdornerLayer = AdornerLayer.GetAdornerLayer(rect);
             adornerList.Add(new SimpleCircleAdorner(rect));
@@ -795,6 +826,8 @@ namespace CopyAndPasteInCanvas
             ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
             rectList.Add(ellipse);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
             typeOfShape.Add(2);
             Canvas.SetLeft(ellipse, 100);
             Canvas.SetTop(ellipse, 10);
@@ -830,6 +863,8 @@ namespace CopyAndPasteInCanvas
             info.havePoints = true;
             InfoList.Add(info);
             rectList.Add(polygon);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
             typeOfShape.Add(3);
             Canvas.SetLeft(polygon, 100);
             Canvas.SetTop(polygon, 10);
@@ -864,6 +899,8 @@ namespace CopyAndPasteInCanvas
             info.havePoints = true;
             InfoList.Add(info);
             rectList.Add(polygon);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
             typeOfShape.Add(4);
             Canvas.SetLeft(polygon, 100);
             Canvas.SetTop(polygon, 10);
@@ -1195,6 +1232,8 @@ namespace CopyAndPasteInCanvas
                 Uid = rectList.Count.ToString()
             };
             rectList.Add(arrow);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
             typeOfShape.Add(5);
             Canvas.SetLeft(arrow, 200);
             Canvas.SetTop(arrow, 100);
@@ -1319,6 +1358,7 @@ namespace CopyAndPasteInCanvas
         }
         public void ResizeArrow(int typeOfPoint, double x, double y, int shapeid)
         {
+            //Console.WriteLine($"arrow id is {shapeId}");
             x -= 140;
             y -= 100;
             dynamic a1 = rectList[shapeid];
@@ -1334,7 +1374,7 @@ namespace CopyAndPasteInCanvas
                 //calculate the posion in arrow (not canvas)
                 double realX = a1.StartPoint.X + dX;
                 double realY = a1.StartPoint.Y + dY;
-                Console.WriteLine($"delta   {dX}     {dY}");
+                //Console.WriteLine($"delta   {dX}     {dY}");
                 leftCanvas = x;
                 topCanvas = y;
                 newStart = new Point(realX, realY);
@@ -1369,6 +1409,8 @@ namespace CopyAndPasteInCanvas
                 Canvas.SetTop(rectList[shapeid], topCanvas);
             }
         }
+
+       
     }
 
 }

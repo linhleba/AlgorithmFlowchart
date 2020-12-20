@@ -415,7 +415,7 @@
                                     <GeometryDrawing.Pen>
                                         <Pen Brush="Black" Thickness="0.05"/>
                                     </GeometryDrawing.Pen>
-                                </GeometryDrawing>
+                                </GeometryDrawing>                                
                             </DrawingBrush.Drawing>
                         </DrawingBrush>
                     </Canvas.Background>
