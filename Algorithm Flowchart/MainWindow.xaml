@@ -232,7 +232,7 @@
                     </ScrollViewer>
                 </TabItem>
             </dragablz:TabablzControl>
-            
+
         </Grid>
 
         <Grid DockPanel.Dock="Bottom">
@@ -249,7 +249,7 @@
                                 <Button Name="buttonClear1" Content="clear" Width="60" Margin="10,10,0,0" Click="buttonClear1_Click" FontSize="10" />
                             </StackPanel>
                         </StackPanel>
-                        
+
 
 
                     </Grid>
@@ -378,9 +378,25 @@
                         Click="Button_Arrow_Click" >
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Grid>                                              
+                                            <Grid>
                                                 <Path Data="M 0,25 48,25 45,28 45,22 50,25" Stroke="Black" StrokeThickness="3">
-                                                    
+
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <Button  Grid.Column="1" 
+                        Margin="5,0,11,5" Height="55"
+                        BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
+                        Click="Button_TextBoxClick">
+                                    <Button.Template >
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path Data="M 5,15 40,15 30,15 30,50" Stroke="Black" StrokeThickness="6">
+
                                                 </Path>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
@@ -389,13 +405,14 @@
                                     </Button.Template>
                                 </Button>
 
+
                             </Grid>
                         </StackPanel>
                     </Grid>
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="0">
                     <Grid Background="White" Grid.Column="0">
-                            <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
+                        <pt:ColorPickerPanel x:Name="colorPicker" Margin="0,0,10,0" MouseLeftButtonUp="colorPicker_MouseLeftButtonUp" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -415,7 +432,7 @@
                                     <GeometryDrawing.Pen>
                                         <Pen Brush="Black" Thickness="0.05"/>
                                     </GeometryDrawing.Pen>
-                                </GeometryDrawing>                                
+                                </GeometryDrawing>
                             </DrawingBrush.Drawing>
                         </DrawingBrush>
                     </Canvas.Background>
@@ -426,9 +443,9 @@
         </Grid>
 
 
-        
+
 
     </DockPanel>
 
-   
+
 </Window>

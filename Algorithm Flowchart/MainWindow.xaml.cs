@@ -39,6 +39,7 @@ namespace CopyAndPasteInCanvas
         public List<ShapeInfo> InfoList;
         public List<int> typeOfShape;
         public List<TextBox> textBoxes;
+        public List<TextBox> onlyTextBoxes;
         public Point startPoint;
         public int shapeId;
         public int preShapeId;
@@ -65,6 +66,7 @@ namespace CopyAndPasteInCanvas
             isColorPicker = false;
             rectList = new List<Shape>();
             InfoList = new List<ShapeInfo>();
+            onlyTextBoxes = new List<TextBox>();
             textBoxes = new List<TextBox>();
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
             adornerList = new List<Adorner>();
@@ -149,8 +151,8 @@ namespace CopyAndPasteInCanvas
                     this.Open(sender, e);
                     for (int i = 0; i < textBoxes.Count; i++)
                     {
-                        Canvas.SetLeft(textBoxes[i], InfoList[i].Y + (InfoList[i].Width - textBoxes[i].Width) / 2);
-                        Canvas.SetTop(textBoxes[i], InfoList[i].X + (InfoList[i].Height - textBoxes[i].Height) / 2);
+                        Canvas.SetLeft(textBoxes[i], InfoList[i].Y + (InfoList[i].Width - textBoxes[i].MinWidth) / 2);
+                        Canvas.SetTop(textBoxes[i], InfoList[i].X + (InfoList[i].Height - textBoxes[i].MinHeight) / 2);
                     }
                     break;
                 case 3:
@@ -606,8 +608,8 @@ namespace CopyAndPasteInCanvas
                     double y = (e.GetPosition(this).Y/zoom - (rectList[shapeId].Height/zoom) / 2) - 100/zoom;
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
-                    Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
-                    Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+                    Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
+                    Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].MinHeight) / 2);
                     Console.WriteLine($"left = {Canvas.GetLeft(rectList[shapeId])}  top = {Canvas.GetTop(rectList[shapeId])}");
                     if (bindingArrowShape[shapeId] != null)
                     {
@@ -1255,12 +1257,14 @@ namespace CopyAndPasteInCanvas
         {
             TextBox textBox = new TextBox
             {
-                Width = 80,
-                Height = 50,
+                MinWidth = 80,
+                MinHeight = 50,
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 TextAlignment = TextAlignment.Center,
                 TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                MaxHeight = 2000,
                 Text = "Shape " + rectList.Count,
                 FontSize = 16,
                 Background = Brushes.White,
@@ -1280,8 +1284,8 @@ namespace CopyAndPasteInCanvas
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus;
 
-            Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.Width) / 2);
-            Canvas.SetTop(textBox, 10 + (shape.Height - textBox.Height) / 2);
+            Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.MinWidth) / 2);
+            Canvas.SetTop(textBox, 10 + (shape.Height - textBox.MinHeight) / 2);
             Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
         }
 
@@ -1356,6 +1360,33 @@ namespace CopyAndPasteInCanvas
             return 999;
             
         }
+
+        private void Button_TextBoxClick(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = new TextBox
+            {
+                MinWidth = 80,
+                MinHeight = 50,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                Text = "Text " + onlyTextBoxes.Count,
+                FontSize = 16,
+                Background = Brushes.White,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                IsEnabled = true
+            };
+            onlyTextBoxes.Add(textBox);
+            textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
+            textBox.LostFocus += TextBox_LostFocus;
+
+            Canvas.SetLeft(textBox, 150);
+            Canvas.SetTop(textBox, 150);
+            Canvas.Children.Add(onlyTextBoxes[onlyTextBoxes.Count - 1]);
+        }
+
         public void ResizeArrow(int typeOfPoint, double x, double y, int shapeid)
         {
             //Console.WriteLine($"arrow id is {shapeId}");
