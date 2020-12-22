@@ -42,6 +42,7 @@ namespace CopyAndPasteInCanvas
         public List<TextBox> onlyTextBoxes;
         public Point startPoint;
         public int shapeId;
+        public int textBoxId;
         public int preShapeId;
         public bool move = false;
         public bool resize = false;
@@ -71,6 +72,7 @@ namespace CopyAndPasteInCanvas
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
             adornerList = new List<Adorner>();
             shapeId = -1;
+            textBoxId = -1;
             CommandBinding SaveCmdBinding = new CommandBinding();
 
             SaveCmdBinding.Command = ApplicationCommands.Save;
@@ -173,9 +175,9 @@ namespace CopyAndPasteInCanvas
                     {
                         writer.Write(jsonStateOfShape);
                     }
-                 
+
                     break;
-       
+
             }
         }
 
@@ -409,7 +411,7 @@ namespace CopyAndPasteInCanvas
                 rightPanel.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
         }*/
 
-       
+
 
         private void colorPicker_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -428,7 +430,7 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            for (int i = this.rectList.Count-1; i >= 0; i--)
+            for (int i = this.rectList.Count - 1; i >= 0; i--)
             {
                 if (typeOfShape[i] == 5)
                 {
@@ -442,14 +444,15 @@ namespace CopyAndPasteInCanvas
                         pointArrow = 1;
                         return rectList[i].Uid;
                     }
-                    else*/ if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a,2) > 0)
+                    else*/
+                    if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0)
                     {
                         resize = true;
                         this.Cursor = Cursors.ScrollE;
                         pointArrow = 2;
                         return rectList[i].Uid;
                     }
-                    else if (DistanceFromPointToLine(p,a) < 5 && DistanceFromPointToLine(p, a) > 0)
+                    else if (DistanceFromPointToLine(p, a) < 5 && DistanceFromPointToLine(p, a) > 0)
                     {
                         move = true;
                         rectList[i].Stroke = Brushes.Red;
@@ -458,7 +461,7 @@ namespace CopyAndPasteInCanvas
                     }
                     //Console.WriteLine($" {DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1)}");
                     this.Cursor = null;
-                    rectList[i].Stroke = Brushes.Black;                   
+                    rectList[i].Stroke = Brushes.Black;
                 }
                 double x0 = Canvas.GetLeft(rectList[i]) * zoom;
                 //Console.WriteLine("x0 is: " +  x0);
@@ -530,7 +533,7 @@ namespace CopyAndPasteInCanvas
                         this.resize = true;
                         this.Cursor = Cursors.SizeWE;
                     }
-                    
+
                     //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 4;
@@ -573,6 +576,30 @@ namespace CopyAndPasteInCanvas
 
         }
 
+        public String IsContainTextBox(double x, double y)
+        {
+            x -= 140;
+            y -= 100;
+            for (int i = this.onlyTextBoxes.Count - 1; i >= 0; i--)
+            {
+                double x0 = Canvas.GetLeft(onlyTextBoxes[i]) * zoom;
+                //Console.WriteLine("x0 is: " +  x0);
+                double y0 = Canvas.GetTop(onlyTextBoxes[i]) * zoom;
+                double x1 = (x0 + onlyTextBoxes[i].MinWidth * zoom);
+                double y1 = (y0 + onlyTextBoxes[i].MinHeight * zoom);
+                double valueOfDistance = 0;
+                if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
+                {
+                    this.move = true;
+                    if (!isColorPicker)
+                        this.Cursor = Cursors.SizeAll;
+                    else
+                        this.Cursor = Cursors.Pen;
+                    return onlyTextBoxes[i].Uid;
+                }
+            }
+            return "-1";
+        }
         // Move and resize shape func
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
@@ -587,10 +614,18 @@ namespace CopyAndPasteInCanvas
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
             }
+
+            // Check if textbox id is exists or not
+            if (textBoxId == -1)
+            {
+                String s = IsContainTextBox(e.GetPosition(this).X, e.GetPosition(this).Y);
+                bool succes = Int32.TryParse(s, out textBoxId);
+            }
             //when mouse button is release , stop this function
-            if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
+            if (e.LeftButton == MouseButtonState.Released || (shapeId < 0 && textBoxId <0))
             {
                 shapeId = -1;
+                textBoxId = -1;
                 if (move) move = !move;
                 if (resize) resize = !resize;
                 delta = direction = 0;
@@ -600,9 +635,17 @@ namespace CopyAndPasteInCanvas
             //Console.WriteLine($"shapeid ={shapeId}");
             //action when moving shape  
             if (move)
-            {       
+            {
                 //type= 5 is arrow
-               if(typeOfShape[shapeId] != 5)
+                if (textBoxId != -1)
+                {
+                    double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].MinWidth / zoom) / 2) - 140 / zoom;
+                    double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].MinHeight / zoom) / 2) - 100 / zoom;
+                    Canvas.SetLeft(onlyTextBoxes[textBoxId], x);
+                    Canvas.SetTop(onlyTextBoxes[textBoxId], y);
+                }
+
+                else if (typeOfShape[shapeId] != 5)
                 {
                     double x = (e.GetPosition(this).X/zoom - (rectList[shapeId].Width/zoom) / 2)  - 140/zoom;
                     double y = (e.GetPosition(this).Y/zoom - (rectList[shapeId].Height/zoom) / 2) - 100/zoom;
@@ -737,8 +780,8 @@ namespace CopyAndPasteInCanvas
                             break;
 
                     }
-                    Canvas.SetLeft(textBoxes[shapeId], x0 + (rectList[shapeId].Width - textBoxes[shapeId].Width) / 2);
-                    Canvas.SetTop(textBoxes[shapeId], y0 + (rectList[shapeId].Height - textBoxes[shapeId].Height) / 2);
+                    Canvas.SetLeft(textBoxes[shapeId], x0 + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
+                    Canvas.SetTop(textBoxes[shapeId], y0 + (rectList[shapeId].Height - textBoxes[shapeId].MinHeight) / 2);
                     this.InvalidateVisual();
                 }
                 catch (Exception exception)
@@ -768,6 +811,10 @@ namespace CopyAndPasteInCanvas
             if (shapeId >= 0)
             {
                 shapeId = -1;
+            }
+            if (textBoxId >= 0)
+            {
+                textBoxId = -1;
             }
 
 
@@ -1041,6 +1088,8 @@ namespace CopyAndPasteInCanvas
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
+                String sText = IsContainTextBox(e.GetPosition(this).X, e.GetPosition(this).Y);
+                bool succesTextBox = Int32.TryParse(s, out textBoxId);
 
                 if (shapeId > -1)
 
@@ -1216,6 +1265,14 @@ namespace CopyAndPasteInCanvas
 
         }
 
+        private void TextBox_LostFocus2(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            textBox.IsReadOnly = true;
+            textBox.IsEnabled = true;
+            textBox.BorderThickness = new Thickness(0, 0, 0, 0);
+        }
+
         private void Button_Arrow_Click(object sender, RoutedEventArgs e)
         {
             double x0 = 0;
@@ -1376,11 +1433,13 @@ namespace CopyAndPasteInCanvas
                 FontSize = 16,
                 Background = Brushes.White,
                 BorderThickness = new Thickness(0, 0, 0, 0),
+                Uid = onlyTextBoxes.Count.ToString(),
                 IsEnabled = true
             };
             onlyTextBoxes.Add(textBox);
+       
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
-            textBox.LostFocus += TextBox_LostFocus;
+            textBox.LostFocus += TextBox_LostFocus2;
 
             Canvas.SetLeft(textBox, 150);
             Canvas.SetTop(textBox, 150);
