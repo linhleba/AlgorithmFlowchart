@@ -54,6 +54,7 @@ namespace CopyAndPasteInCanvas
         System.Windows.Documents.AdornerLayer myAdornerLayer;
         public List<Adorner> adornerList;
         public bool showAdorner = false;
+        public bool drawArrow = false;
         //variable to  choose which point of arrow is chosen
         public int pointArrow = -1;
         //vector bind arrow with shape 
@@ -264,10 +265,8 @@ namespace CopyAndPasteInCanvas
                     if (!isColorPicker)
                     {
                         buttonChooseColor.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-                        buttonChooseColor.Content = "P";
                     }
-                    else
-                        buttonChooseColor.Content = "NP";
+                    else buttonChooseColor.Background = Brushes.Black;
                     if (isColorPicker)
                         isColorPicker = false;
                     else
@@ -933,6 +932,8 @@ namespace CopyAndPasteInCanvas
             {
                 if (showAdorner)
                     showAdorner = false;
+                if (drawArrow)
+                    drawArrow = false;
                 clearAllAdorner();
                 shapeId = -1;
                 return;
@@ -949,6 +950,7 @@ namespace CopyAndPasteInCanvas
                 showAdorner = true;
                 myAdornerLayer.Add(adornerList[shapeId]);
             }
+            
         }
 
 
@@ -1409,8 +1411,44 @@ namespace CopyAndPasteInCanvas
                 Canvas.SetTop(rectList[shapeid], topCanvas);
             }
         }
+        public void DrawArrow(double x, double y)
+        {
+            double x0 = 0;
+            double y0 = 0;
+            double x1 = x-140;
+            double y1 = y-100;
+            double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+            Arrow arrow = new Arrow
+            {
+                StartPoint = new Point(x0, y0),
+                EndPoint = new Point(x1, y1),
+                Left = 200,
+                Top = 100,
+                Stroke = Brushes.Black,
+                StrokeThickness = 2,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(arrow);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
+            typeOfShape.Add(5);
+            Canvas.SetLeft(arrow, 200);
+            Canvas.SetTop(arrow, 100);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape           
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
+            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
+            dynamic a = arrow;
+            myAdorner.From = a.StartPoint;
+            myAdorner.To = a.EndPoint;
+            adornerList.Add(myAdorner);
+            CreateTextBoxForShapes(textBoxes, arrow);
+            textBoxes[rectList.Count - 1].Width = 0;
+            textBoxes[rectList.Count - 1].Height = 0;
+            this.InvalidateVisual();
+        }
 
-       
+
     }
 
 }
