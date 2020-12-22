@@ -59,6 +59,9 @@ namespace CopyAndPasteInCanvas
         //variable to  choose which point of arrow is chosen
         public int pointArrow = -1;
         //vector bind arrow with shape 
+        public bool isDrawArrow = false;
+        //1= left ;2 top ;3 right; 4 bottom
+        public int typePoint = 0;
         public List<List<int>> bindingArrowShape = new List<List<int>>();
         public Window1()
         {
@@ -436,15 +439,6 @@ namespace CopyAndPasteInCanvas
                 {
                     dynamic a = rectList[i];
                     Point p = new Point(x, y);
-                    //checking mouse is over the start of arrow
-                    /*if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0)
-                    {
-                        resize = true;
-                        this.Cursor = Cursors.ScrollE;
-                        pointArrow = 1;
-                        return rectList[i].Uid;
-                    }
-                    else*/
                     if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0)
                     {
                         resize = true;
@@ -464,7 +458,6 @@ namespace CopyAndPasteInCanvas
                     rectList[i].Stroke = Brushes.Black;
                 }
                 double x0 = Canvas.GetLeft(rectList[i]) * zoom;
-                //Console.WriteLine("x0 is: " +  x0);
                 double y0 = Canvas.GetTop(rectList[i]) * zoom;
                 double x1 = (x0 + rectList[i].Width * zoom);
                 double y1 = (y0 + rectList[i].Height * zoom);
@@ -526,9 +519,14 @@ namespace CopyAndPasteInCanvas
                 }
                 else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance && y0 <= y && y <= y1)
                 {
-                    /*if(!showAdorner)
+                    if(!showAdorner)
+                    {
+                        this.isDrawArrow = true;
+                        typePoint = 1;
                         this.Cursor = Cursors.Cross;
-                    else*/
+                    }
+                        
+                    else
                     {
                         this.resize = true;
                         this.Cursor = Cursors.SizeWE;
@@ -541,8 +539,18 @@ namespace CopyAndPasteInCanvas
                 }
                 else if (y0 - valueOfDistance <= y && y <= y0 + valueOfDistance && x0 <= x && x <= x1)
                 {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeNS;
+                    if (!showAdorner)
+                    {
+                        this.isDrawArrow = true;
+                        typePoint = 2;
+                        this.Cursor = Cursors.Cross;
+                    }
+                    else
+                    {
+                        this.resize = true;
+                        this.Cursor = Cursors.SizeNS;
+                    }
+                    
                     //rectList[i].Stroke = Brushes.Red;
                     direction = -1;
                     dragHandle = 1;
@@ -550,16 +558,36 @@ namespace CopyAndPasteInCanvas
                 }
                 else if (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance && x0 <= x && x <= x1)
                 {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeNS;
+                    if (!showAdorner)
+                    {
+                        this.isDrawArrow = true;
+                        typePoint = 4;
+                        this.Cursor = Cursors.Cross;
+                    }
+                    else
+                    {
+                        this.resize = true;
+                        this.Cursor = Cursors.SizeNS;
+                    }
+                       
                     direction = 1;
                     dragHandle = 3;
                     return rectList[i].Uid;
                 }
                 else if (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance && y0 <= y && y <= y1)
                 {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeWE;
+                    if (!showAdorner)
+                    {
+                        this.isDrawArrow = true;
+                        typePoint = 3;
+                        this.Cursor = Cursors.Cross;
+                    }
+                    else
+                    {
+                        this.resize = true;
+                        this.Cursor = Cursors.SizeWE;
+                    }
+                        
                     //rectList[i].Stroke = Brushes.Red;
                     direction = 1;
                     dragHandle = 2;
@@ -628,13 +656,22 @@ namespace CopyAndPasteInCanvas
                 textBoxId = -1;
                 if (move) move = !move;
                 if (resize) resize = !resize;
+                if (isDrawArrow)
+                {
+                    typePoint = 0;
+                    isDrawArrow = !isDrawArrow;
+                }
                 delta = direction = 0;
                 return;
             }
             //Console.WriteLine($"shape id = {shapeId}");
             //Console.WriteLine($"shapeid ={shapeId}");
             //action when moving shape  
-            if (move)
+            if(isDrawArrow)
+            {
+                ResizeArrow(2, e.GetPosition(this).X, e.GetPosition(this).Y, rectList.Count - 1);
+            }
+            else if (move)
             {
                 //type= 5 is arrow
                 if (textBoxId != -1)
@@ -982,6 +1019,8 @@ namespace CopyAndPasteInCanvas
             {
                 if (showAdorner)
                     showAdorner = false;
+                isDrawArrow = false;
+                typePoint = 0;
                 clearAllAdorner();
                 shapeId = -1;
                 return;
@@ -992,7 +1031,38 @@ namespace CopyAndPasteInCanvas
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
                 textBoxes[shapeId].Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
             }
-
+            if(isDrawArrow)
+            {
+                double x0=-1000, y0=-1000;
+                switch(typePoint)
+                {
+                    case 1: //left 
+                    {
+                        x0 = Canvas.GetLeft(rectList[shapeId]);
+                        y0 = Canvas.GetTop(rectList[shapeId]) + rectList[shapeId].Height / 2;
+                        break;
+                    }
+                    case 2: //top 
+                        {
+                            x0 = Canvas.GetLeft(rectList[shapeId]) + rectList[shapeId].Width / 2;
+                            y0 = Canvas.GetTop(rectList[shapeId]) ;
+                            break;
+                        }
+                    case 3: //right 
+                        {
+                            x0 = Canvas.GetLeft(rectList[shapeId]) + rectList[shapeId].Width;
+                            y0 = Canvas.GetTop(rectList[shapeId]) + rectList[shapeId].Height / 2;
+                            break;
+                        }
+                    case 4: //bottom 
+                        {
+                            x0 = Canvas.GetLeft(rectList[shapeId]) + rectList[shapeId].Width / 2;
+                            y0 = Canvas.GetTop(rectList[shapeId]) + rectList[shapeId].Height;
+                            break;
+                        }
+                }
+                DrawArrow(x0,y0);
+            }
             if (!showAdorner)
             {
                 showAdorner = true;
@@ -1500,7 +1570,40 @@ namespace CopyAndPasteInCanvas
             }
         }
 
-       
+       public void DrawArrow(double x, double y)
+        {
+            double x0 = 0;
+            double y0 = 0;
+            double x1 = 100;
+            double y1 = 100;
+            Arrow arrow = new Arrow
+            {
+                StartPoint = new Point(x0, y0),
+                EndPoint = new Point(x1, y1),
+                Left = x,
+                Top = y,
+                Stroke = Brushes.Black,
+                StrokeThickness = 2,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(arrow);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
+            typeOfShape.Add(5);
+            Canvas.SetLeft(arrow, x);
+            Canvas.SetTop(arrow, y);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape           
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
+            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
+            dynamic a = arrow;
+            myAdorner.From = a.StartPoint;
+            myAdorner.To = a.EndPoint;
+            adornerList.Add(myAdorner);
+            CreateTextBoxForShapes(textBoxes, arrow);
+            textBoxes[rectList.Count - 1].Width = 0;
+            textBoxes[rectList.Count - 1].Height = 0;
+        }
     }
 
 }
