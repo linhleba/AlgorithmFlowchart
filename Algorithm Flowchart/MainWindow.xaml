@@ -245,8 +245,13 @@
                     <Grid Background="White" Height="70">
                         <StackPanel >
                             <StackPanel Orientation="Horizontal">
-                                <Button Name="buttonChooseColor" Margin="10,10,0,0" Width="50"/>
-                                <Button Name="buttonClear1" Content="clear" Width="60" Margin="10,10,0,0" Click="buttonClear1_Click" FontSize="10" />
+                                <Button Name="buttonChooseColor" Margin="20,20,0,0" Width="36" Height="32" Uid="2" Click="Tool_Button_Click">
+                                    <materialDesign:PackIcon Margin="-15,0,-15,0" Kind="Paint" Foreground="White" Height="30" Width="36" RenderTransformOrigin="-0.139,0.587"/>
+                                </Button>
+                                <Button Name="buttonClear1" Width="36" Margin="17,20,0,0" Click="buttonClear1_Click" >
+                                    <materialDesign:PackIcon Margin="-17,-4,-15,0" Kind="Delete" Foreground="White" Height="30" Width="36" RenderTransformOrigin="-0.139,0.587"/>
+                                </Button>
+                               
                             </StackPanel>
                         </StackPanel>
 
@@ -254,16 +259,16 @@
 
                     </Grid>
                 </Border>
-                <Border BorderBrush="Black" BorderThickness="0.5" Grid.Column="0">
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Column="0">
                     <Grid Background="White" x:Name="ShapeTool" >
                         <StackPanel Background="White">
-                            <Grid >
+                            <Grid Margin="0,10,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70"></ColumnDefinition >
                                     <ColumnDefinition Width="70"></ColumnDefinition >
                                 </Grid.ColumnDefinitions>
                                 <Button  Grid.Column="0"
-                                    Margin="0,0,0,0" Height="60" Width="60" BorderBrush="#FFBCE6FF"
+                                    Margin="0,10,0,0" Height="60" Width="60" BorderBrush="#FFBCE6FF"
                                     Foreground="#FFBCE6FF" Click="Button_Rhombus_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
@@ -312,7 +317,7 @@
                                     </Button.Template>
                                 </Button>
                             </Grid>
-                            <Grid >
+                            <Grid Margin="0,10,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="21.5"></ColumnDefinition >
                                     <ColumnDefinition Width="48.5"/>
@@ -381,6 +386,7 @@
                                             <Grid>
                                                 <Path Data="M 0,25 48,25 45,28 45,22 50,25" Stroke="Black" StrokeThickness="3">
 
+
                                                 </Path>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
@@ -396,6 +402,7 @@
                                         <ControlTemplate TargetType="Button">
                                             <Grid>
                                                 <Path Data="M 5,15 40,15 30,15 30,50" Stroke="Black" StrokeThickness="6">
+
 
                                                 </Path>
                                                 <ContentPresenter HorizontalAlignment="Center"
