@@ -386,6 +386,7 @@
                                             <Grid>
                                                 <Path Data="M 0,25 48,25 45,28 45,22 50,25" Stroke="Black" StrokeThickness="3">
 
+
                                                 </Path>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                   VerticalAlignment="Center"/>
@@ -393,6 +394,24 @@
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
+                                <Button  Grid.Column="1" 
+                        Margin="5,0,11,5" Height="55"
+                        BorderBrush="#FFBCE6FF" Foreground="#FFBCE6FF" 
+                        Click="Button_TextBoxClick">
+                                    <Button.Template >
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Path Data="M 5,15 40,15 30,15 30,50" Stroke="Black" StrokeThickness="6">
+
+
+                                                </Path>
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
 
                             </Grid>
                         </StackPanel>

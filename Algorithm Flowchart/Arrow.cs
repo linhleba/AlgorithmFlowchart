@@ -18,7 +18,10 @@ namespace Algorithm_Flowchart
         public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(Arrow), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty LeftProperty = DependencyProperty.Register("Left", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty TopProperty = DependencyProperty.Register("Top", typeof(double), typeof(Arrow), new FrameworkPropertyMetadata(new Double(), FrameworkPropertyMetadataOptions.AffectsMeasure));
-        public static readonly DependencyProperty ShapeIDProperty = DependencyProperty.Register("ShapeID", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1 , FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ShapeID1Property = DependencyProperty.Register("ShapeID1", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1 , FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ShapeID2Property = DependencyProperty.Register("ShapeID2", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty TypePoint1Property = DependencyProperty.Register("TypePoint1", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty TypePoint2Property = DependencyProperty.Register("TypePoint2", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         private GeometryGroup linegeo;
 
@@ -59,10 +62,25 @@ namespace Algorithm_Flowchart
             get { return (double)GetValue(TopProperty); }
             set { SetValue(TopProperty, value); }
         }
-        public int ShapeID
+        public int ShapeID1
         {
-            get { return (int)GetValue(ShapeIDProperty); }
-            set { SetValue(ShapeIDProperty, value); }
+            get { return (int)GetValue(ShapeID1Property); }
+            set { SetValue(ShapeID1Property, value); }
+        }
+        public int ShapeID2
+        {
+            get { return (int)GetValue(ShapeID2Property); }
+            set { SetValue(ShapeID2Property, value); }
+        }
+        public int TypePoint1
+        {
+            get { return (int)GetValue(TypePoint1Property); }
+            set { SetValue(TypePoint1Property, value); }
+        }
+        public int TypePoint2
+        {
+            get { return (int)GetValue(TypePoint2Property); }
+            set { SetValue(TypePoint2Property, value); }
         }
         public PathGeometry triangle { get; set; }
 
