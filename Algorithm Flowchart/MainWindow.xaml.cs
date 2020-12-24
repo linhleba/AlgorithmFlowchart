@@ -1114,31 +1114,7 @@ namespace CopyAndPasteInCanvas
                 myAdornerLayer.Add(adornerList[shapeId]);
             }
         }
-        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine("BUTTON UP");
-            if(isDrawArrow)
-            {
-                int id = rectList.Count - 1;
-                dynamic a = rectList[id];
-                //ResizeArrow(2, e.GetPosition(this).X, e.GetPosition(this).Y, id);
-                int temp = Int32.Parse(IsContain(e.GetPosition(this).X, e.GetPosition(this).Y));
-                if (temp != -1 && typeOfShape[temp] != 5 && temp != a.ShapeID1)
-                {
-                    Console.WriteLine($"arrow AT SHAPE ID {temp}");
-                    Console.WriteLine($"TYPE POINT {typePoint2}");
-                    Point p = GetPositionOf4Point(typePoint2, temp);
-                    ResizeArrow(2, p.X + 140, p.Y + 100, id, temp, typePoint2);
-                    //ResizeArrow(2, Canvas.GetLeft(rectList[temp]) + 140, Canvas.GetTop(rectList[temp]) + 100 + rectList[temp].Width / 2, id, temp);
-                    if (!bindingArrowShape[temp].Contains(id))
-                        bindingArrowShape[temp].Add(id);
-                    resize = false;
-                    //typePoint = 0; ;
-                    return;
-                }
-            }
-        }
-
+       
 
         private void buttonClear1_Click(object sender, RoutedEventArgs e)
         {
