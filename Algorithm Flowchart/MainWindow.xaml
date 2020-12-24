@@ -420,7 +420,7 @@
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
 
                 <Canvas x:Name="Canvas" Height="1000" Width="3000"
-                Margin="0,0,0,0" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1"  >
+                Margin="0,0,0,0" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp" MouseLeftButtonDown="Canvas_MouseLeftButtonDown_1" MouseLeftButtonUp="Canvas_MouseLeftButtonUp"  >
                     <Canvas.Background>
                         <DrawingBrush TileMode="Tile" Viewport="-10,-10,40,40" 
                                      ViewportUnits="Absolute">
