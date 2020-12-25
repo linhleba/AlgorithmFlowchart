@@ -1,7 +1,9 @@
 ﻿using Algorithm_Flowchart;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+//using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -11,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -19,7 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
 using Path = System.Windows.Shapes.Path;
-
+using Size = System.Windows.Size;
 
 namespace CopyAndPasteInCanvas
 {
@@ -56,6 +59,7 @@ namespace CopyAndPasteInCanvas
         System.Windows.Documents.AdornerLayer myAdornerLayer;
         public List<Adorner> adornerList;
         public bool showAdorner = false;
+        public bool drawArrow = false;
         //variable to  choose which point of arrow is chosen
         public int pointArrow = -1;
         //vector bind arrow with shape 
@@ -182,6 +186,15 @@ namespace CopyAndPasteInCanvas
                     }
 
                     break;
+                case 4:
+                    SaveFileDialog diag = new SaveFileDialog();
+                    diag.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+                    if (diag.ShowDialog() == true)
+                    {
+                        SaveCanvasToFile(Canvas, diag.FileName);
+                        MessageBox.Show("Saved successfully!");
+                    }
+                    break;
 
             }
         }
@@ -273,10 +286,8 @@ namespace CopyAndPasteInCanvas
                     if (!isColorPicker)
                     {
                         buttonChooseColor.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-                        buttonChooseColor.Content = "P";
                     }
-                    else
-                        buttonChooseColor.Content = "NP";
+                    else buttonChooseColor.Background = Brushes.Black;
                     if (isColorPicker)
                         isColorPicker = false;
                     else
@@ -655,8 +666,8 @@ namespace CopyAndPasteInCanvas
                 double x0 = Canvas.GetLeft(onlyTextBoxes[i]) * zoom;
                 //Console.WriteLine("x0 is: " +  x0);
                 double y0 = Canvas.GetTop(onlyTextBoxes[i]) * zoom;
-                double x1 = (x0 + onlyTextBoxes[i].MinWidth * zoom);
-                double y1 = (y0 + onlyTextBoxes[i].MinHeight * zoom);
+                double x1 = (x0 + onlyTextBoxes[i].ActualWidth * zoom);
+                double y1 = (y0 + onlyTextBoxes[i].ActualHeight * zoom);
                 double valueOfDistance = 0;
                 if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
                 {
@@ -742,10 +753,11 @@ namespace CopyAndPasteInCanvas
             else if (move)
             {
                 //type= 5 is arrow
-                if (textBoxId != -1)
+                if (textBoxId != -1 && shapeId == -1)
                 {
-                    double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].MinWidth / zoom) / 2) - 140 / zoom;
-                    double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].MinHeight / zoom) / 2) - 100 / zoom;
+                    double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].ActualWidth / zoom) / 2) - 140 / zoom;
+                    double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].ActualHeight / zoom) / 2) - 100 / zoom;
+                    this.Cursor = Cursors.SizeAll;
                     Canvas.SetLeft(onlyTextBoxes[textBoxId], x);
                     Canvas.SetTop(onlyTextBoxes[textBoxId], y);
                 }
@@ -810,7 +822,9 @@ namespace CopyAndPasteInCanvas
                     this.Canvas.Children.Add(rectList[shapeId]);
                     Canvas.SetLeft(rectList[shapeId], x);
                     Canvas.SetTop(rectList[shapeId], y);
-                   
+                    Canvas.SetLeft(textBoxes[shapeId], 99999);
+                    Canvas.SetTop(textBoxes[shapeId], 99999);
+
                 }
             }
             //action when resize shape
@@ -1107,9 +1121,11 @@ namespace CopyAndPasteInCanvas
                 if (showAdorner)
                     showAdorner = false;
                 isDrawArrow = false;
+
                 isDrawPointArrow = false;
                 typePoint1 = 0;
                 typePoint2 = 0;
+
                 clearAllAdorner();
                 shapeId = -1;
                 return;
@@ -1139,6 +1155,7 @@ namespace CopyAndPasteInCanvas
                 showAdorner = true;
                 myAdornerLayer.Add(adornerList[shapeId]);
             }
+            
         }
        
 
@@ -1228,10 +1245,13 @@ namespace CopyAndPasteInCanvas
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
                 String sText = IsContainTextBox(e.GetPosition(this).X, e.GetPosition(this).Y);
-                bool succesTextBox = Int32.TryParse(s, out textBoxId);
+                bool succesTextBox = Int32.TryParse(sText, out textBoxId);
 
                 if (shapeId > -1 && typeOfShape[shapeId]!=5)
                     textBoxes[shapeId].IsEnabled = true;
+
+                if (textBoxId > -1)
+                    onlyTextBoxes[textBoxId].IsEnabled = true;
             }
             if (canvas == null)
                 return;
@@ -1407,7 +1427,7 @@ namespace CopyAndPasteInCanvas
         {
             TextBox textBox = sender as TextBox;
             textBox.IsReadOnly = true;
-            textBox.IsEnabled = true;
+            textBox.IsEnabled = false;
             textBox.BorderThickness = new Thickness(0, 0, 0, 0);
         }
 
@@ -1445,7 +1465,7 @@ namespace CopyAndPasteInCanvas
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
-            CreateTextBoxForShapes(textBoxes, arrow);
+            CreateTextBoxForShapes(textBoxes, arrow, "Arrow");
             textBoxes[rectList.Count - 1].Width = 0;
             textBoxes[rectList.Count - 1].Height = 0;
             this.InvalidateVisual();
@@ -1482,8 +1502,16 @@ namespace CopyAndPasteInCanvas
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus;
 
-            Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.MinWidth) / 2);
-            Canvas.SetTop(textBox, 10 + (shape.Height - textBox.MinHeight) / 2);
+            if (text == "Arrow")
+            {
+                Canvas.SetLeft(textBox, 99999);
+                Canvas.SetTop(textBox, 99999);
+            }
+            else
+            {
+                Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.MinWidth) / 2);
+                Canvas.SetTop(textBox, 10 + (shape.Height - textBox.MinHeight) / 2);
+            }
             Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
         }
 
@@ -1762,7 +1790,7 @@ namespace CopyAndPasteInCanvas
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
-            CreateTextBoxForShapes(textBoxes, arrow);
+            CreateTextBoxForShapes(textBoxes, arrow, "Arrow");
             textBoxes[rectList.Count - 1].Width = 0;
             textBoxes[rectList.Count - 1].Height = 0;
         }
@@ -1887,6 +1915,92 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
+
+        public void DrawArrow(double x, double y)
+        {
+            double x0 = 0;
+            double y0 = 0;
+            double x1 = x-140;
+            double y1 = y-100;
+            double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
+            Arrow arrow = new Arrow
+            {
+                StartPoint = new Point(x0, y0),
+                EndPoint = new Point(x1, y1),
+                Left = 200,
+                Top = 100,
+                Stroke = Brushes.Black,
+                StrokeThickness = 2,
+                Uid = rectList.Count.ToString()
+            };
+            rectList.Add(arrow);
+            List<int> temp = new List<int>() { -1 };
+            bindingArrowShape.Add(temp);
+            typeOfShape.Add(5);
+            Canvas.SetLeft(arrow, 200);
+            Canvas.SetTop(arrow, 100);
+            Canvas.Children.Add(rectList[rectList.Count - 1]);
+            //add adorner for shape           
+            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
+            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
+            dynamic a = arrow;
+            myAdorner.From = a.StartPoint;
+            myAdorner.To = a.EndPoint;
+            adornerList.Add(myAdorner);
+            CreateTextBoxForShapes(textBoxes, arrow, "Arrow");
+            textBoxes[rectList.Count - 1].Width = 0;
+            textBoxes[rectList.Count - 1].Height = 0;
+            this.InvalidateVisual();
+        }
+
+        public static void SaveCanvasToFile(Canvas surface, string filename)
+        {
+            Size size = new Size(surface.Width, surface.Height);
+            //Size size = new Size(100, 100);
+            surface.Measure(size);
+            surface.Arrange(new Rect(size));
+
+            // Create a render bitmap and push the surface to it
+            RenderTargetBitmap renderBitmap =
+              new RenderTargetBitmap(
+                (int)size.Width,
+                (int)size.Height,
+                96d,
+                96d,
+                PixelFormats.Pbgra32);
+                //PixelFormats.Default);
+
+
+            //// Image source to set to bitmap
+            //BitmapImage bitmap = new BitmapImage(new Uri("page", UriKind.Relative));
+            //Image img = new Image() { Width = size.Width, Height = size.Height, Stretch = Stretch.Uniform, StretchDirection = StretchDirection.Both };
+            //img.Source = bitmap;
+            //img.Measure(size);
+            //img.Arrange(new Rect(size));
+
+            // drawing virtual
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                VisualBrush visualBrush = new VisualBrush(surface);
+                drawingContext.DrawRectangle(visualBrush,null,
+                  new Rect(new System.Windows.Point(), new Size(size.Width, size.Height)));
+            }
+            //renderBitmap.Render(surface);
+            renderBitmap.Render(drawingVisual);
+
+
+            // Create a file stream for saving image
+            using (FileStream outStream = new FileStream(filename, FileMode.Create))
+            {
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                // push the rendered bitmap to it
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                // save the data to the stream
+                encoder.Save(outStream);
+            }
+        }
+
     }
 
 }
