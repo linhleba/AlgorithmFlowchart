@@ -1,7 +1,9 @@
 ﻿using Algorithm_Flowchart;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+//using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -11,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -19,7 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Resources;
 using System.Windows.Shapes;
 using Path = System.Windows.Shapes.Path;
-
+using Size = System.Windows.Size;
 
 namespace CopyAndPasteInCanvas
 {
@@ -180,6 +183,15 @@ namespace CopyAndPasteInCanvas
                         writer.Write(jsonStateOfShape);
                     }
 
+                    break;
+                case 4:
+                    SaveFileDialog diag = new SaveFileDialog();
+                    diag.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
+                    if (diag.ShowDialog() == true)
+                    {
+                        SaveCanvasToFile(Canvas, diag.FileName);
+                        MessageBox.Show("Saved successfully!");
+                    }
                     break;
 
             }
@@ -1762,7 +1774,53 @@ namespace CopyAndPasteInCanvas
             this.InvalidateVisual();
         }
 
+        public static void SaveCanvasToFile(Canvas surface, string filename)
+        {
+            Size size = new Size(surface.Width, surface.Height);
+            //Size size = new Size(100, 100);
+            surface.Measure(size);
+            surface.Arrange(new Rect(size));
 
+            // Create a render bitmap and push the surface to it
+            RenderTargetBitmap renderBitmap =
+              new RenderTargetBitmap(
+                (int)size.Width,
+                (int)size.Height,
+                96d,
+                96d,
+                PixelFormats.Pbgra32);
+                //PixelFormats.Default);
+
+
+            //// Image source to set to bitmap
+            //BitmapImage bitmap = new BitmapImage(new Uri("page", UriKind.Relative));
+            //Image img = new Image() { Width = size.Width, Height = size.Height, Stretch = Stretch.Uniform, StretchDirection = StretchDirection.Both };
+            //img.Source = bitmap;
+            //img.Measure(size);
+            //img.Arrange(new Rect(size));
+
+            // drawing virtual
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                VisualBrush visualBrush = new VisualBrush(surface);
+                drawingContext.DrawRectangle(visualBrush,null,
+                  new Rect(new System.Windows.Point(), new Size(size.Width, size.Height)));
+            }
+            //renderBitmap.Render(surface);
+            renderBitmap.Render(drawingVisual);
+
+
+            // Create a file stream for saving image
+            using (FileStream outStream = new FileStream(filename, FileMode.Create))
+            {
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                // push the rendered bitmap to it
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                // save the data to the stream
+                encoder.Save(outStream);
+            }
+        }
 
     }
 
