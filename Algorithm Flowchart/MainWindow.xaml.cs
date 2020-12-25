@@ -764,67 +764,70 @@ namespace CopyAndPasteInCanvas
 
                 else if (typeOfShape[shapeId] != 5)
                 {
-                    double x = (e.GetPosition(this).X/zoom - (rectList[shapeId].Width/zoom) / 2)  - 140/zoom;
-                    double y = (e.GetPosition(this).Y/zoom - (rectList[shapeId].Height/zoom) / 2) - 100/zoom;
-                    Canvas.SetLeft(rectList[shapeId], x);
-                    Canvas.SetTop(rectList[shapeId], y);
-                    Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
-                    Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].MinHeight) / 2);
-                    //Console.WriteLine($"left = {Canvas.GetLeft(rectList[shapeId])}  top = {Canvas.GetTop(rectList[shapeId])}");
-                    if (bindingArrowShape[shapeId].Count >1)
-                    {                        
-                        for(int i=1; i < bindingArrowShape[shapeId].Count; i++)
+                    // Check to not move if textbox is enable
+                    if (textBoxes[shapeId].IsEnabled == false)
+                    {
+                        double x = (e.GetPosition(this).X / zoom - (rectList[shapeId].Width / zoom) / 2) - 140 / zoom;
+                        double y = (e.GetPosition(this).Y / zoom - (rectList[shapeId].Height / zoom) / 2) - 100 / zoom;
+                        Canvas.SetLeft(rectList[shapeId], x);
+                        Canvas.SetTop(rectList[shapeId], y);
+                        Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
+                        Canvas.SetTop(textBoxes[shapeId], y + (rectList[shapeId].Height - textBoxes[shapeId].MinHeight) / 2);
+                        //Console.WriteLine($"left = {Canvas.GetLeft(rectList[shapeId])}  top = {Canvas.GetTop(rectList[shapeId])}");
+                        if (bindingArrowShape[shapeId].Count > 1)
                         {
-                            //Console.WriteLine($"THIS IS AT MOVE SHAPE : i ={i}");
-                            dynamic temp = rectList[bindingArrowShape[shapeId][i]];
-                            Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
-                            if (temp.ShapeID1 == shapeId)
+                            for (int i = 1; i < bindingArrowShape[shapeId].Count; i++)
                             {
-                                Point p = GetPositionOf4Point(temp.TypePoint1, shapeId);
-                                ResizeArrow(1, p.X+140, p.Y+100, bindingArrowShape[shapeId][i]);
-                            }
-                            if (temp.ShapeID2 == shapeId)
-                            {
-                                Point p = GetPositionOf4Point(temp.TypePoint2, shapeId);
-                                ResizeArrow(2, p.X + 140, p.Y + 100, bindingArrowShape[shapeId][i]);
-                            }
+                                //Console.WriteLine($"THIS IS AT MOVE SHAPE : i ={i}");
+                                dynamic temp = rectList[bindingArrowShape[shapeId][i]];
+                                Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
+                                if (temp.ShapeID1 == shapeId)
+                                {
+                                    Point p = GetPositionOf4Point(temp.TypePoint1, shapeId);
+                                    ResizeArrow(1, p.X + 140, p.Y + 100, bindingArrowShape[shapeId][i]);
+                                }
+                                if (temp.ShapeID2 == shapeId)
+                                {
+                                    Point p = GetPositionOf4Point(temp.TypePoint2, shapeId);
+                                    ResizeArrow(2, p.X + 140, p.Y + 100, bindingArrowShape[shapeId][i]);
+                                }
                                 //ResizeArrow(2, Canvas.GetLeft(rectList[shapeId]) + 140, Canvas.GetTop(rectList[shapeId]) + 100 + rectList[shapeId].Width / 2, bindingArrowShape[shapeId][i]);
-                        }                            
-                    }                        
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    double x = (e.GetPosition(this).X  - 140);
-                    double y = (e.GetPosition(this).Y  - 100) ;     
-                    dynamic a1 = rectList[shapeId];
-                    Canvas.Children.Remove(rectList[shapeId]);
-                    Point newStart = a1.StartPoint;
-                    Point newEnd = a1.EndPoint;
-                    int shapeid1 = a1.ShapeID1;
-                    int shapeid2 = a1.ShapeID2;
-                    int typepoint1 = a1.TypePoint1;
-                    int typepoint2 = a1.TypePoint2;
-                    Arrow arrow = new Arrow
-                    {
-                        StartPoint = newStart,
-                        EndPoint = newEnd,
-                        Left=x,
-                        Top=y,
-                        Stroke = Brushes.Black,
-                        ShapeID1=shapeid1,
-                        ShapeID2=shapeid2,
-                        TypePoint1 = typepoint1,
-                        TypePoint2 = typepoint2,
-                        StrokeThickness = 2,
-                        Uid = shapeId.ToString()
-                    };
-                    rectList[shapeId] = arrow;
-                    this.Canvas.Children.Add(rectList[shapeId]);
-                    Canvas.SetLeft(rectList[shapeId], x);
-                    Canvas.SetTop(rectList[shapeId], y);
-                    Canvas.SetLeft(textBoxes[shapeId], 99999);
-                    Canvas.SetTop(textBoxes[shapeId], 99999);
-
+                        double x = (e.GetPosition(this).X - 140);
+                        double y = (e.GetPosition(this).Y - 100);
+                        dynamic a1 = rectList[shapeId];
+                        Canvas.Children.Remove(rectList[shapeId]);
+                        Point newStart = a1.StartPoint;
+                        Point newEnd = a1.EndPoint;
+                        int shapeid1 = a1.ShapeID1;
+                        int shapeid2 = a1.ShapeID2;
+                        int typepoint1 = a1.TypePoint1;
+                        int typepoint2 = a1.TypePoint2;
+                        Arrow arrow = new Arrow
+                        {
+                            StartPoint = newStart,
+                            EndPoint = newEnd,
+                            Left = x,
+                            Top = y,
+                            Stroke = Brushes.Black,
+                            ShapeID1 = shapeid1,
+                            ShapeID2 = shapeid2,
+                            TypePoint1 = typepoint1,
+                            TypePoint2 = typepoint2,
+                            StrokeThickness = 2,
+                            Uid = shapeId.ToString()
+                        };
+                        rectList[shapeId] = arrow;
+                        this.Canvas.Children.Add(rectList[shapeId]);
+                        Canvas.SetLeft(rectList[shapeId], x);
+                        Canvas.SetTop(rectList[shapeId], y);
+                        Canvas.SetLeft(textBoxes[shapeId], 99999);
+                        Canvas.SetTop(textBoxes[shapeId], 99999);
                 }
             }
             //action when resize shape
@@ -1241,6 +1244,7 @@ namespace CopyAndPasteInCanvas
 
             if (e.ClickCount >= 2)
             {
+               
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
@@ -1252,6 +1256,7 @@ namespace CopyAndPasteInCanvas
 
                 if (textBoxId > -1)
                     onlyTextBoxes[textBoxId].IsEnabled = true;
+                if (move) move = false;
             }
             if (canvas == null)
                 return;
