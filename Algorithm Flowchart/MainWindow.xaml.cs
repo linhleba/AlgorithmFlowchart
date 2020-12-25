@@ -437,7 +437,7 @@ namespace CopyAndPasteInCanvas
             y -= 100;
             for (int i = this.rectList.Count - 1; i >= 0; i--)
             {
-                if (typeOfShape[i] == 5)
+                if (typeOfShape[i] == 5 && isDrawArrow==false)
                 {
                     dynamic a = rectList[i];
                     Point p = new Point(x, y);
@@ -1092,7 +1092,7 @@ namespace CopyAndPasteInCanvas
                 preShapeId = shapeId;
             }
 
-            //Console.WriteLine($" showadorner {showAdorner.ToString()}");
+            Console.WriteLine($" DRAWPOINT {isDrawPointArrow.ToString()}");
             if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
@@ -1100,6 +1100,7 @@ namespace CopyAndPasteInCanvas
                 bool success = Int32.TryParse(s, out shapeId);
                 if ((shapeId > -1) && !showAdorner)
                     myAdornerLayer.Remove(adornerList[shapeId]);
+                //isDrawPointArrow = false;
             }
             if (e.LeftButton == MouseButtonState.Released || shapeId < 0)
             {
@@ -1595,7 +1596,7 @@ namespace CopyAndPasteInCanvas
 
         public void ResizeArrow(int typeOfPoint, double x, double y, int id)
         {
-            //Console.WriteLine($"arrow id is {shapeId}");
+            //Console.WriteLine("RESIZE");
             x -= 140;
             y -= 100;
             try
@@ -1657,6 +1658,7 @@ namespace CopyAndPasteInCanvas
         }
         public void ResizeArrow(int typeOfPoint, double x, double y, int id, int shape, int typepoint2)
         {
+            //Console.WriteLine("RESIZE");
             //Console.WriteLine($"arrow id is {shapeId}");
             x -= 140;
             y -= 100;
@@ -1726,10 +1728,12 @@ namespace CopyAndPasteInCanvas
 
         public void DrawArrow(double x, double y,int id, int typePoint)
         {
+            Console.WriteLine(  "DRAW ARROW");
             double x0 = 0;
             double y0 = 0;
             double x1 = 100;
             double y1 = 100;
+            List<Point> pList = new List<Point>();
             Arrow arrow = new Arrow
             {
                 StartPoint = new Point(x0, y0),
@@ -1737,6 +1741,7 @@ namespace CopyAndPasteInCanvas
                 Left = x,
                 Top = y,
                 ShapeID1=id,
+                ListPoint= pList,
                 TypePoint1=typePoint,
                 Stroke = Brushes.Black,
                 StrokeThickness = 2,
@@ -1753,6 +1758,7 @@ namespace CopyAndPasteInCanvas
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
             ArrowAdorner myAdorner = new ArrowAdorner(arrow);
             dynamic a = arrow;
+            Console.WriteLine($"LIST POINT = {a.ListPoint.Count}");
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
