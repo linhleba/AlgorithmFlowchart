@@ -22,6 +22,7 @@ namespace Algorithm_Flowchart
         public static readonly DependencyProperty ShapeID2Property = DependencyProperty.Register("ShapeID2", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty TypePoint1Property = DependencyProperty.Register("TypePoint1", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public static readonly DependencyProperty TypePoint2Property = DependencyProperty.Register("TypePoint2", typeof(int), typeof(Arrow), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ListPointProperty = DependencyProperty.Register("ListPoint", typeof(List<Point>), typeof(Arrow), new FrameworkPropertyMetadata(new List<Point>(), FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         private GeometryGroup linegeo;
 
@@ -82,6 +83,11 @@ namespace Algorithm_Flowchart
             get { return (int)GetValue(TypePoint2Property); }
             set { SetValue(TypePoint2Property, value); }
         }
+        public List<Point> ListPoint
+        {
+            get { return (List<Point>)GetValue(ListPointProperty); }
+            set { SetValue(ListPointProperty, value); }
+        }
         public PathGeometry triangle { get; set; }
 
         protected override Geometry DefiningGeometry
@@ -92,19 +98,31 @@ namespace Algorithm_Flowchart
                 double X1 = StartPoint.X;
                 double Y2 = EndPoint.Y;
                 double X2 = EndPoint.X;
-                double theta = Math.Atan2(Y1 - Y2, X1 - X2);
-                double sint = Math.Sin(theta);
-                double cost = Math.Cos(theta);
                 Point pt1 = new Point(X1, Y1);
                 Point pt2 = new Point(X2, Y2);
+                
+                //listPoint.Add(new Point(X1,Y2 ));
+                triangle = new PathGeometry();                
+                String path0 = $"M {pt1.X},{pt1.Y} ";
+                for (int i = 0; i < ListPoint.Count; i++)
+                {
+                    //Point p = ListPoint[i];
+                    path0 += $" {ListPoint[i].X},{ListPoint[i].Y} ";
+                }
+                double theta = Math.Atan2(Y1 - Y2, X1 - X2);
+                if (ListPoint.Count>0)
+                    theta = Math.Atan2(ListPoint[ListPoint.Count-1].Y - Y2, ListPoint[ListPoint.Count - 1].X - X2);
+                double sint = Math.Sin(theta);
+                double cost = Math.Cos(theta);
                 Point pt3 = new Point(
                     X2 + (4 * cost - 4 * sint),
                     Y2 + (4 * sint + 4 * cost));
                 Point pt4 = new Point(
                     X2 + (4 * cost + 4 * sint),
                     Y2 - (4 * cost - 4 * sint));
-                triangle = new PathGeometry();
-                triangle.AddGeometry(Geometry.Parse($"M {pt1.X},{pt1.Y} {pt2.X},{pt2.Y} {pt3.X },{pt3.Y} {pt4.X},{pt4.Y} {pt2.X},{pt2.Y} "));
+                // path0 += $" {X1},{Y2} ";
+                String path =path0+ $" {pt2.X},{pt2.Y} {pt3.X },{pt3.Y} {pt4.X},{pt4.Y} {pt2.X},{pt2.Y} ";
+                triangle.AddGeometry(Geometry.Parse(path));
                 linegeo.Children.Add(triangle);
                 return linegeo;
             }
