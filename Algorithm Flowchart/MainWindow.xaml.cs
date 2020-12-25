@@ -679,7 +679,21 @@ namespace CopyAndPasteInCanvas
             //action when moving shape  
             if (isDrawArrow)
             {
-                ResizeArrow(2, e.GetPosition(this).X, e.GetPosition(this).Y, rectList.Count - 1);
+                int id = rectList.Count - 1;
+                dynamic a = rectList[id];
+                ResizeArrow(2, e.GetPosition(this).X, e.GetPosition(this).Y, id);
+                //Console.WriteLine($"x & y=  {e.GetPosition(this).X} {e.GetPosition(this).Y}");
+                int temp = Int32.Parse(IsContain(e.GetPosition(this).X, e.GetPosition(this).Y));
+                if (temp != -1 && typeOfShape[temp] != 5 && temp != a.ShapeID1)
+                {
+                    Console.WriteLine($"arrow AT SHAPE ID {temp}");
+                    ResizeArrow(2, Canvas.GetLeft(rectList[temp]) + 140, Canvas.GetTop(rectList[temp]) + 100 + rectList[temp].Width / 2, id, temp);
+                    if (!bindingArrowShape[temp].Contains(id))
+                        bindingArrowShape[temp].Add(id);
+                    resize = false;
+                    return;
+                }
+                return;                
             }
             else if (move)
             {
@@ -1093,7 +1107,6 @@ namespace CopyAndPasteInCanvas
         }
 
         private void DelCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-
         {
             e.CanExecute = true;
         }
