@@ -1962,11 +1962,11 @@ namespace CopyAndPasteInCanvas
         }
         public static void SaveCanvasToFile(Canvas surface, string filename)
         {
-            Size size = new Size(surface.Width, surface.Height);
+            //surface.S
+            Size size = new Size(surface.Width/4, surface.Height/4);
             //Size size = new Size(100, 100);
-            surface.Measure(size);
-            surface.Arrange(new Rect(size));
-
+            surface.Measure(new Size((int)surface.Width, (int)surface.Height));
+            surface.Arrange(new Rect(new Size((int)surface.Width/10, (int)surface.Height/10)));
             // Create a render bitmap and push the surface to it
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
@@ -1979,11 +1979,11 @@ namespace CopyAndPasteInCanvas
 
 
             //// Image source to set to bitmap
-            //BitmapImage bitmap = new BitmapImage(new Uri("page", UriKind.Relative));
-            //Image img = new Image() { Width = size.Width, Height = size.Height, Stretch = Stretch.Uniform, StretchDirection = StretchDirection.Both };
-            //img.Source = bitmap;
-            //img.Measure(size);
-            //img.Arrange(new Rect(size));
+            BitmapImage bitmap = new BitmapImage(new Uri("page.jpg", UriKind.Relative));
+            Image img = new Image() { Width = size.Width, Height = size.Height, Stretch = Stretch.Uniform, StretchDirection = StretchDirection.Both };
+            img.Source = bitmap;
+            img.Measure(size);
+            img.Arrange(new Rect(size));
 
             // drawing virtual
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -1993,8 +1993,8 @@ namespace CopyAndPasteInCanvas
                 drawingContext.DrawRectangle(visualBrush,null,
                   new Rect(new System.Windows.Point(), new Size(size.Width, size.Height)));
             }
-            //renderBitmap.Render(surface);
-            renderBitmap.Render(drawingVisual);
+            renderBitmap.Render(surface);
+            renderBitmap.Render(img);
 
 
             // Create a file stream for saving image
