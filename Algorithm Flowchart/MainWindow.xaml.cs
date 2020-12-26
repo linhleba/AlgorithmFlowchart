@@ -451,8 +451,17 @@ namespace CopyAndPasteInCanvas
                 if (typeOfShape[i] == 5 && isDrawArrow==false)
                 {
                     dynamic a = rectList[i];
+                    //Console.WriteLine($"BEFORE {x}  {y} ");
                     Point p = new Point(x, y);
-                    //Console.WriteLine($"DISTANCE {DistanceFromPointToLine(p, a)}");
+                    //Console.WriteLine($"DISTANCE {DistanceFromPointToLine(p, a)}\nZOOM= {zoom}");
+                    //Console.WriteLine($"{a.Left}  {a.Top}  {a.EndPoint.X}   {a.EndPoint.Y}");
+                    //Console.WriteLine($"AFTER {p.X}  {p.Y} ");
+                    /*NOTE
+                        1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
+                                                mũi tên (type =2)
+                     
+                     */
+                    //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
                     if (DistanceFromPointToPoint(p, a, 3) < 5 && DistanceFromPointToPoint(p, a, 1) > 3 && !isDrawPointArrow)
                     {
                         this.Cursor = Cursors.Cross;
@@ -464,6 +473,7 @@ namespace CopyAndPasteInCanvas
 
                         return rectList[i].Uid;
                     }
+                    //tính khoảng cách từ con chuột -> phần mũi tên , nếu nó ở gần thì cho phép kéo mũi tên ở phía mũi tên
                     else if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0)
                     {
                         resize = true;
@@ -471,6 +481,7 @@ namespace CopyAndPasteInCanvas
                         pointArrow = 2;
                         return rectList[i].Uid;
                     }
+                    //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
                     else if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0)
                     {
                         resize = true;
@@ -478,7 +489,7 @@ namespace CopyAndPasteInCanvas
                         pointArrow = 1;
                         return rectList[i].Uid;
                     }
-                    
+                    //khoẳng cách giữa chuột và đương thẳng tạo bởi 2 điểm của mũi tên
                     else if (DistanceFromPointToLine(p, a) < 5 && DistanceFromPointToLine(p, a) > 0)
                     {
                         move = true;
@@ -808,6 +819,10 @@ namespace CopyAndPasteInCanvas
                         int shapeid2 = a1.ShapeID2;
                         int typepoint1 = a1.TypePoint1;
                         int typepoint2 = a1.TypePoint2;
+                        double left = a1.Left;
+                        double top = a1.Top;
+                        //x -= left;
+                        //y -= top;
                         Arrow arrow = new Arrow
                         {
                             StartPoint = newStart,
@@ -1436,6 +1451,7 @@ namespace CopyAndPasteInCanvas
             textBox.BorderThickness = new Thickness(0, 0, 0, 0);
         }
 
+        //tạo arrow, giá trị left top là vị trí đặt canvas 
         private void Button_Arrow_Click(object sender, RoutedEventArgs e)
         {
             double x0 = 0;
@@ -1538,8 +1554,12 @@ namespace CopyAndPasteInCanvas
 
         public double DistanceFromPointToLine(Point p, Arrow arrow)
         {
-            Point l1 = new Point(arrow.Left+ arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
+            Point l1 = new Point(arrow.Left + arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
             Point l2 = new Point(arrow.Left + arrow.EndPoint.X, arrow.Top + arrow.EndPoint.Y);
+            //Point l1 = new Point((arrow.Left+ arrow.StartPoint.X) * zoom, (arrow.Top + arrow.StartPoint.Y) * zoom);
+            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X) * zoom, (arrow.Top + arrow.EndPoint.Y) * zoom);
+            //Point l1 = new Point((arrow.Left + arrow.StartPoint.X)/ zoom, (arrow.Top + arrow.StartPoint.Y) / zoom);
+            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X)/ zoom, (arrow.Top + arrow.EndPoint.Y) /zoom);
             // border to limit coordinate of p
             double xMax; double xMin; double yMax; double yMin;
             if (l1.X < l2.X)
@@ -1627,6 +1647,12 @@ namespace CopyAndPasteInCanvas
             Canvas.Children.Add(onlyTextBoxes[onlyTextBoxes.Count - 1]);
         }
 
+        //cách thựuc hiện: luu lại toàn bộ thông tin của mũi tên được gọi 
+        // sau đó tạo 1 mũi tên mới giống hết cái cũ và thay thế nó vào rectList
+        //tương tự cho hàm moveArrow , DrawArrow, và nhưung hàm nào có thay đổi chỉ số các thành phần trogn arrow
+
+        //hàm resize arrow k nó nối vào shape
+        //chỉ di chuyển trên canvas
         public void ResizeArrow(int typeOfPoint, double x, double y, int id)
         {
             //Console.WriteLine("RESIZE");
@@ -1634,6 +1660,8 @@ namespace CopyAndPasteInCanvas
             y -= 100;
             try
             {
+                //lưu lại toàn bộ thông tin của arrow cũ
+                //cập nhật các thông tin đã thay đổi (nếu có)
                 //Console.WriteLine($"id= {id}");
                 dynamic a1 = rectList[id];
                 double leftCanvas = a1.Left;
@@ -1663,6 +1691,7 @@ namespace CopyAndPasteInCanvas
                     y -= topCanvas;
                     newEnd = new Point(x, y);
                 }
+                //tạo 1 arrow mới với cá thông tin ở trên và thay thế vào rectList
                 Arrow arrow = new Arrow
                 {
                     StartPoint = newStart,
@@ -1689,6 +1718,10 @@ namespace CopyAndPasteInCanvas
             }
             
         }
+        //réize nối vào shape tại phần mũi tên
+        //shape: id của shape đc nối
+        //typepoint2 : là điểm mà ta sẽ nối shape vào 
+        //1 shape có 4 điểm nối , chi tiết xem tại :GetPositionOf4Point(int, int)
         public void ResizeArrow(int typeOfPoint, double x, double y, int id, int shape, int typepoint2)
         {
             //Console.WriteLine("RESIZE");
@@ -1758,7 +1791,7 @@ namespace CopyAndPasteInCanvas
             }
 
         }
-
+        //hàm vẽ mũi tên của shape
         public void DrawArrow(double x, double y,int id, int typePoint)
         {
             Console.WriteLine(  "DRAW ARROW");
@@ -1799,6 +1832,9 @@ namespace CopyAndPasteInCanvas
             textBoxes[rectList.Count - 1].Width = 0;
             textBoxes[rectList.Count - 1].Height = 0;
         }
+        // 2 hàm AddPointArrow & MovePointArrow phục vụ cho việc bẻ đôi mũi tên
+        // addpoint: thêm 1 điểm trên mũi tên
+        //drawpoint: kéo thả vị trí điểm đó
         public void AddPointArrow(double x, double y, int id)
         {
             x -= 140;
@@ -1920,44 +1956,6 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-
-        public void DrawArrow(double x, double y)
-        {
-            double x0 = 0;
-            double y0 = 0;
-            double x1 = x-140;
-            double y1 = y-100;
-            double distance = Math.Sqrt(Math.Pow((x1 - x0), 2) + Math.Pow((y1 - y0), 2));
-            Arrow arrow = new Arrow
-            {
-                StartPoint = new Point(x0, y0),
-                EndPoint = new Point(x1, y1),
-                Left = 200,
-                Top = 100,
-                Stroke = Brushes.Black,
-                StrokeThickness = 2,
-                Uid = rectList.Count.ToString()
-            };
-            rectList.Add(arrow);
-            List<int> temp = new List<int>() { -1 };
-            bindingArrowShape.Add(temp);
-            typeOfShape.Add(5);
-            Canvas.SetLeft(arrow, 200);
-            Canvas.SetTop(arrow, 100);
-            Canvas.Children.Add(rectList[rectList.Count - 1]);
-            //add adorner for shape           
-            myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
-            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
-            dynamic a = arrow;
-            myAdorner.From = a.StartPoint;
-            myAdorner.To = a.EndPoint;
-            adornerList.Add(myAdorner);
-            CreateTextBoxForShapes(textBoxes, arrow, "Arrow");
-            textBoxes[rectList.Count - 1].Width = 0;
-            textBoxes[rectList.Count - 1].Height = 0;
-            this.InvalidateVisual();
-        }
-
         public static void SaveCanvasToFile(Canvas surface, string filename)
         {
             Size size = new Size(surface.Width, surface.Height);
