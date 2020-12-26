@@ -446,39 +446,45 @@ namespace CopyAndPasteInCanvas
             {
                 if (typeOfShape[i] == 5 && isDrawArrow==false)
                 {
-                    dynamic a = rectList[i];
-                    //Console.WriteLine($"BEFORE {x}  {y} ");
-                    Point p = new Point(x/zoom, y/zoom);
                     /*NOTE
                         1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
-                                                mũi tên (type =2)
-                     
-                     */
+                                                mũi tên (type =2) */
+                    dynamic a = rectList[i];
+                    Point p = new Point(x/zoom, y/zoom);                    
                     //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
-
                     if(a.ListPoint.Count > 0)
                     {
-                        Console.WriteLine(DistanceFromPointToPoint(p, a, 3, -1, 0));
-                        if (DistanceFromPointToPoint(p, a, 3, -1, 0) < 5 && DistanceFromPointToPoint(p, a, 1, -1, 0) > 3 && !isDrawPointArrow)
-                            positionBreakPoint=0;
-                        else if (DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count - 1, -1) < 5 && DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count-1,-1) > 3 && !isDrawPointArrow)
-                            positionBreakPoint = -1;
-                        for (int j=0; j< a.ListPoint.Count-1; j ++)
-                        {
-                            if (DistanceFromPointToPoint(p, a, 3, j, j + 1) < 5 && DistanceFromPointToPoint(p, a, 1, j, j + 1) > 3 && !isDrawPointArrow)
-                            {
-                                positionBreakPoint = j+1;
-                                break;
-                            }
-                        }
-                        if (positionBreakPoint>=-1)
+                        CalcAddPoint(p, a);
+                        if (positionBreakPoint >= -1)
                         {
                             this.Cursor = Cursors.Cross;
                             rectList[i].Stroke = Brushes.Green;
                             if (!isDrawPointArrow)
                             {
                                 isDrawPointArrow = true;
-                            }                            
+                            }
+                            return rectList[i].Uid;
+                        }
+                        else if(CalcMoveArrow(p,a) ==true && !isDrawPointArrow)
+                        {
+                            move = true;
+                            rectList[i].Stroke = Brushes.Red;
+                            this.Cursor = Cursors.SizeAll;
+                            return rectList[i].Uid;
+                        }
+                        else if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollE;
+                            pointArrow = 2;
+                            return rectList[i].Uid;
+                        }
+                        //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
+                        else if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollW;
+                            pointArrow = 1;
                             return rectList[i].Uid;
                         }
                     }
@@ -1202,7 +1208,8 @@ namespace CopyAndPasteInCanvas
             }
             if(isDrawPointArrow)
             {
-                AddPointArrow(0, 0, shapeId,positionBreakPoint);
+                dynamic a = rectList[shapeId];
+                AddPointArrow(200, 200, shapeId,positionBreakPoint);
             }    
             if (!showAdorner)
             {
@@ -1593,15 +1600,14 @@ namespace CopyAndPasteInCanvas
         }
 
 
-        public double DistanceFromPointToLine(Point p, Arrow arrow)
+        public double DistanceFromPointToLine(Point p, Arrow arrow,int p1 = -1, int p2 = -1)
         {
             Point l1 = new Point(arrow.Left + arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
             Point l2 = new Point(arrow.Left + arrow.EndPoint.X, arrow.Top + arrow.EndPoint.Y);
-            //Point l1 = new Point((arrow.Left+ arrow.StartPoint.X) * zoom, (arrow.Top + arrow.StartPoint.Y) * zoom);
-            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X) * zoom, (arrow.Top + arrow.EndPoint.Y) * zoom);
-            //Point l1 = new Point((arrow.Left + arrow.StartPoint.X)/ zoom, (arrow.Top + arrow.StartPoint.Y) / zoom);
-            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X)/ zoom, (arrow.Top + arrow.EndPoint.Y) /zoom);
-            // border to limit coordinate of p
+            if (p1 != -1)
+                l1 = new Point((arrow.Left + arrow.ListPoint[p1].X), (arrow.Top + arrow.ListPoint[p1].Y));
+            if (p2 != -1)
+                l2 = new Point((arrow.Left + arrow.ListPoint[p2].X), (arrow.Top + arrow.ListPoint[p2].Y));
             double xMax; double xMin; double yMax; double yMin;
             if (l1.X < l2.X)
             {
@@ -2059,7 +2065,36 @@ namespace CopyAndPasteInCanvas
                 encoder.Save(outStream);
             }
         }
-
+        //hàm bổ sung cho mũi tên : tính khảong cách đến mũi tên có nhiều đường gấp khúc
+        public void CalcAddPoint(Point p, Arrow a)
+        {
+            if (DistanceFromPointToPoint(p, a, 3, -1, 0) < 5 && DistanceFromPointToPoint(p, a, 1, -1, 0) > 3 && !isDrawPointArrow)
+                positionBreakPoint = 0;
+            else if (DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count - 1, -1) < 5 && DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count - 1, -1) > 3 && !isDrawPointArrow)
+                positionBreakPoint = -1;
+            for (int j = 0; j < a.ListPoint.Count - 1; j++)
+            {
+                if (DistanceFromPointToPoint(p, a, 3, j, j + 1) < 5 && DistanceFromPointToPoint(p, a, 1, j, j + 1) > 3 && !isDrawPointArrow)
+                {
+                    positionBreakPoint = j + 1;
+                    break;
+                }
+            }
+        }
+        public bool CalcMoveArrow(Point p, Arrow a)
+        {
+            if (DistanceFromPointToLine(p, a, -1, 0) < 5 && DistanceFromPointToLine(p, a, -1, 0) > 0 && !isDrawPointArrow)
+                return true;
+            else if (DistanceFromPointToLine(p, a, a.ListPoint.Count - 1, -1) < 5 && DistanceFromPointToLine(p, a, a.ListPoint.Count - 1, -1) > 0 && !isDrawPointArrow)
+                return true;
+            for (int j = 0; j < a.ListPoint.Count - 1; j++)
+            {
+                if (DistanceFromPointToLine(p, a,j, j + 1) < 5 && DistanceFromPointToLine(p, a,j, j + 1) > 0 && !isDrawPointArrow)
+                    return true;
+            }
+            return false;
+        }
+        
     }
 
 }
