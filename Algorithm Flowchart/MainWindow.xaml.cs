@@ -463,9 +463,7 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
-            //AddShape(Data.InfoList, rectList);
-            //this.Canvas.Children.Clear();
-            //Console.WriteLine("aaaa\n");
+            
         }
         public String IsContain(double x, double y)
         {
@@ -2161,13 +2159,10 @@ namespace CopyAndPasteInCanvas
         }
         public static void SaveCanvasToFile(Canvas surface, string filename)
         {
-            //surface.S
-
+            surface.Background = Brushes.White;
             Size size = new Size(surface.Width, surface.Height);
-           
-            //Size size = new Size(100, 100);
-           // surface.Measure(new Size((int)surface.Width, (int)surface.Height));
-           // surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
+            // surface.Measure(new Size((int)surface.Width, (int)surface.Height));
+            // surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             // Create a render bitmap and push the surface to it
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
@@ -2181,7 +2176,15 @@ namespace CopyAndPasteInCanvas
 
             //// Image source to set to bitmap
             BitmapImage bitmap = new BitmapImage(new Uri("page.jpg", UriKind.Relative));
-            Image img = new Image() { Width = size.Width, Height = size.Height, Stretch = Stretch.Uniform, StretchDirection = StretchDirection.Both };
+           
+            Image img = new Image() 
+            { 
+                Width = size.Width, 
+                Height = size.Height,
+                Stretch = Stretch.Uniform,
+                StretchDirection = StretchDirection.Both, 
+                
+            };
             img.Source = bitmap;
             img.Measure(size);
             img.Arrange(new Rect(size));
@@ -2195,19 +2198,34 @@ namespace CopyAndPasteInCanvas
                 drawingContext.DrawRectangle(visualBrush, null,
                   new Rect(new System.Windows.Point(), new Size(size.Width, size.Height)));
             }
+            
+            surface.Measure(new Size((int)surface.Width, (int)surface.Height));
+            surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             renderBitmap.Render(surface);
-            renderBitmap.Render(img);
+            
 
 
             // Create a file stream for saving image
             using (FileStream outStream = new FileStream(filename, FileMode.Create))
             {
-                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
                 // push the rendered bitmap to it
                 encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
                 // save the data to the stream
                 encoder.Save(outStream);
             }
+            GeometryDrawing geo = new GeometryDrawing();
+            Rect rect = new Rect(0, 0, 50, 50);
+            RectangleGeometry rectgeo = new RectangleGeometry(rect);
+            geo.Geometry = rectgeo;
+            geo.Pen = new Pen(Brushes.Black, 0.05);
+            DrawingBrush dBrush = new DrawingBrush();
+            dBrush.TileMode = TileMode.Tile;
+            dBrush.Viewport = new Rect(-10, -10, 40, 40);
+            dBrush.ViewportUnits = System.Windows.Media.BrushMappingMode.Absolute;
+            dBrush.Drawing = geo;
+            surface.Background = dBrush;
+
         }
         //hàm bổ sung cho mũi tên : tính khảong cách đến mũi tên có nhiều đường gấp khúc
         public void CalcAddPoint(Point p, Arrow a)
