@@ -46,7 +46,7 @@ namespace CopyAndPasteInCanvas
         public Point startPoint;
         public int shapeId;
         public int textBoxId;
-        public int preTextBoxId;
+        public int preTextBoxId = -1;
         public int preShapeId;
         public bool move = false;
         public bool resize = false;
