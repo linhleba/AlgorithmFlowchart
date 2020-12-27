@@ -46,6 +46,7 @@ namespace CopyAndPasteInCanvas
         public Point startPoint;
         public int shapeId;
         public int textBoxId;
+        public int preTextBoxId;
         public int preShapeId;
         public bool move = false;
         public bool resize = false;
@@ -135,7 +136,40 @@ namespace CopyAndPasteInCanvas
             copyCmdBinding.CanExecute += copyCmdBinding_CanExecute;
 
             this.CommandBindings.Add(copyCmdBinding);
+
+            // Update size of textbox
+            this.KeyDown += KeyDown_Event;
+
         }
+
+        private void KeyDown_Event(object sender, KeyEventArgs e)
+        {
+            if (preTextBoxId != -1 && onlyTextBoxes[preTextBoxId].IsEnabled == false)
+            {
+                if (e.Key == Key.I)
+                {
+                    onlyTextBoxes[preTextBoxId].FontSize++;
+                }
+                if (e.Key == Key.O)
+                {
+
+                    onlyTextBoxes[preTextBoxId].FontSize--;
+                }
+                if (e.Key == Key.B)
+                {
+                    if (onlyTextBoxes[preTextBoxId].FontWeight == FontWeights.Bold)
+                    {
+                        onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Normal;
+                    }
+                    else
+                    {
+                        onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Bold;
+                    }
+                }
+            }
+        }
+
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
@@ -464,7 +498,7 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
-            
+
         }
         public String IsContain(double x, double y)
         {
@@ -759,6 +793,10 @@ namespace CopyAndPasteInCanvas
             {
                 preShapeId = shapeId;
             }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
+            }
             //Console.WriteLine(shapeId);
             if (shapeId == -1)
             {
@@ -998,6 +1036,10 @@ namespace CopyAndPasteInCanvas
             {
                 preShapeId = shapeId;
             }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
+            }
             if (shapeId >= 0)
             {
                 shapeId = -1;
@@ -1172,6 +1214,10 @@ namespace CopyAndPasteInCanvas
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
+            }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
             }
             clearAllAdorner();
             //Console.WriteLine($" DRAWPOINT {isDrawPointArrow.ToString()}");
@@ -1763,7 +1809,7 @@ namespace CopyAndPasteInCanvas
                 Property = ForegroundProperty,
                 Value = System.Windows.Media.Brushes.Green
 
-            }); 
+            });
 
 
             st.Triggers.Add(tg);
@@ -2162,7 +2208,7 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist)
+        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo> Infolist)
         {
 
             double right = -100000;
@@ -2187,7 +2233,7 @@ namespace CopyAndPasteInCanvas
             var width = (bounds.Width + bounds.X);// * scale;
             var height = (bounds.Height + bounds.Y);// * scale;
 
- 
+
             surface.Background = Brushes.White;
             // Create a render bitmap and push the surface to it
 
@@ -2200,8 +2246,8 @@ namespace CopyAndPasteInCanvas
                 96d,
                 96d,
 
-                PixelFormats.Pbgra32) ;
-                //PixelFormats.Default);
+                PixelFormats.Pbgra32);
+            //PixelFormats.Default);
 
 
             // drawing virtual
@@ -2214,7 +2260,7 @@ namespace CopyAndPasteInCanvas
                     new Rect(new Point(-left, -top), new Point(width, height)));
             }
 
-            
+
             surface.Measure(new Size((int)surface.Width, (int)surface.Height));
             surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             renderBitmap.Render(surface);
