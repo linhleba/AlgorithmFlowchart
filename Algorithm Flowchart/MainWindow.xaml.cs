@@ -470,8 +470,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             for (int i = this.rectList.Count - 1; i >= 0; i--)
             {
                 if (Data.typeOfShape[i] == 5 && isDrawArrow == false)
@@ -480,7 +480,9 @@ namespace CopyAndPasteInCanvas
                         1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
                                                 mũi tên (type =2) */
                     dynamic a = rectList[i];
-                    Point p = new Point(x / zoom, y / zoom);
+                    x -= scroll.HorizontalOffset / zoom;
+                    y -= scroll.VerticalOffset / zoom;
+                    Point p = new Point((x+ scroll.HorizontalOffset) / zoom,( y+ scroll.VerticalOffset) / zoom);
                     //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
                     if (a.ListPoint.Count > 0)
                     {
@@ -733,8 +735,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             for (int i = this.onlyTextBoxes.Count - 1; i >= 0; i--)
             {
                 double x0 = Canvas.GetLeft(onlyTextBoxes[i]) * zoom;
@@ -842,8 +844,8 @@ namespace CopyAndPasteInCanvas
                     {
                         double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].ActualWidth / zoom) / 2) - 140 / zoom;
                         double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].ActualHeight / zoom) / 2) - 100 / zoom;
-                        x += scroll.HorizontalOffset;
-                        y += scroll.VerticalOffset;
+                        x += scroll.HorizontalOffset / zoom;
+                        y += scroll.VerticalOffset / zoom;
                         this.Cursor = Cursors.SizeAll;
                         Canvas.SetLeft(onlyTextBoxes[textBoxId], x);
                         Canvas.SetTop(onlyTextBoxes[textBoxId], y);
@@ -858,8 +860,8 @@ namespace CopyAndPasteInCanvas
                         {
                             double x = (e.GetPosition(this).X / zoom - (rectList[shapeId].Width / zoom) / 2) - 140 / zoom;
                             double y = (e.GetPosition(this).Y / zoom - (rectList[shapeId].Height / zoom) / 2) - 100 / zoom;
-                            x += scroll.HorizontalOffset;
-                            y += scroll.VerticalOffset;
+                            x += scroll.HorizontalOffset/zoom;
+                            y += scroll.VerticalOffset/zoom;
                             Canvas.SetLeft(rectList[shapeId], x);
                             Canvas.SetTop(rectList[shapeId], y);
                             Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
@@ -891,8 +893,8 @@ namespace CopyAndPasteInCanvas
                     {
                         double x = (e.GetPosition(this).X) / zoom;
                         double y = (e.GetPosition(this).Y) / zoom;
-                        x += scroll.HorizontalOffset;
-                        y += scroll.VerticalOffset;
+                        x += scroll.HorizontalOffset / zoom;
+                        y += scroll.VerticalOffset / zoom;
                         MoveArrow(x, y, shapeId);
                         Canvas.SetLeft(textBoxes[shapeId], 99999);
                         Canvas.SetTop(textBoxes[shapeId], 99999);
@@ -926,8 +928,8 @@ namespace CopyAndPasteInCanvas
                 double x = (e.GetPosition(this).X / zoom - 140);
                 // Get currennt pos y
                 double y = (e.GetPosition(this).Y / zoom - 100);
-                x += scroll.HorizontalOffset;
-                y += scroll.VerticalOffset;
+                x += scroll.HorizontalOffset / zoom;
+                y += scroll.VerticalOffset / zoom;
                 double x0 = Canvas.GetLeft(rectList[shapeId]);
                 double y0 = Canvas.GetTop(rectList[shapeId]);
                 // Get the bottom pos x1,y1
@@ -1866,8 +1868,8 @@ namespace CopyAndPasteInCanvas
             Console.WriteLine($" MOUSE : {x}  {y}");
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //lưu lại toàn bộ thông tin của arrow cũ
@@ -1941,8 +1943,8 @@ namespace CopyAndPasteInCanvas
             //Console.WriteLine($"arrow id is {shapeId}");
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
@@ -2014,8 +2016,8 @@ namespace CopyAndPasteInCanvas
             double y0 = 0;
             double x1 = 100;
             double y1 = 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             List<Point> pList = new List<Point>();
             Arrow arrow = new Arrow
             {
@@ -2060,8 +2062,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
@@ -2108,8 +2110,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
-            x += scroll.HorizontalOffset;
-            y += scroll.VerticalOffset;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
