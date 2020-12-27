@@ -2178,14 +2178,14 @@ namespace CopyAndPasteInCanvas
                     {
                         for (int j = 0; j < a.ListPoint.Count; j++)
                         {
-                            if (a.ListPoint[j].X < left)
-                                left = a.ListPoint[j].X;
-                            if (a.ListPoint[j].X > right)
-                                right = a.ListPoint[j].X;
-                            if (a.ListPoint[j].Y < top)
-                                top = a.ListPoint[j].Y;
-                            if (a.ListPoint[j].Y > bottom)
-                                bottom = a.ListPoint[j].Y;
+                            if (a.ListPoint[j].X + a.Left < left)
+                                left = a.ListPoint[j].X+a.Left ;
+                            if (a.ListPoint[j].X + a.Left > right)
+                                right = a.ListPoint[j].X + a.Left;
+                            if (a.ListPoint[j].Y + a.Top < top)
+                                top = a.ListPoint[j].Y + a.Top;
+                            if (a.ListPoint[j].Y + a.Top > bottom)
+                                bottom = a.ListPoint[j].Y + a.Top;
                         }
                     }
                 }
