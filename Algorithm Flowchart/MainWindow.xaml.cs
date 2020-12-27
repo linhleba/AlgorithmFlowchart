@@ -194,7 +194,8 @@ namespace CopyAndPasteInCanvas
                     daag.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
                     if (daag.ShowDialog() == true)
                     {
-                        SaveCanvasToFile(Canvas, daag.FileName);
+                        UpdateInfo(Data.InfoList, rectList);
+                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList);
                         MessageBox.Show("Saved successfully!");
                     }
                     break;
@@ -206,8 +207,8 @@ namespace CopyAndPasteInCanvas
         {
             for (int i = 0; i < rectList.Count; i++)
             {
-                Data.InfoList[i].X = Canvas.GetTop(rectList[i]);
-                Data.InfoList[i].Y = Canvas.GetLeft(rectList[i]);
+                Data.InfoList[i].Y = Canvas.GetTop(rectList[i]);
+                Data.InfoList[i].X = Canvas.GetLeft(rectList[i]);
                 if (Data.typeOfShape[i] != 5)
                 {
                     Data.InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
@@ -1516,8 +1517,8 @@ namespace CopyAndPasteInCanvas
                 rectList.Add(shape);
                 if (Data.isDeleted[i] != 1)
                 {
-                    Canvas.SetLeft(shape, Data.InfoList[i].Y);
-                    Canvas.SetTop(shape, Data.InfoList[i].X);
+                    Canvas.SetLeft(shape, Data.InfoList[i].X);
+                    Canvas.SetTop(shape, Data.InfoList[i].Y);
                     Canvas.Children.Add(rectList[rectList.Count - 1]);
                     CreateTextBoxForShapes(textBoxes, shape, Data.InfoList[i].text, Data.InfoList[i].color);
                 }
@@ -1759,7 +1760,9 @@ namespace CopyAndPasteInCanvas
             {
                 Property = ForegroundProperty,
                 Value = System.Windows.Media.Brushes.Green
+
             }); 
+
 
             st.Triggers.Add(tg);
             TextBox textBox = new TextBox
@@ -2157,17 +2160,35 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-        public static void SaveCanvasToFile(Canvas surface, string filename)
+        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist)
         {
+
+            double right = -100000;
+            double bottom = -100000;
+            double top = 100000;
+            double left = 100000;
+            for (int i = 0; i < Infolist.Count; i++)
+            {
+                if (Infolist[i].X + Infolist[i].Width > right)
+                    right = Infolist[i].X + Infolist[i].Width;
+                if (Infolist[i].Y + Infolist[i].Height > bottom)
+                    bottom = Infolist[i].Y + Infolist[i].Height;
+                if (Infolist[i].X < left)
+                    left = Infolist[i].X;
+                if (Infolist[i].Y < top)
+                    top = Infolist[i].Y;
+            }
+            Size size = new Size(right, bottom);
+
+ 
             surface.Background = Brushes.White;
-            Size size = new Size(surface.Width, surface.Height);
             // surface.Measure(new Size((int)surface.Width, (int)surface.Height));
             // surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             // Create a render bitmap and push the surface to it
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
+                (int)right,
+                (int)bottom,
                 96d,
                 96d,
                 PixelFormats.Pbgra32) ;
