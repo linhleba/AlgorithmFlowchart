@@ -47,7 +47,7 @@ namespace Algorithm_Flowchart
             get { return (Point)GetValue(EndPointProperty); }
             set { SetValue(EndPointProperty, value); }
         }
-        
+
         public Point StartPoint
         {
             get { return (Point)GetValue(StartPointProperty); }

@@ -112,6 +112,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AFData.cs" />
     <Compile Include="Arrow.cs" />
     <Compile Include="ArrowAdorner.cs" />
     <Compile Include="BackRoundPicker.xaml.cs">

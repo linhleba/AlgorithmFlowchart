@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 
 namespace Algorithm_Flowchart
 {
+
     public class ShapeInfo
     {
         public double X;
@@ -37,5 +38,25 @@ namespace Algorithm_Flowchart
         public string text;
         public Brush color;
         int type;
+
+        //Arrow
+        public Point EndPoint;
+
+        public Point StartPoint;
+
+        public double Left;
+
+        public double Top;
+
+        public int ShapeID1;
+
+        public int ShapeID2;
+
+        public int TypePoint1;
+
+        public int TypePoint2;
+
+        public List<Point> ListPoint;
+
     }
 }
