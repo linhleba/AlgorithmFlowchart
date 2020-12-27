@@ -57,5 +57,6 @@ namespace Algorithm_Flowchart
         public int TypePoint2;
 
         public List<Point> ListPoint;
+
     }
 }
