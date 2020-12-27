@@ -38,7 +38,7 @@ namespace Algorithm_Flowchart
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopRight, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomLeft, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
+            //drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, top, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, left, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, bot, renderRadius, renderRadius);

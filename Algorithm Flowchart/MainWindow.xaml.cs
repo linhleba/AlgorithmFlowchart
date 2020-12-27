@@ -66,6 +66,7 @@ namespace CopyAndPasteInCanvas
         public bool isDrawArrow = false;
         public bool isDrawPointArrow = false;
         public bool isResizeArrow = false;
+        public int positionBreakPoint = -2;
         //1= left ;2 top ;3 right; 4 bottom
         public int typePoint1 = 0;
         public int typePoint2 = 0;
@@ -204,7 +205,7 @@ namespace CopyAndPasteInCanvas
         {
             for (int i = 0; i < rectList.Count; i++)
             {
-                //MessageBox.Show(Convert.ToString(i));
+                MessageBox.Show($"{InfoList.Count}");
                 InfoList[i].X = Canvas.GetTop(rectList[i]);
                 InfoList[i].Y = Canvas.GetLeft(rectList[i]);
                 InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
@@ -363,13 +364,7 @@ namespace CopyAndPasteInCanvas
             }
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var converter = new System.Windows.Media.BrushConverter();
-            Canvas.Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
-
-        }
-
+        
 
         private void tabCnntrol_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -451,213 +446,248 @@ namespace CopyAndPasteInCanvas
             {
                 if (typeOfShape[i] == 5 && isDrawArrow==false)
                 {
-                    dynamic a = rectList[i];
-                    //Console.WriteLine($"BEFORE {x}  {y} ");
-                    Point p = new Point(x/zoom, y/zoom);
-                    //Console.WriteLine($"DISTANCE {DistanceFromPointToLine(p, a)}\nZOOM= {zoom}");
-                    //Console.WriteLine($"{a.Left}  {a.Top}  {a.EndPoint.X}   {a.EndPoint.Y}");
-                    //Console.WriteLine($"AFTER {p.X}  {p.Y} ");
                     /*NOTE
                         1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
-                                                mũi tên (type =2)
-                     
-                     */
+                                                mũi tên (type =2) */
+                    dynamic a = rectList[i];
+                    Point p = new Point(x/zoom, y/zoom);                    
                     //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
-                    if (DistanceFromPointToPoint(p, a, 3) < 5 && DistanceFromPointToPoint(p, a, 1) > 3 && !isDrawPointArrow)
+                    if(a.ListPoint.Count > 0)
                     {
-                        this.Cursor = Cursors.Cross;
-                        if (!isDrawPointArrow)
+                        CalcAddPoint(p, a);
+                        if (positionBreakPoint >= -1)
                         {
-                            isDrawPointArrow = true;
-                            //AddPointArrow(-200, 100, i);
+                            this.Cursor = Cursors.Cross;
+                            rectList[i].Stroke = Brushes.Green;
+                            if (!isDrawPointArrow)
+                            {
+                                isDrawPointArrow = true;
+                            }
+                            return rectList[i].Uid;
                         }
-
-                        return rectList[i].Uid;
+                        else if(CalcMoveArrow(p,a) ==true && !isDrawPointArrow)
+                        {
+                            move = true;
+                            rectList[i].Stroke = Brushes.Red;
+                            this.Cursor = Cursors.SizeAll;
+                            return rectList[i].Uid;
+                        }
+                        else if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollE;
+                            pointArrow = 2;
+                            return rectList[i].Uid;
+                        }
+                        //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
+                        else if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollW;
+                            pointArrow = 1;
+                            return rectList[i].Uid;
+                        }
                     }
-                    //tính khoảng cách từ con chuột -> phần mũi tên , nếu nó ở gần thì cho phép kéo mũi tên ở phía mũi tên
-                    else if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0)
+                    else
                     {
-                        resize = true;
-                        this.Cursor = Cursors.ScrollE;
-                        pointArrow = 2;
-                        return rectList[i].Uid;
+                        if (DistanceFromPointToPoint(p, a, 3) < 5 && DistanceFromPointToPoint(p, a, 1) > 0 && !isDrawPointArrow)
+                        {
+                            this.Cursor = Cursors.Cross;
+                            rectList[i].Stroke = Brushes.Green;
+                            if (!isDrawPointArrow)
+                            {
+                                isDrawPointArrow = true;
+                            }
+                            return rectList[i].Uid;
+                        }
+                        //tính khoảng cách từ con chuột -> phần mũi tên , nếu nó ở gần thì cho phép kéo mũi tên ở phía mũi tên
+                        else if (DistanceFromPointToPoint(p, a, 2) < 5 && DistanceFromPointToPoint(p, a, 2) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollE;
+                            pointArrow = 2;                            
+                            return rectList[i].Uid;
+                        }
+                        //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
+                        else if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0 && !isDrawPointArrow)
+                        {
+                            resize = true;
+                            this.Cursor = Cursors.ScrollW;
+                            pointArrow = 1;
+                            return rectList[i].Uid;
+                        }
+                        //khoẳng cách giữa chuột và đương thẳng tạo bởi 2 điểm của mũi tên
+                        else if (DistanceFromPointToLine(p, a) < 5 && DistanceFromPointToLine(p, a) > 0 && !isDrawPointArrow)
+                        {
+                            move = true;
+                            rectList[i].Stroke = Brushes.Red;
+                            this.Cursor = Cursors.SizeAll;
+                            return rectList[i].Uid;
+                        }
                     }
-                    //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
-                    else if (DistanceFromPointToPoint(p, a, 1) < 5 && DistanceFromPointToPoint(p, a, 1) > 0)
-                    {
-                        resize = true;
-                        this.Cursor = Cursors.ScrollW;
-                        pointArrow = 1;
-                        return rectList[i].Uid;
-                    }
-                    //khoẳng cách giữa chuột và đương thẳng tạo bởi 2 điểm của mũi tên
-                    else if (DistanceFromPointToLine(p, a) < 5 && DistanceFromPointToLine(p, a) > 0)
-                    {
-                        move = true;
-                        rectList[i].Stroke = Brushes.Red;
-                        //Console.WriteLine("return "+ rectList[i].Uid);
-                        return rectList[i].Uid;
-                    }
-                    //Console.WriteLine($" {DistanceFromPointToPoint(p, a, Canvas.GetLeft(rectList[i]), Canvas.GetTop(rectList[i]), 1)}");
                     this.Cursor = null;
                     rectList[i].Stroke = Brushes.Black;
                 }
-                double x0 = Canvas.GetLeft(rectList[i]) * zoom;
-                double y0 = Canvas.GetTop(rectList[i]) * zoom;
-                double x1 = (x0 + rectList[i].Width * zoom);
-                double y1 = (y0 + rectList[i].Height * zoom);
-                double valueOfDistance = 0;
-                // Set value to handle point for the different shape
-                if (typeOfShape[i] == 1 || typeOfShape[i] == 2)
+                else if(typeOfShape[i] != 5)
                 {
-                    valueOfDistance = 10;
-                }
-                else if (typeOfShape[i] == 3 || typeOfShape[i] == 4)
-                {
-                    valueOfDistance = 20;
-                }
-                if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
-                {
-                    this.move = true;
-                    if (!isColorPicker)
-                        this.Cursor = Cursors.SizeAll;
-                    else
-                        this.Cursor = Cursors.Pen;
-                    return rectList[i].Uid;
-                }
-                else if ((x0 - valueOfDistance <= x && x <= x0 + valueOfDistance) && (y0 - 10 <= y && y <= y0 + 10))
-                {
-                    this.resize = true;
-                    if(typeOfShape[i]!=5)
-                        this.Cursor = Cursors.SizeNWSE;
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = 1;
-                    dragHandle = 7;
-                    return rectList[i].Uid;
-                }
-                else if ((x1 - valueOfDistance <= x && x <= x1 + valueOfDistance) && (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance))
-                {
-                    this.resize = true;
-                    if (typeOfShape[i] != 5)
-                        this.Cursor = Cursors.SizeNWSE;
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = 1;
-                    dragHandle = 5;
-                    return rectList[i].Uid;
-                }
-                else if ((y0 - valueOfDistance <= y && y <= y0 + valueOfDistance) && (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance))
-                {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeNESW;
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = 1;
-                    dragHandle = 8;
-                    return rectList[i].Uid;
-                }
-                else if ((y1 - valueOfDistance <= y && y <= y1 + valueOfDistance) && (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance))
-                {
-                    this.resize = true;
-                    this.Cursor = Cursors.SizeNESW;
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = 1;
-                    dragHandle = 6;
-                    return rectList[i].Uid;
-                }
-                else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance && y0 <= y && y <= y1)
-                {
-                    if(!showAdorner)
-                    {       
-                        this.isDrawArrow = true;
-                        typePoint1 = 1;
-                        this.Cursor = Cursors.Cross;
-                    }                        
-                    else
+                    double x0 = Canvas.GetLeft(rectList[i]) * zoom;
+                    double y0 = Canvas.GetTop(rectList[i]) * zoom;
+                    double x1 = (x0 + rectList[i].Width * zoom);
+                    double y1 = (y0 + rectList[i].Height * zoom);
+                    double valueOfDistance = 0;
+                    // Set value to handle point for the different shape
+                    if (typeOfShape[i] == 1 || typeOfShape[i] == 2)
+                    {
+                        valueOfDistance = 10;
+                    }
+                    else if (typeOfShape[i] == 3 || typeOfShape[i] == 4)
+                    {
+                        valueOfDistance = 20;
+                    }
+                    if (x0 + valueOfDistance <= x && x <= x1 - valueOfDistance && (y0 + valueOfDistance <= y && y <= y1 - valueOfDistance))
+                    {
+                        this.move = true;
+                        if (!isColorPicker)
+                            this.Cursor = Cursors.SizeAll;
+                        else
+                            this.Cursor = Cursors.Pen;
+                        return rectList[i].Uid;
+                    }
+                    else if ((x0 - valueOfDistance <= x && x <= x0 + valueOfDistance) && (y0 - 10 <= y && y <= y0 + 10))
                     {
                         this.resize = true;
-                        this.Cursor = Cursors.SizeWE;
+                        if (typeOfShape[i] != 5)
+                            this.Cursor = Cursors.SizeNWSE;
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = 1;
+                        dragHandle = 7;
+                        return rectList[i].Uid;
                     }
-                    Console.WriteLine($"isDRAW {isDrawArrow.ToString()}");
-                    if (isDrawArrow || isResizeArrow)
-                    {
-                        typePoint2 = 1;
-                        rectList[i].Stroke = Brushes.Red;
-                    }
-                    //
-                    direction = 1;
-                    dragHandle = 4;
-                    return rectList[i].Uid;
-                }
-                else if (y0 - valueOfDistance <= y && y <= y0 + valueOfDistance && x0 <= x && x <= x1)
-                {
-                    if (!showAdorner)
-                    {                        
-                        this.isDrawArrow = true;
-                        typePoint1 = 2;
-                        this.Cursor = Cursors.Cross;
-                        
-                    }
-                    else
+                    else if ((x1 - valueOfDistance <= x && x <= x1 + valueOfDistance) && (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance))
                     {
                         this.resize = true;
-                        this.Cursor = Cursors.SizeNS;
+                        if (typeOfShape[i] != 5)
+                            this.Cursor = Cursors.SizeNWSE;
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = 1;
+                        dragHandle = 5;
+                        return rectList[i].Uid;
                     }
-                    if (isDrawArrow || isResizeArrow)
-                    {
-                        typePoint2 = 2;
-                        rectList[i].Stroke = Brushes.Red;
-                    }
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = -1;
-                    dragHandle = 1;
-                    return rectList[i].Uid;
-                }
-                else if (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance && x0 <= x && x <= x1)
-                {
-                    if (!showAdorner)
-                    {
-                        this.isDrawArrow = true;
-                        typePoint1 = 4;
-                        this.Cursor = Cursors.Cross;
-                        
-                    }
-                    else
+                    else if ((y0 - valueOfDistance <= y && y <= y0 + valueOfDistance) && (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance))
                     {
                         this.resize = true;
-                        this.Cursor = Cursors.SizeNS;
+                        this.Cursor = Cursors.SizeNESW;
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = 1;
+                        dragHandle = 8;
+                        return rectList[i].Uid;
                     }
-                    if (isDrawArrow || isResizeArrow)
-                    {
-                        typePoint2 = 4;
-                        rectList[i].Stroke = Brushes.Red;
-                    }
-                    direction = 1;
-                    dragHandle = 3;
-                    return rectList[i].Uid;
-                }
-                else if (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance && y0 <= y && y <= y1)
-                {
-                    if (!showAdorner)
-                    {
-                        this.isDrawArrow = true;
-                        typePoint1 = 3;
-                        this.Cursor = Cursors.Cross;
-                        
-                    }
-                    else
+                    else if ((y1 - valueOfDistance <= y && y <= y1 + valueOfDistance) && (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance))
                     {
                         this.resize = true;
-                        this.Cursor = Cursors.SizeWE;
+                        this.Cursor = Cursors.SizeNESW;
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = 1;
+                        dragHandle = 6;
+                        return rectList[i].Uid;
                     }
-                    if (isDrawArrow || isResizeArrow)
+                    else if (x0 - valueOfDistance <= x && x <= x0 + valueOfDistance && y0 <= y && y <= y1)
                     {
-                        typePoint2 = 3;
-                        rectList[i].Stroke = Brushes.Red;
+                        if (!showAdorner)
+                        {
+                            this.isDrawArrow = true;
+                            typePoint1 = 1;
+                            this.Cursor = Cursors.Cross;
+                        }
+                        else
+                        {
+                            this.resize = true;
+                            this.Cursor = Cursors.SizeWE;
+                        }
+                        //Console.WriteLine($"isDRAW {isDrawArrow.ToString()}");
+                        if (isDrawArrow || isResizeArrow)
+                        {
+                            typePoint2 = 1;
+                            rectList[i].Stroke = Brushes.Red;
+                        }
+                        //
+                        direction = 1;
+                        dragHandle = 4;
+                        return rectList[i].Uid;
                     }
-                    //rectList[i].Stroke = Brushes.Red;
-                    direction = 1;
-                    dragHandle = 2;
-                    return rectList[i].Uid;
+                    else if (y0 - valueOfDistance <= y && y <= y0 + valueOfDistance && x0 <= x && x <= x1)
+                    {
+                        if (!showAdorner)
+                        {
+                            this.isDrawArrow = true;
+                            typePoint1 = 2;
+                            this.Cursor = Cursors.Cross;
+
+                        }
+                        else
+                        {
+                            this.resize = true;
+                            this.Cursor = Cursors.SizeNS;
+                        }
+                        if (isDrawArrow || isResizeArrow)
+                        {
+                            typePoint2 = 2;
+                            rectList[i].Stroke = Brushes.Red;
+                        }
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = -1;
+                        dragHandle = 1;
+                        return rectList[i].Uid;
+                    }
+                    else if (y1 - valueOfDistance <= y && y <= y1 + valueOfDistance && x0 <= x && x <= x1)
+                    {
+                        if (!showAdorner)
+                        {
+                            this.isDrawArrow = true;
+                            typePoint1 = 4;
+                            this.Cursor = Cursors.Cross;
+
+                        }
+                        else
+                        {
+                            this.resize = true;
+                            this.Cursor = Cursors.SizeNS;
+                        }
+                        if (isDrawArrow || isResizeArrow)
+                        {
+                            typePoint2 = 4;
+                            rectList[i].Stroke = Brushes.Red;
+                        }
+                        direction = 1;
+                        dragHandle = 3;
+                        return rectList[i].Uid;
+                    }
+                    else if (x1 - valueOfDistance <= x && x <= x1 + valueOfDistance && y0 <= y && y <= y1)
+                    {
+                        if (!showAdorner)
+                        {
+                            this.isDrawArrow = true;
+                            typePoint1 = 3;
+                            this.Cursor = Cursors.Cross;
+
+                        }
+                        else
+                        {
+                            this.resize = true;
+                            this.Cursor = Cursors.SizeWE;
+                        }
+                        if (isDrawArrow || isResizeArrow)
+                        {
+                            typePoint2 = 3;
+                            rectList[i].Stroke = Brushes.Red;
+                        }
+                        //rectList[i].Stroke = Brushes.Red;
+                        direction = 1;
+                        dragHandle = 2;
+                        return rectList[i].Uid;
+                    }
                 }
+                
             }
             //if no tin shape cursor is normal and return -1(it mean not shape is catch)
             this.Cursor = null;
@@ -729,6 +759,7 @@ namespace CopyAndPasteInCanvas
                     isDrawArrow = !isDrawArrow;
                 }
                 isResizeArrow = false;
+                positionBreakPoint = -2;
                 //if (isDrawPointArrow)
                     isDrawPointArrow = false;
                 delta = direction = 0;
@@ -740,7 +771,7 @@ namespace CopyAndPasteInCanvas
             //action when moving shape  
             if(isDrawPointArrow)
             {
-                MovePointArrow(e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom, shapeId);
+                MovePointArrow(e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom, shapeId,positionBreakPoint);
             }
             else if (isDrawArrow && textBoxId == -1)
             {
@@ -750,8 +781,8 @@ namespace CopyAndPasteInCanvas
                 int temp = Int32.Parse(IsContain(e.GetPosition(this).X, e.GetPosition(this).Y));
                 if (temp != -1 && typeOfShape[temp] != 5 && temp != a.ShapeID1)
                 {
-                    Console.WriteLine($"arrow AT SHAPE ID {temp}");
-                    Console.WriteLine($"TYPE POINT {typePoint2}");
+                    //Console.WriteLine($"arrow AT SHAPE ID {temp}");
+                    //Console.WriteLine($"TYPE POINT {typePoint2}");
                     Point p = GetPositionOf4Point(typePoint2, temp);
                     ResizeArrow(2, p.X + 140, p.Y + 100, id, temp,typePoint2);
                     //ResizeArrow(2, Canvas.GetLeft(rectList[temp]) + 140, Canvas.GetTop(rectList[temp]) + 100 + rectList[temp].Width / 2, id, temp);
@@ -798,7 +829,7 @@ namespace CopyAndPasteInCanvas
                                 {
                                     //Console.WriteLine($"THIS IS AT MOVE SHAPE : i ={i}");
                                     dynamic temp = rectList[bindingArrowShape[shapeId][i]];
-                                    Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
+                                   // Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
                                     if (temp.ShapeID1 == shapeId)
                                     {
                                         Point p = GetPositionOf4Point(temp.TypePoint1, shapeId);
@@ -816,38 +847,9 @@ namespace CopyAndPasteInCanvas
                     }
                     else
                     {
-                        double x = (e.GetPosition(this).X - 140) / zoom;
-                        double y = (e.GetPosition(this).Y - 100) / zoom;
-                        dynamic a1 = rectList[shapeId];
-                        Canvas.Children.Remove(rectList[shapeId]);
-                        Point newStart = a1.StartPoint;
-                        Point newEnd = a1.EndPoint;
-                        int shapeid1 = a1.ShapeID1;
-                        int shapeid2 = a1.ShapeID2;
-                        int typepoint1 = a1.TypePoint1;
-                        int typepoint2 = a1.TypePoint2;
-                        double left = a1.Left;
-                        double top = a1.Top;
-                        //x -= left;
-                        //y -= top;
-                        Arrow arrow = new Arrow
-                        {
-                            StartPoint = newStart,
-                            EndPoint = newEnd,
-                            Left = x,
-                            Top = y,
-                            Stroke = Brushes.Black,
-                            ShapeID1 = shapeid1,
-                            ShapeID2 = shapeid2,
-                            TypePoint1 = typepoint1,
-                            TypePoint2 = typepoint2,
-                            StrokeThickness = 2,
-                            Uid = shapeId.ToString()
-                        };
-                        rectList[shapeId] = arrow;
-                        this.Canvas.Children.Add(rectList[shapeId]);
-                        Canvas.SetLeft(rectList[shapeId], x);
-                        Canvas.SetTop(rectList[shapeId], y);
+                        double x = (e.GetPosition(this).X) / zoom;
+                        double y = (e.GetPosition(this).Y) / zoom;
+                        MoveArrow(x, y, shapeId);
                         Canvas.SetLeft(textBoxes[shapeId], 99999);
                         Canvas.SetTop(textBoxes[shapeId], 99999);
                     }
@@ -865,7 +867,7 @@ namespace CopyAndPasteInCanvas
                     int temp = Int32.Parse(IsContain(e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom));
                     if (temp != -1 && typeOfShape[temp] != 5)
                     {
-                        Console.WriteLine($"arrow AT SHAPE ID {temp}");
+                        //Console.WriteLine($"arrow AT SHAPE ID {temp}");
                         Point p = GetPositionOf4Point(typePoint2, temp);
                         ResizeArrow(2, (p.X + 140)/zoom, (p.Y + 100)/zoom, shapeId, temp, typePoint2);
                         if (!bindingArrowShape[temp].Contains(shapeId))
@@ -1120,21 +1122,22 @@ namespace CopyAndPasteInCanvas
         //paint shape when mouse change into pen
         private void Canvas_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
+            //Console.WriteLine($"TESSSTSTSTSTSTSTST {e.GetPosition(this).X}   {e.GetPosition(this).Y}");
             //AddPointArrow(e.GetPosition(this).X, e.GetPosition(this).Y, 0);
-            for(int i=0; i < bindingArrowShape.Count; i++)
+            /*for(int i=0; i < bindingArrowShape.Count; i++)
             {
                 Console.Write($"i= {i}:     ");
                 for (int j = 0; j < bindingArrowShape[i].Count; j++)
                     Console.Write($"{bindingArrowShape[i][j]}    ");
                 Console.WriteLine();
             }
-            Console.WriteLine();
+            Console.WriteLine();*/
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
             }
-
-            Console.WriteLine($" DRAWPOINT {isDrawPointArrow.ToString()}");
+            clearAllAdorner();
+            //Console.WriteLine($" DRAWPOINT {isDrawPointArrow.ToString()}");
             if (shapeId == -1)
             {
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
@@ -1176,7 +1179,8 @@ namespace CopyAndPasteInCanvas
             }
             if(isDrawPointArrow)
             {
-                AddPointArrow(0, 0, shapeId);
+                dynamic a = rectList[shapeId];
+                AddPointArrow(200, 200, shapeId,positionBreakPoint);
             }    
             if (!showAdorner)
             {
@@ -1199,8 +1203,13 @@ namespace CopyAndPasteInCanvas
         }
         public void clearAllAdorner()
         {
-            for (int i = 0; i < adornerList.Count; i++)
-                this.myAdornerLayer.Remove(adornerList[i]);
+            for(int i=0; i < rectList.Count; i++)
+            {
+                if(myAdornerLayer.GetAdorners(rectList[i])!= null)
+                    myAdornerLayer.Remove(adornerList[i]);
+            }
+           /* for (int i = 0; i < adornerList.Count; i++)
+                this.myAdornerLayer.Remove(adornerList[i]);*/
         }
         private void pasteCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1491,8 +1500,8 @@ namespace CopyAndPasteInCanvas
             Canvas.Children.Add(rectList[rectList.Count - 1]);
             //add adorner for shape           
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
-            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
             dynamic a = arrow;
+            ArrowAdorner myAdorner = new ArrowAdorner(arrow);            
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
@@ -1562,15 +1571,14 @@ namespace CopyAndPasteInCanvas
         }
 
 
-        public double DistanceFromPointToLine(Point p, Arrow arrow)
+        public double DistanceFromPointToLine(Point p, Arrow arrow,int p1 = -1, int p2 = -1)
         {
             Point l1 = new Point(arrow.Left + arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
             Point l2 = new Point(arrow.Left + arrow.EndPoint.X, arrow.Top + arrow.EndPoint.Y);
-            //Point l1 = new Point((arrow.Left+ arrow.StartPoint.X) * zoom, (arrow.Top + arrow.StartPoint.Y) * zoom);
-            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X) * zoom, (arrow.Top + arrow.EndPoint.Y) * zoom);
-            //Point l1 = new Point((arrow.Left + arrow.StartPoint.X)/ zoom, (arrow.Top + arrow.StartPoint.Y) / zoom);
-            //Point l2 = new Point((arrow.Left + arrow.EndPoint.X)/ zoom, (arrow.Top + arrow.EndPoint.Y) /zoom);
-            // border to limit coordinate of p
+            if (p1 != -1)
+                l1 = new Point((arrow.Left + arrow.ListPoint[p1].X), (arrow.Top + arrow.ListPoint[p1].Y));
+            if (p2 != -1)
+                l2 = new Point((arrow.Left + arrow.ListPoint[p2].X), (arrow.Top + arrow.ListPoint[p2].Y));
             double xMax; double xMin; double yMax; double yMin;
             if (l1.X < l2.X)
             {
@@ -1605,10 +1613,14 @@ namespace CopyAndPasteInCanvas
             }
             return 999;
         }
-        public double DistanceFromPointToPoint(Point p, Arrow arrow, double typeOfPoint)
+        public double DistanceFromPointToPoint(Point p, Arrow arrow, double typeOfPoint,int p1=-1, int p2=-1)
         {
             Point l1 = new Point((arrow.Left + arrow.StartPoint.X), (arrow.Top + arrow.StartPoint.Y));
             Point l2 = new Point((arrow.Left + arrow.EndPoint.X), (arrow.Top + arrow.EndPoint.Y));
+            if(p1 !=-1 )
+                l1 = new Point((arrow.Left + arrow.ListPoint[p1].X), (arrow.Top + arrow.ListPoint[p1].Y));
+            if (p2 != -1)
+                l2 = new Point((arrow.Left + arrow.ListPoint[p2].X), (arrow.Top + arrow.ListPoint[p2].Y));
             if (typeOfPoint==1)
             {
                 return Math.Sqrt(Math.Pow(p.X - l1.X, 2) +
@@ -1663,9 +1675,55 @@ namespace CopyAndPasteInCanvas
 
         //hàm resize arrow k nó nối vào shape
         //chỉ di chuyển trên canvas
+        public void MoveArrow(double x, double y, int id)
+        {
+            x -= 140;
+            y -= 100;
+            try
+            {
+                dynamic a1 = rectList[id];
+                double leftCanvas = x;
+                double topCanvas = y;
+                Canvas.Children.Remove(rectList[id]);
+                Point newStart = a1.StartPoint;
+                Point newEnd = a1.EndPoint;
+                int shapeid1 = a1.ShapeID1;
+                int shapeid2 = a1.ShapeID2;
+                int typepoint1 = a1.TypePoint1;
+                int typepoint2 = a1.TypePoint2;
+                List<Point> pList = a1.ListPoint;
+                
+                //tạo 1 arrow mới với cá thông tin ở trên và thay thế vào rectList
+                Arrow arrow = new Arrow
+                {
+                    StartPoint = newStart,
+                    EndPoint = newEnd,
+                    Left = leftCanvas,
+                    Top = topCanvas,
+                    ShapeID1 = shapeid1,
+                    ShapeID2 = shapeid2,
+                    TypePoint1 = typepoint1,
+                    TypePoint2 = typepoint2,
+                    ListPoint = pList,
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 2,
+                    Uid = a1.Uid
+                };
+                rectList[id] = arrow;
+                this.Canvas.Children.Add(rectList[id]);
+                Canvas.SetLeft(rectList[id], leftCanvas);
+                Canvas.SetTop(rectList[id], topCanvas);
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine($"EXCEPTION id ={id}");
+            }
+
+        }
         public void ResizeArrow(int typeOfPoint, double x, double y, int id)
         {
             //Console.WriteLine("RESIZE");
+            Console.WriteLine($" MOUSE : {x}  {y}");
             x -= 140;
             y -= 100;
             try
@@ -1690,7 +1748,7 @@ namespace CopyAndPasteInCanvas
                    // Console.WriteLine($" Canvas = {leftCanvas} ; {topCanvas}\n");
                     //Console.WriteLine($" dx= {x}   dy={y}");
                     double dx = 0 - (x-leftCanvas);
-                    double dy = 0 - (y-topCanvas);
+                    double dy = 0 - (y - topCanvas);
                     newEnd = new Point(a1.EndPoint.X + dx, a1.EndPoint.Y + dy);
                     leftCanvas = x;
                     topCanvas = y;
@@ -1698,7 +1756,10 @@ namespace CopyAndPasteInCanvas
                 else
                 {
                     x -= leftCanvas;
-                    y -= topCanvas;
+                    y -= topCanvas ;
+                    Console.WriteLine($" SHAPE : {leftCanvas}  {topCanvas}");
+                    Console.WriteLine($" SHAPE : {x}  {y}\n");
+
                     newEnd = new Point(x, y);
                 }
                 //tạo 1 arrow mới với cá thông tin ở trên và thay thế vào rectList
@@ -1804,7 +1865,7 @@ namespace CopyAndPasteInCanvas
         //hàm vẽ mũi tên của shape
         public void DrawArrow(double x, double y,int id, int typePoint)
         {
-            Console.WriteLine(  "DRAW ARROW");
+            //Console.WriteLine(  "DRAW ARROW");
             double x0 = 0;
             double y0 = 0;
             double x1 = 100;
@@ -1834,7 +1895,7 @@ namespace CopyAndPasteInCanvas
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
             ArrowAdorner myAdorner = new ArrowAdorner(arrow);
             dynamic a = arrow;
-            Console.WriteLine($"LIST POINT = {a.ListPoint.Count}");
+           // Console.WriteLine($"LIST POINT = {a.ListPoint.Count}");
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
@@ -1845,7 +1906,7 @@ namespace CopyAndPasteInCanvas
         // 2 hàm AddPointArrow & MovePointArrow phục vụ cho việc bẻ đôi mũi tên
         // addpoint: thêm 1 điểm trên mũi tên
         //drawpoint: kéo thả vị trí điểm đó
-        public void AddPointArrow(double x, double y, int id)
+        public void AddPointArrow(double x, double y, int id, int position)
         {
             x -= 140;
             y -= 100;
@@ -1863,7 +1924,10 @@ namespace CopyAndPasteInCanvas
                 int typepoint1 = a1.TypePoint1;
                 int typepoint2 = a1.TypePoint2;
                 List<Point> pList = a1.ListPoint;
-                pList.Add(new Point(x-leftCanvas, y-topCanvas));
+                if(position==-1 || position == -2)
+                    pList.Add(new Point(x - leftCanvas, y - topCanvas));
+                else 
+                    pList.Insert(position, new Point(x - leftCanvas, y - topCanvas));
                 Arrow arrow = new Arrow
                 {
                     StartPoint = newStart,
@@ -1888,7 +1952,7 @@ namespace CopyAndPasteInCanvas
             {
             }
         }
-        public void MovePointArrow(double x, double y, int id)
+        public void MovePointArrow(double x, double y, int id,int position)
         {
             x -= 140;
             y -= 100;
@@ -1907,7 +1971,11 @@ namespace CopyAndPasteInCanvas
                 int typepoint2 = a1.TypePoint2;
                 List<Point> pList = a1.ListPoint;
                 //pList[pList.Count - 1] = new Point(x - leftCanvas, y - topCanvas);
-                pList[pList.Count - 1] = new Point(x - leftCanvas, y - topCanvas);
+                if (position == -1 || position == -2)
+                    pList[pList.Count - 1] = new Point(x - leftCanvas, y - topCanvas);
+                else
+                    pList[position] = new Point(x - leftCanvas, y - topCanvas);
+
                 Arrow arrow = new Arrow
                 {
                     StartPoint = newStart,
@@ -2013,7 +2081,36 @@ namespace CopyAndPasteInCanvas
                 encoder.Save(outStream);
             }
         }
-
+        //hàm bổ sung cho mũi tên : tính khảong cách đến mũi tên có nhiều đường gấp khúc
+        public void CalcAddPoint(Point p, Arrow a)
+        {
+            if (DistanceFromPointToPoint(p, a, 3, -1, 0) < 5 && DistanceFromPointToPoint(p, a, 1, -1, 0) > 0 && !isDrawPointArrow)
+                positionBreakPoint = 0;
+            else if (DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count - 1, -1) < 5 && DistanceFromPointToPoint(p, a, 3, a.ListPoint.Count - 1, -1) > 0 && !isDrawPointArrow)
+                positionBreakPoint = -1;
+            for (int j = 0; j < a.ListPoint.Count - 1; j++)
+            {
+                if (DistanceFromPointToPoint(p, a, 3, j, j + 1) < 5 && DistanceFromPointToPoint(p, a, 1, j, j + 1) > 0 && !isDrawPointArrow)
+                {
+                    positionBreakPoint = j + 1;
+                    break;
+                }
+            }
+        }
+        public bool CalcMoveArrow(Point p, Arrow a)
+        {
+            if (DistanceFromPointToLine(p, a, -1, 0) < 5 && DistanceFromPointToLine(p, a, -1, 0) > 0 && !isDrawPointArrow)
+                return true;
+            else if (DistanceFromPointToLine(p, a, a.ListPoint.Count - 1, -1) < 5 && DistanceFromPointToLine(p, a, a.ListPoint.Count - 1, -1) > 0 && !isDrawPointArrow)
+                return true;
+            for (int j = 0; j < a.ListPoint.Count - 1; j++)
+            {
+                if (DistanceFromPointToLine(p, a,j, j + 1) < 5 && DistanceFromPointToLine(p, a,j, j + 1) > 0 && !isDrawPointArrow)
+                    return true;
+            }
+            return false;
+        }
+        
     }
 
 }
