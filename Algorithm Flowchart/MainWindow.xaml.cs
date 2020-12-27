@@ -41,6 +41,7 @@ namespace CopyAndPasteInCanvas
         public List<Shape> rectList;
         public List<ShapeInfo> InfoList;
         public List<int> typeOfShape;
+        public List<int> isDeleted;
         public List<TextBox> textBoxes;
         public List<TextBox> onlyTextBoxes;
         public Point startPoint;
@@ -81,6 +82,7 @@ namespace CopyAndPasteInCanvas
             onlyTextBoxes = new List<TextBox>();
             textBoxes = new List<TextBox>();
             typeOfShape = new List<int>();  // 1:Rectangle,  2:Circle, 3:Parallelogram, 4:...
+            isDeleted = new List<int>();
             adornerList = new List<Adorner>();
             shapeId = -1;
             textBoxId = -1;
@@ -169,16 +171,15 @@ namespace CopyAndPasteInCanvas
                     }
                     break;
                 case 3:
+                    //Rect list
                     UpdateInfo(InfoList, rectList);
-                    FileStream fs = File.Open("SaveCanvas.xaml", FileMode.Create);
-                    XamlWriter.Save(Canvas, fs);
-                    fs.Close();
                     string jsonStateOfShape = JsonConvert.SerializeObject(InfoList);
                     using (FileStream stream = new FileStream("Info.json", FileMode.Create))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
                         writer.Write(jsonStateOfShape);
                     }
+                    //TofShape list
                     jsonStateOfShape = JsonConvert.SerializeObject(typeOfShape);
                     JsonConvert.SerializeObject(typeOfShape);
                     using (FileStream stream = new FileStream("Type.json", FileMode.Create))
@@ -186,7 +187,14 @@ namespace CopyAndPasteInCanvas
                     {
                         writer.Write(jsonStateOfShape);
                     }
-
+                    //Deleted list
+                    jsonStateOfShape = JsonConvert.SerializeObject(isDeleted);
+                    JsonConvert.SerializeObject(isDeleted);
+                    using (FileStream stream = new FileStream("Deleted.json", FileMode.Create))
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        writer.Write(jsonStateOfShape);
+                    }
                     break;
                 case 4:
                     SaveFileDialog diag = new SaveFileDialog();
@@ -208,13 +216,42 @@ namespace CopyAndPasteInCanvas
                 MessageBox.Show($"{InfoList.Count}");
                 InfoList[i].X = Canvas.GetTop(rectList[i]);
                 InfoList[i].Y = Canvas.GetLeft(rectList[i]);
-                InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
-                InfoList[i].Height = Convert.ToInt32(rectList[i].Height);
+                if (typeOfShape[i] != 5)
+                {
+                    InfoList[i].Width = Convert.ToInt32(rectList[i].Width);
+                    InfoList[i].Height = Convert.ToInt32(rectList[i].Height);
+                }
+                //else
+                //{
+                //    dynamic arrow = rectList[i];
+
+                //   // InfoList[i].EndPoint = arrow.
+
+                //    InfoList[i].StartPoint = arrow.StartPoint.get;
+
+                //    InfoList[i].ShapeID1 = arrow.ShapeID1.get;
+
+                //    InfoList[i].ShapeID2 = arrow.ShapeID2.get;
+
+                //    InfoList[i].TypePoint1 = arrow.TypePoint1.get;
+
+                //    InfoList[i].TypePoint2 = arrow.TypePoint2.get;
+
+                //    InfoList[i].ListPoint = arrow.ListPoint.get;
+
+                //    InfoList[i].triangle = arrow.triangle.get;
+
+                //    InfoList[i].DefiningGeometry = arrow.DefiningGeometry;
+
+                //}
                 InfoList[i].StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness);
                 InfoList[i].Stretch = rectList[i].Stretch;
                 InfoList[i].Uid = rectList[i].Uid;
                 InfoList[i].Fill = rectList[i].Fill;
-                InfoList[i].text = textBoxes[i].Text;
+                if (isDeleted[i] != 1)
+                    InfoList[i].text = textBoxes[i].Text;
+                else
+                    InfoList[i].text = "Arrow";
                 InfoList[i].color = textBoxes[i].Background;
             }
         }
@@ -364,7 +401,7 @@ namespace CopyAndPasteInCanvas
             }
         }
 
-        
+
 
         private void tabCnntrol_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -444,15 +481,15 @@ namespace CopyAndPasteInCanvas
             y -= 100;
             for (int i = this.rectList.Count - 1; i >= 0; i--)
             {
-                if (typeOfShape[i] == 5 && isDrawArrow==false)
+                if (typeOfShape[i] == 5 && isDrawArrow == false)
                 {
                     /*NOTE
                         1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
                                                 mũi tên (type =2) */
                     dynamic a = rectList[i];
-                    Point p = new Point(x/zoom, y/zoom);                    
+                    Point p = new Point(x / zoom, y / zoom);
                     //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
-                    if(a.ListPoint.Count > 0)
+                    if (a.ListPoint.Count > 0)
                     {
                         CalcAddPoint(p, a);
                         if (positionBreakPoint >= -1)
@@ -465,7 +502,7 @@ namespace CopyAndPasteInCanvas
                             }
                             return rectList[i].Uid;
                         }
-                        else if(CalcMoveArrow(p,a) ==true && !isDrawPointArrow)
+                        else if (CalcMoveArrow(p, a) == true && !isDrawPointArrow)
                         {
                             move = true;
                             rectList[i].Stroke = Brushes.Red;
@@ -505,7 +542,7 @@ namespace CopyAndPasteInCanvas
                         {
                             resize = true;
                             this.Cursor = Cursors.ScrollE;
-                            pointArrow = 2;                            
+                            pointArrow = 2;
                             return rectList[i].Uid;
                         }
                         //tính khoảng cách từ con chuột -> phần dấu chấm , nếu nó ở gần thì cho phép kéo mũi tên ở dấu chấm
@@ -528,7 +565,7 @@ namespace CopyAndPasteInCanvas
                     this.Cursor = null;
                     rectList[i].Stroke = Brushes.Black;
                 }
-                else if(typeOfShape[i] != 5)
+                else if (typeOfShape[i] != 5)
                 {
                     double x0 = Canvas.GetLeft(rectList[i]) * zoom;
                     double y0 = Canvas.GetTop(rectList[i]) * zoom;
@@ -687,7 +724,7 @@ namespace CopyAndPasteInCanvas
                         return rectList[i].Uid;
                     }
                 }
-                
+
             }
             //if no tin shape cursor is normal and return -1(it mean not shape is catch)
             this.Cursor = null;
@@ -730,6 +767,8 @@ namespace CopyAndPasteInCanvas
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
+                //if (isDeleted[shapeId] == 1)
+                //    return;
             }
             //Console.WriteLine(shapeId);
             if (shapeId == -1)
@@ -746,7 +785,7 @@ namespace CopyAndPasteInCanvas
                 bool succes = Int32.TryParse(s, out textBoxId);
             }
             //when mouse button is release , stop this function
-            if (e.LeftButton == MouseButtonState.Released || (shapeId < 0 && textBoxId <0))
+            if (e.LeftButton == MouseButtonState.Released || (shapeId < 0 && textBoxId < 0))
             {
                 shapeId = -1;
                 textBoxId = -1;
@@ -761,17 +800,17 @@ namespace CopyAndPasteInCanvas
                 isResizeArrow = false;
                 positionBreakPoint = -2;
                 //if (isDrawPointArrow)
-                    isDrawPointArrow = false;
+                isDrawPointArrow = false;
                 delta = direction = 0;
                 return;
             }
-            
+
             //Console.WriteLine($"shape id = {shapeId}");
             //Console.WriteLine($"shapeid ={shapeId}");
             //action when moving shape  
-            if(isDrawPointArrow)
+            if (isDrawPointArrow)
             {
-                MovePointArrow(e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom, shapeId,positionBreakPoint);
+                MovePointArrow(e.GetPosition(this).X / zoom, e.GetPosition(this).Y / zoom, shapeId, positionBreakPoint);
             }
             else if (isDrawArrow && textBoxId == -1)
             {
@@ -784,7 +823,7 @@ namespace CopyAndPasteInCanvas
                     //Console.WriteLine($"arrow AT SHAPE ID {temp}");
                     //Console.WriteLine($"TYPE POINT {typePoint2}");
                     Point p = GetPositionOf4Point(typePoint2, temp);
-                    ResizeArrow(2, p.X + 140, p.Y + 100, id, temp,typePoint2);
+                    ResizeArrow(2, p.X + 140, p.Y + 100, id, temp, typePoint2);
                     //ResizeArrow(2, Canvas.GetLeft(rectList[temp]) + 140, Canvas.GetTop(rectList[temp]) + 100 + rectList[temp].Width / 2, id, temp);
                     if (!bindingArrowShape[temp].Contains(id))
                         bindingArrowShape[temp].Add(id);
@@ -792,7 +831,7 @@ namespace CopyAndPasteInCanvas
                     //typePoint = 0; ;
                     //return;
                 }
-                return;                
+                return;
             }
             else if (move)
             {
@@ -829,7 +868,7 @@ namespace CopyAndPasteInCanvas
                                 {
                                     //Console.WriteLine($"THIS IS AT MOVE SHAPE : i ={i}");
                                     dynamic temp = rectList[bindingArrowShape[shapeId][i]];
-                                   // Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
+                                    // Console.WriteLine($"ShapeID1 = {temp.TypePoint1}\n SHAPEID2 = {temp.TypePoint2}");
                                     if (temp.ShapeID1 == shapeId)
                                     {
                                         Point p = GetPositionOf4Point(temp.TypePoint1, shapeId);
@@ -858,30 +897,30 @@ namespace CopyAndPasteInCanvas
             //action when resize shape
             else if (resize)
             {
-                if(typeOfShape[shapeId]==5)
+                if (typeOfShape[shapeId] == 5)
                 {
                     isResizeArrow = true;
-                    dynamic a = rectList[shapeId];                    
-                    ResizeArrow(pointArrow, e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom, shapeId);
+                    dynamic a = rectList[shapeId];
+                    ResizeArrow(pointArrow, e.GetPosition(this).X / zoom, e.GetPosition(this).Y / zoom, shapeId);
                     //Console.WriteLine($"x & y=  {e.GetPosition(this).X} {e.GetPosition(this).Y}");
-                    int temp = Int32.Parse(IsContain(e.GetPosition(this).X/zoom, e.GetPosition(this).Y/zoom));
+                    int temp = Int32.Parse(IsContain(e.GetPosition(this).X / zoom, e.GetPosition(this).Y / zoom));
                     if (temp != -1 && typeOfShape[temp] != 5)
                     {
                         //Console.WriteLine($"arrow AT SHAPE ID {temp}");
                         Point p = GetPositionOf4Point(typePoint2, temp);
-                        ResizeArrow(2, (p.X + 140)/zoom, (p.Y + 100)/zoom, shapeId, temp, typePoint2);
+                        ResizeArrow(2, (p.X + 140) / zoom, (p.Y + 100) / zoom, shapeId, temp, typePoint2);
                         if (!bindingArrowShape[temp].Contains(shapeId))
                             bindingArrowShape[temp].Add(shapeId);
-                        resize=false;
+                        resize = false;
                         return;
                     }
                     return;
                 }
                 // If shape is rectangle or circle
                 // Get current pos x
-                double x = (e.GetPosition(this).X/zoom   - 140);
+                double x = (e.GetPosition(this).X / zoom - 140);
                 // Get currennt pos y
-                double y = (e.GetPosition(this).Y/zoom  - 100);
+                double y = (e.GetPosition(this).Y / zoom - 100);
                 double x0 = Canvas.GetLeft(rectList[shapeId]);
                 double y0 = Canvas.GetTop(rectList[shapeId]);
                 // Get the bottom pos x1,y1
@@ -897,7 +936,7 @@ namespace CopyAndPasteInCanvas
                         // Case handle vertical alignment for shapes
                         case 1:
                             Canvas.SetTop(rectList[shapeId], y * zoom);
-                            rectList[shapeId].Height = (y1 - Canvas.GetTop(rectList[shapeId]))*zoom;
+                            rectList[shapeId].Height = (y1 - Canvas.GetTop(rectList[shapeId])) * zoom;
                             break;
                         case 3:
                             rectList[shapeId].Height += deltaDistanceY * zoom;
@@ -940,15 +979,15 @@ namespace CopyAndPasteInCanvas
                             rectList[shapeId].Width += deltaDistanceX * zoom;
                             break;
                     }
-                    if(typeOfShape[shapeId]!=5)
+                    if (typeOfShape[shapeId] != 5)
                     {
                         Canvas.SetLeft(textBoxes[shapeId], x0 + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
                         Canvas.SetTop(textBoxes[shapeId], y0 + (rectList[shapeId].Height - textBoxes[shapeId].MinHeight) / 2);
                     }
-                   
+
                     this.InvalidateVisual();
                 }
-                catch (Exception exception){}
+                catch (Exception exception) { }
             }
         }
 
@@ -992,17 +1031,19 @@ namespace CopyAndPasteInCanvas
                 StrokeThickness = 1,
                 Uid = rectList.Count.ToString()
             };
+            int i = 0;
+            isDeleted.Add(i);
             ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
             rectList.Add(rect);
-            List<int> temp= new List<int>() { -1 };
+            List<int> temp = new List<int>() { -1 };
             bindingArrowShape.Add(temp);
             // Add type of shape of the rectangle
             typeOfShape.Add(1);
             Canvas.SetLeft(rect, 100);
             Canvas.SetTop(rect, 10);
             Canvas.Children.Add(rectList[rectList.Count - 1]);
-           // Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
+            // Console.WriteLine("Coor of shape " + Canvas.GetLeft(rect) + " " + Canvas.GetTop(rect));
             //add adorner for shape     
             myAdornerLayer = AdornerLayer.GetAdornerLayer(rect);
             adornerList.Add(new SimpleCircleAdorner(rect));
@@ -1018,7 +1059,6 @@ namespace CopyAndPasteInCanvas
             this.InvalidateVisual();
         }
 
-
         private void Button_Circle_Click(object sender, RoutedEventArgs e)
         {
             Ellipse ellipse = new Ellipse
@@ -1032,6 +1072,8 @@ namespace CopyAndPasteInCanvas
             };
             ShapeInfo info = new ShapeInfo();
             InfoList.Add(info);
+            int i = 0;
+            isDeleted.Add(i);
             rectList.Add(ellipse);
             List<int> temp = new List<int>() { -1 };
             bindingArrowShape.Add(temp);
@@ -1069,6 +1111,8 @@ namespace CopyAndPasteInCanvas
             info.Points = myPointCollection;
             info.havePoints = true;
             InfoList.Add(info);
+            int i = 0;
+            isDeleted.Add(i);
             rectList.Add(polygon);
             List<int> temp = new List<int>() { -1 };
             bindingArrowShape.Add(temp);
@@ -1105,6 +1149,8 @@ namespace CopyAndPasteInCanvas
             info.Points = myPointCollection;
             info.havePoints = true;
             InfoList.Add(info);
+            int i = 0;
+            isDeleted.Add(i);
             rectList.Add(polygon);
             List<int> temp = new List<int>() { -1 };
             bindingArrowShape.Add(temp);
@@ -1167,29 +1213,28 @@ namespace CopyAndPasteInCanvas
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
                 textBoxes[shapeId].Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
             }
-            if(isDrawArrow)
+            if (isDrawArrow)
             {
-                double x0=-1000, y0=-1000;
-                Point p=GetPositionOf4Point(typePoint1, shapeId);
+                double x0 = -1000, y0 = -1000;
+                Point p = GetPositionOf4Point(typePoint1, shapeId);
                 x0 = p.X;
-                y0 = p.Y;  
-                DrawArrow(x0,y0, shapeId,typePoint1);
-                if (!bindingArrowShape[shapeId].Contains(rectList.Count-1))
+                y0 = p.Y;
+                DrawArrow(x0, y0, shapeId, typePoint1);
+                if (!bindingArrowShape[shapeId].Contains(rectList.Count - 1))
                     bindingArrowShape[shapeId].Add(rectList.Count - 1);
             }
-            if(isDrawPointArrow)
+            if (isDrawPointArrow)
             {
                 dynamic a = rectList[shapeId];
-                AddPointArrow(200, 200, shapeId,positionBreakPoint);
-            }    
+                AddPointArrow(200, 200, shapeId, positionBreakPoint);
+            }
             if (!showAdorner)
             {
                 showAdorner = true;
                 myAdornerLayer.Add(adornerList[shapeId]);
             }
-            
+
         }
-       
 
         private void buttonClear1_Click(object sender, RoutedEventArgs e)
         {
@@ -1203,13 +1248,15 @@ namespace CopyAndPasteInCanvas
         }
         public void clearAllAdorner()
         {
-            for(int i=0; i < rectList.Count; i++)
+            for (int i = 0; i < rectList.Count; i++)
             {
-                if(myAdornerLayer.GetAdorners(rectList[i])!= null)
+                if (myAdornerLayer == null)
+                    return;
+                if (myAdornerLayer.GetAdorners(rectList[i]) != null)
                     myAdornerLayer.Remove(adornerList[i]);
             }
-           /* for (int i = 0; i < adornerList.Count; i++)
-                this.myAdornerLayer.Remove(adornerList[i]);*/
+            /* for (int i = 0; i < adornerList.Count; i++)
+                 this.myAdornerLayer.Remove(adornerList[i]);*/
         }
         private void pasteCmdBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1250,6 +1297,15 @@ namespace CopyAndPasteInCanvas
         {
             //remove shape from canvas
             if (shape == null) return;
+            if (typeOfShape[Convert.ToInt32(shape.Uid)] == 5)
+            {
+                dynamic arrow = shape;
+                if (arrow.ShapeID1 != -1)
+                    bindingArrowShape[arrow.ShapeID1].Remove(Convert.ToInt32(arrow.Uid));
+                if (arrow.ShapeID2 != -1)
+                    bindingArrowShape[arrow.ShapeID2].Remove(Convert.ToInt32(arrow.Uid));
+            }
+            isDeleted[Convert.ToInt32(shape.Uid)] = 1;
             canvas.Children.Remove(shape);
             canvas.Children.Remove(textBoxes[Convert.ToInt32(shape.Uid)]);
             canvas.Children.Remove(adornerList[Convert.ToInt32(shape.Uid)]);
@@ -1278,14 +1334,14 @@ namespace CopyAndPasteInCanvas
 
             if (e.ClickCount >= 2)
             {
-               
+
                 String s = IsContain(e.GetPosition(this).X, e.GetPosition(this).Y);
                 //cause IsContain return shapeID - which is String so we have to try to parse it into int
                 bool success = Int32.TryParse(s, out shapeId);
                 String sText = IsContainTextBox(e.GetPosition(this).X, e.GetPosition(this).Y);
                 bool succesTextBox = Int32.TryParse(sText, out textBoxId);
 
-                if (shapeId > -1 && typeOfShape[shapeId]!=5)
+                if (shapeId > -1 && typeOfShape[shapeId] != 5)
                     textBoxes[shapeId].IsEnabled = true;
 
                 if (textBoxId > -1)
@@ -1302,8 +1358,8 @@ namespace CopyAndPasteInCanvas
             if (shape == null)
 
                 return;
-            
-            
+
+
         }
         private void pasteCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 
@@ -1342,6 +1398,14 @@ namespace CopyAndPasteInCanvas
 
                         rectList.Add(shape);
 
+                        List<int> temp = new List<int>() { -1 };
+
+                        bindingArrowShape.Add(temp);
+
+                        int i = 0;
+
+                        isDeleted.Add(i);
+
                         typeOfShape.Add(typeOfShape[Int32.Parse(shape.Uid) - 1]);
 
                         Canvas.SetLeft(rectList[rectList.Count - 1], left);
@@ -1379,6 +1443,7 @@ namespace CopyAndPasteInCanvas
         private void Open(object sender, RoutedEventArgs e)
         {
             string reopenedState = string.Empty;
+
             using (FileStream stream = new FileStream("Type.json", FileMode.Open))
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -1386,6 +1451,7 @@ namespace CopyAndPasteInCanvas
             }
             var type = JsonConvert.DeserializeObject<List<int>>(reopenedState);
             type.ForEach(typeOfShape.Add);
+
             using (FileStream stream = new FileStream("Info.json", FileMode.Open))
             using (StreamReader reader = new StreamReader(stream))
             {
@@ -1394,10 +1460,17 @@ namespace CopyAndPasteInCanvas
             var info = JsonConvert.DeserializeObject<List<ShapeInfo>>(reopenedState);
             InfoList = new List<ShapeInfo>();
             info.ForEach(InfoList.Add);
-
             AddShape(InfoList, rectList);
 
-           
+            using (FileStream stream = new FileStream("Deleted.json", FileMode.Open))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                reopenedState = reader.ReadToEnd();
+            }
+            var deleted = JsonConvert.DeserializeObject<List<int>>(reopenedState);
+            isDeleted = new List<int>();
+            deleted.ForEach(isDeleted.Add);
+
             reopenedState = string.Empty;
         }
 
@@ -1418,6 +1491,9 @@ namespace CopyAndPasteInCanvas
                     case 2:
                         shape = new Ellipse();
                         break;
+                    case 5:
+                        shape = new Arrow();
+                        break;
                     default:
                         shape = new Polygon()
                         {
@@ -1433,14 +1509,19 @@ namespace CopyAndPasteInCanvas
                 shape.Stretch = infoList[i].Stretch;
                 shape.Uid = rectList.Count.ToString();
                 rectList.Add(shape);
-                Canvas.SetLeft(shape, infoList[i].Y);
-                Canvas.SetTop(shape, infoList[i].X);
-                Canvas.Children.Add(rectList[rectList.Count - 1]);
+                if (isDeleted[i] != 1)
+                {
+                    Canvas.SetLeft(shape, infoList[i].Y);
+                    Canvas.SetTop(shape, infoList[i].X);
+                    Canvas.Children.Add(rectList[rectList.Count - 1]);
+                    CreateTextBoxForShapes(textBoxes, shape, infoList[i].text, infoList[i].color);
+                }
+                else
+                    CreateTextBoxForShapes(textBoxes, shape, infoList[i].text, infoList[i].color);
                 //add adorner for shape            
                 myAdornerLayer = AdornerLayer.GetAdornerLayer(shape);
                 adornerList.Add(new SimpleCircleAdorner(shape));
-                CreateTextBoxForShapes(textBoxes, shape, infoList[i].text, infoList[i].color);
-
+                
             }
         }
         private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1484,13 +1565,17 @@ namespace CopyAndPasteInCanvas
             {
                 StartPoint = new Point(x0, y0),
                 EndPoint = new Point(x1, y1),
-                Left= 400,
-                Top=200,
+                Left = 400,
+                Top = 200,
                 Stroke = Brushes.Black,
-                ListPoint=pList,
+                ListPoint = pList,
                 StrokeThickness = 2,
                 Uid = rectList.Count.ToString()
             };
+            int i = 0;
+            isDeleted.Add(i);
+            ShapeInfo info = new ShapeInfo();
+            InfoList.Add(info);
             rectList.Add(arrow);
             List<int> temp = new List<int>() { -1 };
             bindingArrowShape.Add(temp);
@@ -1501,7 +1586,7 @@ namespace CopyAndPasteInCanvas
             //add adorner for shape           
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
             dynamic a = arrow;
-            ArrowAdorner myAdorner = new ArrowAdorner(arrow);            
+            ArrowAdorner myAdorner = new ArrowAdorner(arrow);
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
@@ -1552,7 +1637,8 @@ namespace CopyAndPasteInCanvas
                 Canvas.SetLeft(textBox, 100 + (shape.Width - textBox.MinWidth) / 2);
                 Canvas.SetTop(textBox, 10 + (shape.Height - textBox.MinHeight) / 2);
             }
-            Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
+            if (text != "Arrow")
+                Canvas.Children.Add(textBoxes[textBoxes.Count - 1]);
         }
 
         private void buttonZoomin_Click(object sender, RoutedEventArgs e)
@@ -1565,13 +1651,13 @@ namespace CopyAndPasteInCanvas
 
         private void buttonZoomout_Click(object sender, RoutedEventArgs e)
         {
-            zoom -= zoomDelta; 
+            zoom -= zoomDelta;
             Canvas.RenderTransform = new ScaleTransform(zoom, zoom);
 
         }
 
 
-        public double DistanceFromPointToLine(Point p, Arrow arrow,int p1 = -1, int p2 = -1)
+        public double DistanceFromPointToLine(Point p, Arrow arrow, int p1 = -1, int p2 = -1)
         {
             Point l1 = new Point(arrow.Left + arrow.StartPoint.X, arrow.Top + arrow.StartPoint.Y);
             Point l2 = new Point(arrow.Left + arrow.EndPoint.X, arrow.Top + arrow.EndPoint.Y);
@@ -1613,20 +1699,20 @@ namespace CopyAndPasteInCanvas
             }
             return 999;
         }
-        public double DistanceFromPointToPoint(Point p, Arrow arrow, double typeOfPoint,int p1=-1, int p2=-1)
+        public double DistanceFromPointToPoint(Point p, Arrow arrow, double typeOfPoint, int p1 = -1, int p2 = -1)
         {
             Point l1 = new Point((arrow.Left + arrow.StartPoint.X), (arrow.Top + arrow.StartPoint.Y));
             Point l2 = new Point((arrow.Left + arrow.EndPoint.X), (arrow.Top + arrow.EndPoint.Y));
-            if(p1 !=-1 )
+            if (p1 != -1)
                 l1 = new Point((arrow.Left + arrow.ListPoint[p1].X), (arrow.Top + arrow.ListPoint[p1].Y));
             if (p2 != -1)
                 l2 = new Point((arrow.Left + arrow.ListPoint[p2].X), (arrow.Top + arrow.ListPoint[p2].Y));
-            if (typeOfPoint==1)
+            if (typeOfPoint == 1)
             {
                 return Math.Sqrt(Math.Pow(p.X - l1.X, 2) +
                 Math.Pow(p.Y - l1.Y, 2) * 1.0);
             }
-            else if(typeOfPoint == 2)
+            else if (typeOfPoint == 2)
             {
                 return Math.Sqrt(Math.Pow(p.X - l2.X, 2) +
                 Math.Pow(p.Y - l2.Y, 2) * 1.0);
@@ -1638,7 +1724,7 @@ namespace CopyAndPasteInCanvas
                 Math.Pow(p.Y - l3.Y, 2) * 1.0);
             }
             return 999;
-            
+
         }
 
         private void Button_TextBoxClick(object sender, RoutedEventArgs e)
@@ -1660,7 +1746,7 @@ namespace CopyAndPasteInCanvas
                 IsEnabled = true
             };
             onlyTextBoxes.Add(textBox);
-       
+
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus2;
 
@@ -1692,7 +1778,7 @@ namespace CopyAndPasteInCanvas
                 int typepoint1 = a1.TypePoint1;
                 int typepoint2 = a1.TypePoint2;
                 List<Point> pList = a1.ListPoint;
-                
+
                 //tạo 1 arrow mới với cá thông tin ở trên và thay thế vào rectList
                 Arrow arrow = new Arrow
                 {
@@ -1745,9 +1831,9 @@ namespace CopyAndPasteInCanvas
                 if (typeOfPoint == 1)
                 {
                     //Console.WriteLine($" MOUSE = {x} ; {y}");
-                   // Console.WriteLine($" Canvas = {leftCanvas} ; {topCanvas}\n");
+                    // Console.WriteLine($" Canvas = {leftCanvas} ; {topCanvas}\n");
                     //Console.WriteLine($" dx= {x}   dy={y}");
-                    double dx = 0 - (x-leftCanvas);
+                    double dx = 0 - (x - leftCanvas);
                     double dy = 0 - (y - topCanvas);
                     newEnd = new Point(a1.EndPoint.X + dx, a1.EndPoint.Y + dy);
                     leftCanvas = x;
@@ -1756,7 +1842,7 @@ namespace CopyAndPasteInCanvas
                 else
                 {
                     x -= leftCanvas;
-                    y -= topCanvas ;
+                    y -= topCanvas;
                     Console.WriteLine($" SHAPE : {leftCanvas}  {topCanvas}");
                     Console.WriteLine($" SHAPE : {x}  {y}\n");
 
@@ -1769,25 +1855,25 @@ namespace CopyAndPasteInCanvas
                     EndPoint = newEnd,
                     Left = leftCanvas,
                     Top = topCanvas,
-                    ShapeID1= shapeid1,
-                    ShapeID2= shapeid2,
-                    TypePoint1= typepoint1,
+                    ShapeID1 = shapeid1,
+                    ShapeID2 = shapeid2,
+                    TypePoint1 = typepoint1,
                     TypePoint2 = typepoint2,
-                    ListPoint=pList,
+                    ListPoint = pList,
                     Stroke = Brushes.Black,
                     StrokeThickness = 2,
                     Uid = a1.Uid
                 };
                 rectList[id] = arrow;
-                this.Canvas.Children.Add(rectList[id]);               
+                this.Canvas.Children.Add(rectList[id]);
                 Canvas.SetLeft(rectList[id], leftCanvas);
                 Canvas.SetTop(rectList[id], topCanvas);
-        }
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 //Console.WriteLine($"EXCEPTION id ={id}");
             }
-            
+
         }
         //réize nối vào shape tại phần mũi tên
         //shape: id của shape đc nối
@@ -1819,7 +1905,7 @@ namespace CopyAndPasteInCanvas
                     shapeid1 = shape;
                 else
                     shapeid2 = shape;
-                
+
                 if (typeOfPoint == 1)
                 {
 
@@ -1839,8 +1925,8 @@ namespace CopyAndPasteInCanvas
                     ShapeID1 = shapeid1,
                     ShapeID2 = shapeid2,
                     TypePoint1 = typepoint,
-                    TypePoint2= typePoint2,
-                    ListPoint=pList,
+                    TypePoint2 = typePoint2,
+                    ListPoint = pList,
                     Stroke = Brushes.Black,
                     StrokeThickness = 2,
                     Uid = a1.Uid
@@ -1863,7 +1949,7 @@ namespace CopyAndPasteInCanvas
 
         }
         //hàm vẽ mũi tên của shape
-        public void DrawArrow(double x, double y,int id, int typePoint)
+        public void DrawArrow(double x, double y, int id, int typePoint)
         {
             //Console.WriteLine(  "DRAW ARROW");
             double x0 = 0;
@@ -1877,9 +1963,9 @@ namespace CopyAndPasteInCanvas
                 EndPoint = new Point(x1, y1),
                 Left = x,
                 Top = y,
-                ShapeID1=id,
-                ListPoint= pList,
-                TypePoint1=typePoint,
+                ShapeID1 = id,
+                ListPoint = pList,
+                TypePoint1 = typePoint,
                 Stroke = Brushes.Black,
                 StrokeThickness = 2,
                 Uid = rectList.Count.ToString()
@@ -1895,7 +1981,7 @@ namespace CopyAndPasteInCanvas
             myAdornerLayer = AdornerLayer.GetAdornerLayer(arrow);
             ArrowAdorner myAdorner = new ArrowAdorner(arrow);
             dynamic a = arrow;
-           // Console.WriteLine($"LIST POINT = {a.ListPoint.Count}");
+            // Console.WriteLine($"LIST POINT = {a.ListPoint.Count}");
             myAdorner.From = a.StartPoint;
             myAdorner.To = a.EndPoint;
             adornerList.Add(myAdorner);
@@ -1924,9 +2010,9 @@ namespace CopyAndPasteInCanvas
                 int typepoint1 = a1.TypePoint1;
                 int typepoint2 = a1.TypePoint2;
                 List<Point> pList = a1.ListPoint;
-                if(position==-1 || position == -2)
+                if (position == -1 || position == -2)
                     pList.Add(new Point(x - leftCanvas, y - topCanvas));
-                else 
+                else
                     pList.Insert(position, new Point(x - leftCanvas, y - topCanvas));
                 Arrow arrow = new Arrow
                 {
@@ -1938,7 +2024,7 @@ namespace CopyAndPasteInCanvas
                     ShapeID2 = shapeid2,
                     TypePoint1 = typepoint1,
                     TypePoint2 = typepoint2,
-                    ListPoint=pList,
+                    ListPoint = pList,
                     Stroke = Brushes.Black,
                     StrokeThickness = 2,
                     Uid = a1.Uid
@@ -1952,7 +2038,7 @@ namespace CopyAndPasteInCanvas
             {
             }
         }
-        public void MovePointArrow(double x, double y, int id,int position)
+        public void MovePointArrow(double x, double y, int id, int position)
         {
             x -= 140;
             y -= 100;
@@ -2037,10 +2123,10 @@ namespace CopyAndPasteInCanvas
         public static void SaveCanvasToFile(Canvas surface, string filename)
         {
             //surface.S
-            Size size = new Size(surface.Width/4, surface.Height/4);
+            Size size = new Size(surface.Width / 4, surface.Height / 4);
             //Size size = new Size(100, 100);
             surface.Measure(new Size((int)surface.Width, (int)surface.Height));
-            surface.Arrange(new Rect(new Size((int)surface.Width/10, (int)surface.Height/10)));
+            surface.Arrange(new Rect(new Size((int)surface.Width / 10, (int)surface.Height / 10)));
             // Create a render bitmap and push the surface to it
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
@@ -2049,7 +2135,7 @@ namespace CopyAndPasteInCanvas
                 96d,
                 96d,
                 PixelFormats.Pbgra32);
-                //PixelFormats.Default);
+            //PixelFormats.Default);
 
 
             //// Image source to set to bitmap
@@ -2064,7 +2150,7 @@ namespace CopyAndPasteInCanvas
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
             {
                 VisualBrush visualBrush = new VisualBrush(surface);
-                drawingContext.DrawRectangle(visualBrush,null,
+                drawingContext.DrawRectangle(visualBrush, null,
                   new Rect(new System.Windows.Point(), new Size(size.Width, size.Height)));
             }
             renderBitmap.Render(surface);
@@ -2105,12 +2191,12 @@ namespace CopyAndPasteInCanvas
                 return true;
             for (int j = 0; j < a.ListPoint.Count - 1; j++)
             {
-                if (DistanceFromPointToLine(p, a,j, j + 1) < 5 && DistanceFromPointToLine(p, a,j, j + 1) > 0 && !isDrawPointArrow)
+                if (DistanceFromPointToLine(p, a, j, j + 1) < 5 && DistanceFromPointToLine(p, a, j, j + 1) > 0 && !isDrawPointArrow)
                     return true;
             }
             return false;
         }
-        
+
     }
 
 }
