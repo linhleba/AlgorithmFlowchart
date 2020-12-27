@@ -57,9 +57,5 @@ namespace Algorithm_Flowchart
         public int TypePoint2;
 
         public List<Point> ListPoint;
-
-        public PathGeometry triangle;
-
-        public Geometry DefiningGeometry;
     }
 }
