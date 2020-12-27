@@ -144,26 +144,29 @@ namespace CopyAndPasteInCanvas
 
         private void KeyDown_Event(object sender, KeyEventArgs e)
         {
-            if (preTextBoxId != -1 && onlyTextBoxes[preTextBoxId].IsEnabled == false)
+            if (preTextBoxId != -1)
             {
-                if (e.Key == Key.I)
+                if (onlyTextBoxes[preTextBoxId].IsEnabled == false)
                 {
-                    onlyTextBoxes[preTextBoxId].FontSize++;
-                }
-                if (e.Key == Key.O)
-                {
-
-                    onlyTextBoxes[preTextBoxId].FontSize--;
-                }
-                if (e.Key == Key.B)
-                {
-                    if (onlyTextBoxes[preTextBoxId].FontWeight == FontWeights.Bold)
+                    if (e.Key == Key.I)
                     {
-                        onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Normal;
+                        onlyTextBoxes[preTextBoxId].FontSize++;
                     }
-                    else
+                    if (e.Key == Key.O)
                     {
-                        onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Bold;
+
+                        onlyTextBoxes[preTextBoxId].FontSize--;
+                    }
+                    if (e.Key == Key.B)
+                    {
+                        if (onlyTextBoxes[preTextBoxId].FontWeight == FontWeights.Bold)
+                        {
+                            onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Normal;
+                        }
+                        else
+                        {
+                            onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Bold;
+                        }
                     }
                 }
             }
@@ -229,7 +232,7 @@ namespace CopyAndPasteInCanvas
                     if (daag.ShowDialog() == true)
                     {
                         UpdateInfo(Data.InfoList, rectList);
-                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList);
+                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList,Data);
                         MessageBox.Show("Saved successfully!");
                     }
                     break;
@@ -2208,7 +2211,9 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo> Infolist)
+
+        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist, AFData Data)
+
         {
 
             double right = -100000;
@@ -2217,6 +2222,24 @@ namespace CopyAndPasteInCanvas
             double left = 100000;
             for (int i = 0; i < Infolist.Count; i++)
             {
+                if (Data.typeOfShape[i] == 5)
+                {
+                    dynamic a = Infolist[i];
+                    if (a.ListPoint.Count > 0)
+                    {
+                        for (int j = 0; j < a.ListPoint.Count; j++)
+                        {
+                            if (a.ListPoint[j].X + a.Left < left)
+                                left = a.ListPoint[j].X+a.Left ;
+                            if (a.ListPoint[j].X + a.Left > right)
+                                right = a.ListPoint[j].X + a.Left;
+                            if (a.ListPoint[j].Y + a.Top < top)
+                                top = a.ListPoint[j].Y + a.Top;
+                            if (a.ListPoint[j].Y + a.Top > bottom)
+                                bottom = a.ListPoint[j].Y + a.Top;
+                        }
+                    }
+                }
                 if (Infolist[i].X + Infolist[i].Width > right)
                     right = Infolist[i].X + Infolist[i].Width;
                 if (Infolist[i].Y + Infolist[i].Height > bottom)
