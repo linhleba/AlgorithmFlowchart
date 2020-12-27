@@ -829,7 +829,7 @@ namespace CopyAndPasteInCanvas
 
                 if (textBoxId != -1)
                 {
-                    if (shapeId != -1)
+                    //if (shapeId == -1)
                     {
                         double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].ActualWidth / zoom) / 2) - 140 / zoom;
                         double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].ActualHeight / zoom) / 2) - 100 / zoom;
@@ -1202,6 +1202,25 @@ namespace CopyAndPasteInCanvas
             {
                 rectList[shapeId].Fill = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
                 textBoxes[shapeId].Background = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}");
+
+                if (textBoxId != -1)
+                {
+                    Style st = new Style();
+                    Trigger tg = new Trigger()
+                    {
+                        Property = Control.IsEnabledProperty,
+                        Value = false
+                    };
+                    st.Setters.Add(new Setter()
+                    {
+                        Property = ForegroundProperty,
+                        Value = (Brush)converter.ConvertFromString($"{colorPicker.SelectedColor.ToString()}")
+                    });
+
+                    st.Triggers.Add(tg);
+
+                    onlyTextBoxes[textBoxId].Style = st;
+                }
             }
             if (isDrawArrow)
             {
@@ -1732,6 +1751,19 @@ namespace CopyAndPasteInCanvas
 
         private void Button_TextBoxClick(object sender, RoutedEventArgs e)
         {
+            Style st = new Style();
+            Trigger tg = new Trigger()
+            {
+                Property = Control.IsEnabledProperty,
+                Value = false
+            };
+            st.Setters.Add(new Setter()
+            {
+                Property = ForegroundProperty,
+                Value = System.Windows.Media.Brushes.Green
+            }); 
+
+            st.Triggers.Add(tg);
             TextBox textBox = new TextBox
             {
                 MinWidth = 80,
@@ -1746,12 +1778,12 @@ namespace CopyAndPasteInCanvas
                 Background = Brushes.White,
                 BorderThickness = new Thickness(0, 0, 0, 0),
                 Uid = onlyTextBoxes.Count.ToString(),
-                IsEnabled = true
+                IsEnabled = true,
             };
-            onlyTextBoxes.Add(textBox);
-
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus2;
+            textBox.Style = st;
+            onlyTextBoxes.Add(textBox);
 
             Canvas.SetLeft(textBox, 150);
             Canvas.SetTop(textBox, 150);
@@ -2130,10 +2162,12 @@ namespace CopyAndPasteInCanvas
         public static void SaveCanvasToFile(Canvas surface, string filename)
         {
             //surface.S
-            Size size = new Size(surface.Width / 4, surface.Height / 4);
+
+            Size size = new Size(surface.Width, surface.Height);
+           
             //Size size = new Size(100, 100);
-            surface.Measure(new Size((int)surface.Width, (int)surface.Height));
-            surface.Arrange(new Rect(new Size((int)surface.Width / 10, (int)surface.Height / 10)));
+           // surface.Measure(new Size((int)surface.Width, (int)surface.Height));
+           // surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             // Create a render bitmap and push the surface to it
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
@@ -2141,8 +2175,8 @@ namespace CopyAndPasteInCanvas
                 (int)size.Height,
                 96d,
                 96d,
-                PixelFormats.Pbgra32);
-            //PixelFormats.Default);
+                PixelFormats.Pbgra32) ;
+                //PixelFormats.Default);
 
 
             //// Image source to set to bitmap
@@ -2151,6 +2185,7 @@ namespace CopyAndPasteInCanvas
             img.Source = bitmap;
             img.Measure(size);
             img.Arrange(new Rect(size));
+
 
             // drawing virtual
             DrawingVisual drawingVisual = new DrawingVisual();
