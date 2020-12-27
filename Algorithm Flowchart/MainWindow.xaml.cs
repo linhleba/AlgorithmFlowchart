@@ -195,7 +195,7 @@ namespace CopyAndPasteInCanvas
                     if (daag.ShowDialog() == true)
                     {
                         UpdateInfo(Data.InfoList, rectList);
-                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList);
+                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList,Data);
                         MessageBox.Show("Saved successfully!");
                     }
                     break;
@@ -2162,7 +2162,7 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist)
+        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist, AFData Data)
         {
 
             double right = -100000;
@@ -2171,6 +2171,24 @@ namespace CopyAndPasteInCanvas
             double left = 100000;
             for (int i = 0; i < Infolist.Count; i++)
             {
+                if (Data.typeOfShape[i] == 5)
+                {
+                    dynamic a = Infolist[i];
+                    if (a.ListPoint.Count > 0)
+                    {
+                        for (int j = 0; j < a.ListPoint.Count; j++)
+                        {
+                            if (a.ListPoint[j].X < left)
+                                left = a.ListPoint[j].X;
+                            if (a.ListPoint[j].X > right)
+                                right = a.ListPoint[j].X;
+                            if (a.ListPoint[j].Y < top)
+                                top = a.ListPoint[j].Y;
+                            if (a.ListPoint[j].Y > bottom)
+                                bottom = a.ListPoint[j].Y;
+                        }
+                    }
+                }
                 if (Infolist[i].X + Infolist[i].Width > right)
                     right = Infolist[i].X + Infolist[i].Width;
                 if (Infolist[i].Y + Infolist[i].Height > bottom)
