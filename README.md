@@ -7,23 +7,27 @@ After Version2 , this is our project's UI
 - The project is about algorithm flowchart to make design easily and conveniently for users. 
 - The project is written in C# on Windows Forms
  
-## Members
+## Authors
 Members included:
 1. Le Ba Linh - 18520299
 2. Nguyen Anh Hao - 18520716
 3. Le Thi Hong Dieu - 18520265
 
 ## Features
-Features are expected to develop such as:
-Menu 
-+ File: New,Open, Save, Save as, Export
++ Be able to draw a basic flowchart
+Menu included:
++ File: New, Open, Save, Save as, Export
 + Edit: Undo, Redo, Cut, Copy, Paste, Delete, Clear
 + View: Zoom in, Zoom out, Full Screen
 + Insert: Shape, Arrows, Text, Pencil 
 + Tools: Style, Color Fill,...
 + Help: Tutorials, Feedback, About us...
 
-
+## How to install
++ Run Install_Flowchart
+- Choose the installation path
+- Click "Next" for confirming
+- Click "Close". Now you can use Algorithm Flowchart Application.
 
 ## Acknowledgments
 Thank Mr. Nguyen Tan Toan for accompanying and guiding the group to implement the project.
