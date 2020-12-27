@@ -196,7 +196,7 @@ namespace CopyAndPasteInCanvas
                     {
                         UpdateInfo(Data.InfoList, rectList);
                         SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList);
-                        //MessageBox.Show("Saved successfully!");
+                        MessageBox.Show("Saved successfully!");
                     }
                     break;
 
@@ -2180,50 +2180,28 @@ namespace CopyAndPasteInCanvas
                 if (Infolist[i].Y < top)
                     top = Infolist[i].Y;
             }
+            //Size size = new Size(right, bottom);
             Rect bounds = VisualTreeHelper.GetDescendantBounds(surface);
 
             //var scale = dpi / 96.0;
             var width = (bounds.Width + bounds.X);// * scale;
             var height = (bounds.Height + bounds.Y);// * scale;
 
-
-            //right = right - left;
-            //bottom = bottom - top ;
-
-
  
             surface.Background = Brushes.White;
-            // surface.Measure(new Size((int)surface.Width, (int)surface.Height));
-            // surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
             // Create a render bitmap and push the surface to it
 
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
-                (int)(right - left + 20*(1 + right/ left / 2)),
-                (int)(bottom - top + 10 * (1 + bottom / top / 2)),
-                //(int)(right),
-                //(int)(bottom),
+                //(int)(right - left + 20*(1 + right/ left / 2)),
+                //(int)(bottom - top + 10 * (1 + bottom / top / 2)),
+                (int)(right),
+                (int)(bottom),
                 96d,
                 96d,
 
                 PixelFormats.Pbgra32) ;
                 //PixelFormats.Default);
-
-
-            //// Image source to set to bitmap
-            BitmapImage bitmap = new BitmapImage(new Uri("page.jpg", UriKind.Relative));
-           
-            Image img = new Image() 
-            { 
-                Width = size.Width, 
-                Height = size.Height,
-                Stretch = Stretch.Uniform,
-                StretchDirection = StretchDirection.Both, 
-                
-            };
-            img.Source = bitmap;
-            img.Measure(size);
-            img.Arrange(new Rect(size));
 
 
             // drawing virtual
@@ -2232,7 +2210,7 @@ namespace CopyAndPasteInCanvas
 
             {
                 VisualBrush vb = new VisualBrush(surface);
-                ctx.DrawRectangle(vb, null,
+                drawingContext.DrawRectangle(vb, null,
                     new Rect(new Point(-left, -top), new Point(width, height)));
             }
 
