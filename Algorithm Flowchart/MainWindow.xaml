@@ -423,7 +423,7 @@
                     </Grid>
                 </Border>
             </StackPanel>
-            <ScrollViewer Grid.Column="1"
+            <ScrollViewer Grid.Column="1" x:Name="scroll"
                 HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto" >
 
                 <Canvas x:Name="Canvas" Height="1000" Width="3000"
