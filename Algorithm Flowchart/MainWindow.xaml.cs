@@ -47,7 +47,7 @@ namespace CopyAndPasteInCanvas
         public int shapeId;
         public int textBoxId;
         public int preTextBoxId = -1;
-        public int preShapeId;
+        public int preShapeId = -1;
         public bool move = false;
         public bool resize = false;
         public bool isAbleMove = false;
@@ -166,6 +166,32 @@ namespace CopyAndPasteInCanvas
                         else
                         {
                             onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Bold;
+                        }
+                    }
+                }
+            }
+            else if (preShapeId != -1)
+            {
+                if (textBoxes[preShapeId].IsEnabled == false)
+                {
+                    if (e.Key == Key.I)
+                    {
+                        textBoxes[preShapeId].FontSize++;
+                    }
+                    if (e.Key == Key.O)
+                    {
+
+                        textBoxes[preShapeId].FontSize--;
+                    }
+                    if (e.Key == Key.B)
+                    {
+                        if (textBoxes[preShapeId].FontWeight == FontWeights.Bold)
+                        {
+                            textBoxes[preShapeId].FontWeight = FontWeights.Normal;
+                        }
+                        else
+                        {
+                            textBoxes[preShapeId].FontWeight = FontWeights.Bold;
                         }
                     }
                 }
@@ -804,10 +830,12 @@ namespace CopyAndPasteInCanvas
             //this.Cursor = Cursors.SizeNWSE;
             if (shapeId != -1)
             {
+                preTextBoxId = -1;
                 preShapeId = shapeId;
             }
             if (textBoxId != -1)
             {
+                preShapeId = -1;
                 preTextBoxId = textBoxId;
             }
             //Console.WriteLine(shapeId);
@@ -1055,10 +1083,12 @@ namespace CopyAndPasteInCanvas
 
             if (shapeId != -1)
             {
+                preTextBoxId = -1;
                 preShapeId = shapeId;
             }
             if (textBoxId != -1)
             {
+                preShapeId = -1;
                 preTextBoxId = textBoxId;
             }
             if (shapeId >= 0)
@@ -1234,10 +1264,12 @@ namespace CopyAndPasteInCanvas
             Console.WriteLine();*/
             if (shapeId != -1)
             {
+                preTextBoxId = -1;
                 preShapeId = shapeId;
             }
             if (textBoxId != -1)
             {
+                preShapeId = -1;
                 preTextBoxId = textBoxId;
             }
             clearAllAdorner();
