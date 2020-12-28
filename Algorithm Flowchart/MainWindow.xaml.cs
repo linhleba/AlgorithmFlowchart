@@ -46,6 +46,7 @@ namespace CopyAndPasteInCanvas
         public Point startPoint;
         public int shapeId;
         public int textBoxId;
+        public int preTextBoxId = -1;
         public int preShapeId;
         public bool move = false;
         public bool resize = false;
@@ -135,7 +136,43 @@ namespace CopyAndPasteInCanvas
             copyCmdBinding.CanExecute += copyCmdBinding_CanExecute;
 
             this.CommandBindings.Add(copyCmdBinding);
+
+            // Update size of textbox
+            this.KeyDown += KeyDown_Event;
+
         }
+
+        private void KeyDown_Event(object sender, KeyEventArgs e)
+        {
+            if (preTextBoxId != -1)
+            {
+                if (onlyTextBoxes[preTextBoxId].IsEnabled == false)
+                {
+                    if (e.Key == Key.I)
+                    {
+                        onlyTextBoxes[preTextBoxId].FontSize++;
+                    }
+                    if (e.Key == Key.O)
+                    {
+
+                        onlyTextBoxes[preTextBoxId].FontSize--;
+                    }
+                    if (e.Key == Key.B)
+                    {
+                        if (onlyTextBoxes[preTextBoxId].FontWeight == FontWeights.Bold)
+                        {
+                            onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Normal;
+                        }
+                        else
+                        {
+                            onlyTextBoxes[preTextBoxId].FontWeight = FontWeights.Bold;
+                        }
+                    }
+                }
+            }
+        }
+
+
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
@@ -170,8 +207,8 @@ namespace CopyAndPasteInCanvas
                     }
                     for (int i = 0; i < textBoxes.Count; i++)
                     {
-                        Canvas.SetLeft(textBoxes[i], Data.InfoList[i].Y + (Data.InfoList[i].Width - textBoxes[i].MinWidth) / 2);
-                        Canvas.SetTop(textBoxes[i], Data.InfoList[i].X + (Data.InfoList[i].Height - textBoxes[i].MinHeight) / 2);
+                        Canvas.SetLeft(textBoxes[i], Data.InfoList[i].X + (Data.InfoList[i].Width - textBoxes[i].MinWidth) / 2);
+                        Canvas.SetTop(textBoxes[i], Data.InfoList[i].Y + (Data.InfoList[i].Height - textBoxes[i].MinHeight) / 2);
                     }
                     break;
                 case 3:
@@ -195,8 +232,8 @@ namespace CopyAndPasteInCanvas
                     if (daag.ShowDialog() == true)
                     {
                         UpdateInfo(Data.InfoList, rectList);
-                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList);
-                        //MessageBox.Show("Saved successfully!");
+                        SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList,Data);
+                        MessageBox.Show("Saved successfully!");
                     }
                     break;
 
@@ -464,14 +501,14 @@ namespace CopyAndPasteInCanvas
         protected override void OnRender(System.Windows.Media.DrawingContext e)
         {
             base.OnRender(e);
-            //AddShape(Data.InfoList, rectList);
-            //this.Canvas.Children.Clear();
-            //Console.WriteLine("aaaa\n");
+
         }
         public String IsContain(double x, double y)
         {
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             for (int i = this.rectList.Count - 1; i >= 0; i--)
             {
                 if (Data.typeOfShape[i] == 5 && isDrawArrow == false)
@@ -480,7 +517,9 @@ namespace CopyAndPasteInCanvas
                         1 mũi tên gồm 2 điểm : dấu chấm (type point =1)
                                                 mũi tên (type =2) */
                     dynamic a = rectList[i];
-                    Point p = new Point(x / zoom, y / zoom);
+                    x -= scroll.HorizontalOffset / zoom;
+                    y -= scroll.VerticalOffset / zoom;
+                    Point p = new Point((x+ scroll.HorizontalOffset) / zoom,( y+ scroll.VerticalOffset) / zoom);
                     //tính khoảng cách từ con chuột -> trung điểm arrow , nếu nó ở gần trugn điểm thì cho phép bẻ mũi tên thành 2 phần 
                     if (a.ListPoint.Count > 0)
                     {
@@ -733,6 +772,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             for (int i = this.onlyTextBoxes.Count - 1; i >= 0; i--)
             {
                 double x0 = Canvas.GetLeft(onlyTextBoxes[i]) * zoom;
@@ -756,10 +797,18 @@ namespace CopyAndPasteInCanvas
         // Move and resize shape func
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            Console.WriteLine($"MOUSE POS {e.GetPosition(this).X}   {e.GetPosition(this).Y}");
+            //scroll.ScrollToVerticalOffset(128);
+           // scroll.UpdateLayout();
+            Console.WriteLine($"SCROLL {e.GetPosition(this).X + scroll.HorizontalOffset} {e.GetPosition(this).Y+scroll.VerticalOffset}");
             //this.Cursor = Cursors.SizeNWSE;
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
+            }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
             }
             //Console.WriteLine(shapeId);
             if (shapeId == -1)
@@ -836,6 +885,8 @@ namespace CopyAndPasteInCanvas
                     {
                         double x = (e.GetPosition(this).X / zoom - (onlyTextBoxes[textBoxId].ActualWidth / zoom) / 2) - 140 / zoom;
                         double y = (e.GetPosition(this).Y / zoom - (onlyTextBoxes[textBoxId].ActualHeight / zoom) / 2) - 100 / zoom;
+                        x += scroll.HorizontalOffset / zoom;
+                        y += scroll.VerticalOffset / zoom;
                         this.Cursor = Cursors.SizeAll;
                         Canvas.SetLeft(onlyTextBoxes[textBoxId], x);
                         Canvas.SetTop(onlyTextBoxes[textBoxId], y);
@@ -850,6 +901,8 @@ namespace CopyAndPasteInCanvas
                         {
                             double x = (e.GetPosition(this).X / zoom - (rectList[shapeId].Width / zoom) / 2) - 140 / zoom;
                             double y = (e.GetPosition(this).Y / zoom - (rectList[shapeId].Height / zoom) / 2) - 100 / zoom;
+                            x += scroll.HorizontalOffset/zoom;
+                            y += scroll.VerticalOffset/zoom;
                             Canvas.SetLeft(rectList[shapeId], x);
                             Canvas.SetTop(rectList[shapeId], y);
                             Canvas.SetLeft(textBoxes[shapeId], x + (rectList[shapeId].Width - textBoxes[shapeId].MinWidth) / 2);
@@ -881,6 +934,8 @@ namespace CopyAndPasteInCanvas
                     {
                         double x = (e.GetPosition(this).X) / zoom;
                         double y = (e.GetPosition(this).Y) / zoom;
+                        x += scroll.HorizontalOffset / zoom;
+                        y += scroll.VerticalOffset / zoom;
                         MoveArrow(x, y, shapeId);
                         Canvas.SetLeft(textBoxes[shapeId], 99999);
                         Canvas.SetTop(textBoxes[shapeId], 99999);
@@ -914,6 +969,8 @@ namespace CopyAndPasteInCanvas
                 double x = (e.GetPosition(this).X / zoom - 140);
                 // Get currennt pos y
                 double y = (e.GetPosition(this).Y / zoom - 100);
+                x += scroll.HorizontalOffset / zoom;
+                y += scroll.VerticalOffset / zoom;
                 double x0 = Canvas.GetLeft(rectList[shapeId]);
                 double y0 = Canvas.GetTop(rectList[shapeId]);
                 // Get the bottom pos x1,y1
@@ -999,6 +1056,10 @@ namespace CopyAndPasteInCanvas
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
+            }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
             }
             if (shapeId >= 0)
             {
@@ -1174,6 +1235,10 @@ namespace CopyAndPasteInCanvas
             if (shapeId != -1)
             {
                 preShapeId = shapeId;
+            }
+            if (textBoxId != -1)
+            {
+                preTextBoxId = textBoxId;
             }
             clearAllAdorner();
             //Console.WriteLine($" DRAWPOINT {isDrawPointArrow.ToString()}");
@@ -1764,7 +1829,9 @@ namespace CopyAndPasteInCanvas
             {
                 Property = ForegroundProperty,
                 Value = System.Windows.Media.Brushes.Green
+
             });
+
 
             st.Triggers.Add(tg);
             TextBox textBox = new TextBox
@@ -1850,6 +1917,8 @@ namespace CopyAndPasteInCanvas
             Console.WriteLine($" MOUSE : {x}  {y}");
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //lưu lại toàn bộ thông tin của arrow cũ
@@ -1923,6 +1992,8 @@ namespace CopyAndPasteInCanvas
             //Console.WriteLine($"arrow id is {shapeId}");
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
@@ -1994,6 +2065,8 @@ namespace CopyAndPasteInCanvas
             double y0 = 0;
             double x1 = 100;
             double y1 = 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             List<Point> pList = new List<Point>();
             Arrow arrow = new Arrow
             {
@@ -2038,6 +2111,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
@@ -2084,6 +2159,8 @@ namespace CopyAndPasteInCanvas
         {
             x -= 140;
             y -= 100;
+            x += scroll.HorizontalOffset / zoom;
+            y += scroll.VerticalOffset / zoom;
             try
             {
                 //Console.WriteLine($"id= {id}");
@@ -2162,15 +2239,35 @@ namespace CopyAndPasteInCanvas
             }
             return new Point(x, y);
         }
-        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist)
+
+        public static void SaveCanvasToFile(Canvas surface, string filename, List<ShapeInfo>Infolist, AFData Data)
+
         {
-            //surface.S
+
             double right = -100000;
             double bottom = -100000;
             double top = 100000;
             double left = 100000;
             for (int i = 0; i < Infolist.Count; i++)
             {
+                if (Data.typeOfShape[i] == 5)
+                {
+                    dynamic a = Infolist[i];
+                    if (a.ListPoint.Count > 0)
+                    {
+                        for (int j = 0; j < a.ListPoint.Count; j++)
+                        {
+                            if (a.ListPoint[j].X + a.Left < left)
+                                left = a.ListPoint[j].X+a.Left ;
+                            if (a.ListPoint[j].X + a.Left > right)
+                                right = a.ListPoint[j].X + a.Left;
+                            if (a.ListPoint[j].Y + a.Top < top)
+                                top = a.ListPoint[j].Y + a.Top;
+                            if (a.ListPoint[j].Y + a.Top > bottom)
+                                bottom = a.ListPoint[j].Y + a.Top;
+                        }
+                    }
+                }
                 if (Infolist[i].X + Infolist[i].Width > right)
                     right = Infolist[i].X + Infolist[i].Width;
                 if (Infolist[i].Y + Infolist[i].Height > bottom)
@@ -2180,6 +2277,7 @@ namespace CopyAndPasteInCanvas
                 if (Infolist[i].Y < top)
                     top = Infolist[i].Y;
             }
+            //Size size = new Size(right, bottom);
             Rect bounds = VisualTreeHelper.GetDescendantBounds(surface);
 
             //var scale = dpi / 96.0;
@@ -2187,39 +2285,60 @@ namespace CopyAndPasteInCanvas
             var height = (bounds.Height + bounds.Y);// * scale;
 
 
-            //right = right - left;
-            //bottom = bottom - top ;
+            surface.Background = Brushes.White;
+            // Create a render bitmap and push the surface to it
 
             RenderTargetBitmap renderBitmap =
               new RenderTargetBitmap(
-                (int)(right - left + 20*(1 + right/ left / 2)),
-                (int)(bottom - top + 10 * (1 + bottom / top / 2)),
-                //(int)(right),
-                //(int)(bottom),
+                //(int)(right - left + 20*(1 + right/ left / 2)),
+                //(int)(bottom - top + 10 * (1 + bottom / top / 2)),
+                (int)(right),
+                (int)(bottom),
                 96d,
                 96d,
-                PixelFormats.Pbgra32);
 
-            DrawingVisual dv = new DrawingVisual();
-            using (DrawingContext ctx = dv.RenderOpen())
+                PixelFormats.Pbgra32);
+            //PixelFormats.Default);
+
+
+            // drawing virtual
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+
             {
                 VisualBrush vb = new VisualBrush(surface);
-                ctx.DrawRectangle(vb, null,
+                drawingContext.DrawRectangle(vb, null,
                     new Rect(new Point(-left, -top), new Point(width, height)));
             }
 
-            renderBitmap.Render(dv);
+
+            surface.Measure(new Size((int)surface.Width, (int)surface.Height));
+            surface.Arrange(new Rect(new Size((int)surface.Width, (int)surface.Height)));
+            renderBitmap.Render(surface);
+
 
 
             // Create a file stream for saving image
             using (FileStream outStream = new FileStream(filename, FileMode.Create))
             {
-                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
                 // push the rendered bitmap to it
                 encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
                 // save the data to the stream
                 encoder.Save(outStream);
             }
+            GeometryDrawing geo = new GeometryDrawing();
+            Rect rect = new Rect(0, 0, 50, 50);
+            RectangleGeometry rectgeo = new RectangleGeometry(rect);
+            geo.Geometry = rectgeo;
+            geo.Pen = new Pen(Brushes.Black, 0.05);
+            DrawingBrush dBrush = new DrawingBrush();
+            dBrush.TileMode = TileMode.Tile;
+            dBrush.Viewport = new Rect(-10, -10, 40, 40);
+            dBrush.ViewportUnits = System.Windows.Media.BrushMappingMode.Absolute;
+            dBrush.Drawing = geo;
+            surface.Background = dBrush;
+
         }
         //hàm bổ sung cho mũi tên : tính khảong cách đến mũi tên có nhiều đường gấp khúc
         public void CalcAddPoint(Point p, Arrow a)
