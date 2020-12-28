@@ -39,6 +39,13 @@ namespace Algorithm_Flowchart
         public Brush color;
         int type;
 
+        //Tbox
+        public double TBsize;
+
+        public FontWeight TBFontWeight;
+
+        public Brush TBForegroundColor;
+
         //Arrow
         public Point EndPoint;
 
