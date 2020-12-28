@@ -132,6 +132,7 @@
       <DependentUpon>ShapeToolUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="SimpleCircleAdorner.cs" />
+    <Compile Include="TboxOnly.cs" />
     <Page Include="BackRoundPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
