@@ -37,6 +37,7 @@ namespace CopyAndPasteInCanvas
         double zoomDelta = 0.1;
         int top = 100, left = 200;
         string xaml = "";
+        TextBox textBox;
         Shape shape;
         Canvas savedCanvas = new Canvas();
         Canvas canvas = new Canvas();
@@ -273,7 +274,7 @@ namespace CopyAndPasteInCanvas
 
         private void UpdateInfo(List<ShapeInfo> InfoList, List<Shape> rectList, List<TboxOnly> TbList)
         {
-            for (int i = 0; i < rectList.Count; i++)
+            for (int i = 0; i < onlyTextBoxes.Count; i++)
             {
                 Data.TboxList[i].X = Canvas.GetLeft(onlyTextBoxes[i]);
                 Data.TboxList[i].Y = Canvas.GetTop(onlyTextBoxes[i]);
@@ -1372,6 +1373,7 @@ namespace CopyAndPasteInCanvas
             Data.InfoList.Clear();
             textBoxes.Clear();
             clearAllAdorner();
+            onlyTextBoxes.Clear();
             this.Canvas.Children.Clear();
         }
         public void clearAllAdorner()
@@ -1424,19 +1426,30 @@ namespace CopyAndPasteInCanvas
         private void DelCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             //remove shape from canvas
-            if (shape == null) return;
-            if (Data.typeOfShape[Convert.ToInt32(shape.Uid)] == 5)
+            if (shape == null && textBox == null) return;
+            if(shape != null)
             {
-                dynamic arrow = shape;
-                if (arrow.ShapeID1 != -1)
-                    Data.bindingArrowShape[arrow.ShapeID1].Remove(Convert.ToInt32(arrow.Uid));
-                if (arrow.ShapeID2 != -1)
-                    Data.bindingArrowShape[arrow.ShapeID2].Remove(Convert.ToInt32(arrow.Uid));
+                if (Data.typeOfShape[Convert.ToInt32(shape.Uid)] == 5)
+                {
+                    dynamic arrow = shape;
+                    if (arrow.ShapeID1 != -1)
+                        Data.bindingArrowShape[arrow.ShapeID1].Remove(Convert.ToInt32(arrow.Uid));
+                    if (arrow.ShapeID2 != -1)
+                        Data.bindingArrowShape[arrow.ShapeID2].Remove(Convert.ToInt32(arrow.Uid));
+                }
+                Data.isDeleted[Convert.ToInt32(shape.Uid)] = 1;
+                canvas.Children.Remove(shape);
+                canvas.Children.Remove(textBoxes[Convert.ToInt32(shape.Uid)]);
+                canvas.Children.Remove(adornerList[Convert.ToInt32(shape.Uid)]);
             }
-            Data.isDeleted[Convert.ToInt32(shape.Uid)] = 1;
-            canvas.Children.Remove(shape);
-            canvas.Children.Remove(textBoxes[Convert.ToInt32(shape.Uid)]);
-            canvas.Children.Remove(adornerList[Convert.ToInt32(shape.Uid)]);
+            else
+            {
+                Canvas.SetLeft(textBox, 1000000000000);
+                Canvas.SetTop(textBox, 1000000000000);
+                canvas.Children.Remove(textBox);
+                //onlyTextBoxes.Remove(textBox);
+            }
+
         }
         private void SaveCmdBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -1583,6 +1596,8 @@ namespace CopyAndPasteInCanvas
 
             AddShape(Data.InfoList, rectList);
 
+            AddTbox(Data.TboxList);
+
             reopenedState = string.Empty;
         }
 
@@ -1667,7 +1682,7 @@ namespace CopyAndPasteInCanvas
         }
         private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
+            textBox = sender as TextBox;
             textBox.IsEnabled = true;
             textBox.IsReadOnly = false;
             textBox.BorderThickness = new Thickness(1, 1, 1, 1);
@@ -1880,6 +1895,63 @@ namespace CopyAndPasteInCanvas
 
         }
 
+        private void AddTbox(List<TboxOnly> TBList)
+        {
+            onlyTextBoxes.Clear();
+            for(int i= 0; i < TBList.Count; i++)
+            {
+                CreateTbox(TBList[i]);
+            }
+        }
+        private void CreateTbox(TboxOnly TBList)
+        {
+            Style st = new Style();
+            Trigger tg = new Trigger()
+            {
+                Property = Control.IsEnabledProperty,
+                Value = false
+            };
+            st.Setters.Add(new Setter()
+            {
+                Property = ForegroundProperty,
+                Value = System.Windows.Media.Brushes.Green
+
+            });
+
+
+            st.Triggers.Add(tg);
+            TextBox textBox = new TextBox
+            {
+                MinWidth = 80,
+                MinHeight = 50,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                Text = TBList.text,
+                FontSize = TBList.TBsize,
+                Background = TBList.color,
+                BorderThickness = new Thickness(0, 0, 0, 0),
+                Uid = TBList.Uid,
+                IsEnabled = true,
+            };
+            textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
+            //textBox.MouseLeftButtonDown += TextBox_MouseDown;
+            textBox.LostFocus += TextBox_LostFocus2;
+            textBox.Style = st;
+            onlyTextBoxes.Add(textBox);
+
+            Canvas.SetLeft(textBox, 150);
+            Canvas.SetTop(textBox, 150);
+            Canvas.Children.Add(onlyTextBoxes[onlyTextBoxes.Count - 1]);
+        }
+
+        private void TextBox_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textBox = sender as TextBox;
+        }
+
         private void Button_TextBoxClick(object sender, RoutedEventArgs e)
         {
             Style st = new Style();
@@ -1917,6 +1989,9 @@ namespace CopyAndPasteInCanvas
             textBox.LostFocus += TextBox_LostFocus2;
             textBox.Style = st;
             onlyTextBoxes.Add(textBox);
+
+            TboxOnly tbox = new TboxOnly();
+            Data.TboxList.Add(tbox);
 
             Canvas.SetLeft(textBox, 150);
             Canvas.SetTop(textBox, 150);
