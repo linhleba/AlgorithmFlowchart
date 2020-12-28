@@ -236,10 +236,15 @@ namespace CopyAndPasteInCanvas
                         Canvas.SetLeft(textBoxes[i], Data.InfoList[i].X + (Data.InfoList[i].Width - textBoxes[i].MinWidth) / 2);
                         Canvas.SetTop(textBoxes[i], Data.InfoList[i].Y + (Data.InfoList[i].Height - textBoxes[i].MinHeight) / 2);
                     }
+                    for (int i = 0; i < onlyTextBoxes.Count; i++)
+                    {
+                        Canvas.SetLeft(onlyTextBoxes[i], Data.TboxList[i].X);
+                        Canvas.SetTop(onlyTextBoxes[i], Data.TboxList[i].Y);
+                    }
                     break;
                 case 3:
                     //Rect list
-                    UpdateInfo(Data.InfoList, rectList);
+                    UpdateInfo(Data.InfoList, rectList, Data.TboxList);
                     SaveFileDialog dag = new SaveFileDialog();
                     if (dag.ShowDialog() == true)
                     {
@@ -257,7 +262,7 @@ namespace CopyAndPasteInCanvas
                     daag.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
                     if (daag.ShowDialog() == true)
                     {
-                        UpdateInfo(Data.InfoList, rectList);
+                        UpdateInfo(Data.InfoList, rectList, Data.TboxList);
                         SaveCanvasToFile(Canvas, daag.FileName, Data.InfoList,Data);
                         MessageBox.Show("Saved successfully!");
                     }
@@ -266,8 +271,19 @@ namespace CopyAndPasteInCanvas
             }
         }
 
-        private void UpdateInfo(List<ShapeInfo> InfoList, List<Shape> rectList)
+        private void UpdateInfo(List<ShapeInfo> InfoList, List<Shape> rectList, List<TboxOnly> TbList)
         {
+            for (int i = 0; i < rectList.Count; i++)
+            {
+                Data.TboxList[i].X = Canvas.GetLeft(onlyTextBoxes[i]);
+                Data.TboxList[i].Y = Canvas.GetTop(onlyTextBoxes[i]);
+                Data.TboxList[i].text = onlyTextBoxes[i].Text;
+                Data.TboxList[i].color = onlyTextBoxes[i].Background;
+                Data.TboxList[i].TBFontWeight = onlyTextBoxes[i].FontWeight;
+                Data.TboxList[i].TBForegroundColor = onlyTextBoxes[i].Foreground;
+                Data.TboxList[i].TBsize = onlyTextBoxes[i].FontSize;
+                Data.TboxList[i].Uid = onlyTextBoxes[i].Uid;
+            }
             for (int i = 0; i < rectList.Count; i++)
             {
                 Data.InfoList[i].Y = Canvas.GetTop(rectList[i]);

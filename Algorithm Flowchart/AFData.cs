@@ -27,6 +27,7 @@ namespace Algorithm_Flowchart
 {
     public class AFData
     {
+        public List<TboxOnly> TboxList = new List<TboxOnly>();
         public List<List<int>> bindingArrowShape = new List<List<int>>();
         public List<ShapeInfo> InfoList;
         public List<int> typeOfShape;
