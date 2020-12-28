@@ -233,8 +233,8 @@ namespace CopyAndPasteInCanvas
                     }
                     for (int i = 0; i < textBoxes.Count; i++)
                     {
-                        Canvas.SetLeft(textBoxes[i], Data.InfoList[i].Y + (Data.InfoList[i].Width - textBoxes[i].MinWidth) / 2);
-                        Canvas.SetTop(textBoxes[i], Data.InfoList[i].X + (Data.InfoList[i].Height - textBoxes[i].MinHeight) / 2);
+                        Canvas.SetLeft(textBoxes[i], Data.InfoList[i].X + (Data.InfoList[i].Width - textBoxes[i].MinWidth) / 2);
+                        Canvas.SetTop(textBoxes[i], Data.InfoList[i].Y + (Data.InfoList[i].Height - textBoxes[i].MinHeight) / 2);
                     }
                     break;
                 case 3:
@@ -300,6 +300,9 @@ namespace CopyAndPasteInCanvas
                     Data.InfoList[i].Top = arrow.Top;
 
                 }
+                Data.InfoList[i].TBsize = textBoxes[i].FontSize;
+                Data.InfoList[i].TBForegroundColor = textBoxes[i].Foreground;
+                Data.InfoList[i].TBFontWeight = textBoxes[i].FontWeight;
                 Data.InfoList[i].StrokeThickness = Convert.ToInt32(rectList[i].StrokeThickness);
                 Data.InfoList[i].Stretch = rectList[i].Stretch;
                 Data.InfoList[i].Uid = rectList[i].Uid;
@@ -1527,7 +1530,7 @@ namespace CopyAndPasteInCanvas
 
                         Canvas.Children.Add(rectList[rectList.Count - 1]);
 
-                        CreateTextBoxForShapes(textBoxes, shape, textBoxes[Int32.Parse(shape.Uid) - 1].Text, textBoxes[Int32.Parse(shape.Uid) - 1].Background);
+                        CreateTextBoxForShapes(textBoxes, shape, textBoxes[Int32.Parse(shape.Uid) - 1].Text, textBoxes[Int32.Parse(shape.Uid) - 1].Background, textBoxes[Int32.Parse(shape.Uid) - 1].FontSize, textBoxes[Int32.Parse(shape.Uid) - 1].Foreground);
 
                         left = 200;
 
@@ -1621,7 +1624,7 @@ namespace CopyAndPasteInCanvas
                     Canvas.SetLeft(shape, Data.InfoList[i].X);
                     Canvas.SetTop(shape, Data.InfoList[i].Y);
                     Canvas.Children.Add(rectList[rectList.Count - 1]);
-                    CreateTextBoxForShapes(textBoxes, shape, Data.InfoList[i].text, Data.InfoList[i].color);
+                    CreateTextBoxForShapes(textBoxes, shape, Data.InfoList[i].text, Data.InfoList[i].color, Data.InfoList[i].TBsize, Data.InfoList[i].TBForegroundColor);
                 }
                 else
                     CreateTextBoxForShapes(textBoxes, shape, Data.InfoList[i].text, Data.InfoList[i].color);
@@ -1718,7 +1721,7 @@ namespace CopyAndPasteInCanvas
             this.InvalidateVisual();
         }
 
-        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape, string text = null, Brush color = null)
+        private void CreateTextBoxForShapes(List<TextBox> textBoxes, Shape shape, string text = null, Brush color = null, double size = -1/*,*FontWeight fontweight = FontWeight*/, Brush FGcolor = null)
         {
             TextBox textBox = new TextBox
             {
@@ -1745,6 +1748,18 @@ namespace CopyAndPasteInCanvas
             {
                 textBox.Background = color;
             }
+            if (FGcolor != null)
+            {
+                textBox.Foreground = FGcolor;
+            }
+            if (size != -1)
+            {
+                textBox.FontSize = size;
+            }
+            //if (fontweight != )
+            //{
+            //    textBox.FontWeight = fontweight;
+            //}
             textBoxes.Add(textBox);
             textBox.MouseDoubleClick += TextBox_MouseDoubleClick;
             textBox.LostFocus += TextBox_LostFocus;
